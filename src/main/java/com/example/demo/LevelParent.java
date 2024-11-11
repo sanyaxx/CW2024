@@ -197,9 +197,15 @@ public abstract class LevelParent extends Observable {
 	}
 
 	private void updateKillCount() {
-		for (int i = 0; i < currentNumberOfEnemies - enemyUnits.size(); i++) {
-			user.incrementKillCount();
+		int currentEnemyCount = enemyUnits.size();
+		int kills = currentNumberOfEnemies - currentEnemyCount;
+
+		if (kills > 0) { // Only increment if there are new kills
+			for (int i = 0; i < kills; i++) {
+				user.incrementKillCount();
+			}
 		}
+		currentNumberOfEnemies = currentEnemyCount; // Update current number of enemies
 	}
 
 	private boolean enemyHasPenetratedDefenses(ActiveActorDestructible enemy) {
