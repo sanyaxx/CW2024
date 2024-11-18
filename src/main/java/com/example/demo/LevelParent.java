@@ -263,6 +263,9 @@ public abstract class LevelParent extends Observable {
 		}
 	}
 
+	public void endLevel() {
+		timeline.stop();
+		// Any additional cleanup before moving to the next level
 	}
 
 	protected void loseGame() {
