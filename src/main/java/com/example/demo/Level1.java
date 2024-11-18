@@ -20,6 +20,8 @@ public class Level1 extends LevelParent {
 			loseGame();
 		} else if (userHasReachedKillTarget()) {
 			System.out.println("User  has reached kill target. Advancing to next level.");
+			endLevel();
+			goToNextLevel(getNextLevelName());
 		}
 	}
 
