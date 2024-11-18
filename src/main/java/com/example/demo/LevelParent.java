@@ -183,6 +183,28 @@ public abstract class LevelParent extends Observable {
 		}
 	}
 
+//	Draw bounding boxes around all images function
+//	private void drawBoundingBoxes() {
+//		// Clear previous bounding boxes if any
+//		root.getChildren().removeIf(node -> node instanceof Rectangle);
+//
+//		// Draw the bounding box for the user plane
+//		Rectangle userBounds = new Rectangle(user.getBoundsInParent().getMinX(), user.getBoundsInParent().getMinY(),
+//				user.getBoundsInParent().getWidth(), user.getBoundsInParent().getHeight());
+//		userBounds.setStroke(Color.RED); // Set the outline color
+//		userBounds.setFill(Color.TRANSPARENT); // Make it transparent
+//		root.getChildren().add(userBounds); // Add to the root group
+//
+//		// Draw bounding boxes for enemy projectiles
+//		for (ActiveActorDestructible projectile : enemyProjectiles) {
+//			Rectangle projectileBounds = new Rectangle(projectile.getBoundsInParent().getMinX(), projectile.getBoundsInParent().getMinY(),
+//					projectile.getBoundsInParent().getWidth(), projectile.getBoundsInParent().getHeight());
+//			projectileBounds.setStroke(Color.BLUE); // Set the outline color
+//			projectileBounds.setFill(Color.TRANSPARENT); // Make it transparent
+//			root.getChildren().add(projectileBounds); // Add to the root group
+//		}
+//	}
+
 	private void handleEnemyPenetration() {
 		for (ActiveActorDestructible enemy : enemyUnits) {
 			if (enemyHasPenetratedDefenses(enemy)) {
