@@ -33,11 +33,25 @@ public class Level1 extends LevelParent {
 	@Override
 	protected void spawnEnemyUnits() {
 		int currentNumberOfEnemies = getCurrentNumberOfEnemies();
-		for (int i = 0; i < TOTAL_ENEMIES - currentNumberOfEnemies; i++) {
+
+		// Ensure we have at least 3 and at most 5 enemy planes
+		int enemiesToSpawn = Math.min(5 - currentNumberOfEnemies, TOTAL_ENEMIES - currentNumberOfEnemies);
+		if (currentNumberOfEnemies < 3) {
+			enemiesToSpawn = Math.min(3 - currentNumberOfEnemies, TOTAL_ENEMIES - currentNumberOfEnemies);
+		}
+
+		for (int i = 0; i < enemiesToSpawn; i++) {
 			if (Math.random() < ENEMY_SPAWN_PROBABILITY) {
 				double newEnemyInitialYPosition = Math.random() * getEnemyMaximumYPosition();
 				ActiveActorDestructible newEnemy = new EnemyPlane(getScreenWidth(), newEnemyInitialYPosition);
-				addEnemyUnit(newEnemy);
+
+				// Check for overlapping with existing enemies
+				if (!isEnemyPlaneOverlapping(newEnemy)) {
+					addEnemyUnit(newEnemy);
+				} else {
+					// If overlapping, decrement i to try again
+					i--;
+				}
 			}
 		}
 	}

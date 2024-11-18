@@ -317,4 +317,14 @@ public abstract class LevelParent extends Observable {
 	private void updateNumberOfEnemies() {
 		currentNumberOfEnemies = enemyUnits.size();
 	}
+
+	boolean isEnemyPlaneOverlapping(ActiveActorDestructible newEnemy) {
+		for (ActiveActorDestructible enemy : enemyUnits) {
+			if (newEnemy.getBoundsInParent().intersects(enemy.getBoundsInParent())) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
+
