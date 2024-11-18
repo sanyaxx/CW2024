@@ -36,6 +36,7 @@ public abstract class LevelParent extends Observable {
 	private final List<ActiveActorDestructible> enemyProjectiles;
 	
 	private int currentNumberOfEnemies;
+	private int penetratedEnemyCount;
 	private final LevelView levelView;
 	private int currentLevelNumber; // To track the current level
 	protected static final int TOTAL_LEVELS = 3; // Track the total number of levels
@@ -57,6 +58,7 @@ public abstract class LevelParent extends Observable {
 		this.levelView = instantiateLevelView();
 		this.currentNumberOfEnemies = 0;
 		this.currentLevelNumber = levelNumber; // Set the current level number
+		this.penetratedEnemyCount = 0;
 		initializeTimeline();
 		friendlyUnits.add(user);
 	}
@@ -221,6 +223,8 @@ public abstract class LevelParent extends Observable {
 			if (enemyHasPenetratedDefenses(enemy)) {
 				enemy.takeDamage();
 				enemy.destroy();
+				penetratedEnemyCount++; // Increment the counter for each enemy that penetrates
+				updateNumberOfEnemies();
 			}
 		}
 	}
@@ -232,7 +236,6 @@ public abstract class LevelParent extends Observable {
 	private void updateKillCount() {
 		int currentEnemyCount = enemyUnits.size();
 		int kills = currentNumberOfEnemies - currentEnemyCount;
-
 		if (kills > 0) { // Only increment if there are new kills
 			for (int i = 0; i < kills; i++) {
 				user.incrementKillCount();
@@ -240,6 +243,9 @@ public abstract class LevelParent extends Observable {
 			}
 		}
 		currentNumberOfEnemies = currentEnemyCount; // Update current number of enemies
+
+		// Reset the penetrated enemy count for the next update
+		penetratedEnemyCount = 0;
 	}
 
 	private boolean enemyHasPenetratedDefenses(ActiveActorDestructible enemy) {
@@ -294,7 +300,7 @@ public abstract class LevelParent extends Observable {
 	}
 
 	protected int getCurrentNumberOfEnemies() {
-		return enemyUnits.size();
+		return currentNumberOfEnemies;
 	}
 
 	protected void addEnemyUnit(ActiveActorDestructible enemy) {
@@ -315,6 +321,10 @@ public abstract class LevelParent extends Observable {
 	}
 
 	private void updateNumberOfEnemies() {
-		currentNumberOfEnemies = enemyUnits.size();
+		// Update currentNumberOfEnemies to reflect the number of enemies that have not penetrated defenses
+		currentNumberOfEnemies = enemyUnits.size() - penetratedEnemyCount;
+
+		// Reset the penetrated enemy count for the next update
+		penetratedEnemyCount = 0;
 	}
 }
