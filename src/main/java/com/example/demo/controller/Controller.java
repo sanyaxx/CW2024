@@ -13,7 +13,7 @@ import com.example.demo.LevelParent;
 
 public class Controller implements Observer {
 
-	private static final String LEVEL_ONE_CLASS_NAME = "com.example.demo.LevelOne";
+	private static final String LEVEL_ONE_CLASS_NAME = "com.example.demo.Level1";
 	private final Stage stage;
 
     public Controller(Stage stage) {
