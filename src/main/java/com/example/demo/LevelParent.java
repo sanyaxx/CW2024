@@ -77,11 +77,6 @@ public abstract class LevelParent extends Observable {
 		timeline.play();
 	}
 
-	public void goToNextLevel(String levelName) {
-		setChanged();
-		notifyObservers(levelName);
-	}
-
 	private void updateScene() {
 		spawnEnemyUnits();
 		updateActors();
