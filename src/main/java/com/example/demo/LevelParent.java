@@ -95,6 +95,10 @@ public abstract class LevelParent extends Observable {
 		updateKillCount();
 		updateLevelView();
 		checkIfGameOver();
+
+		// Call the method to draw bounding boxes
+		drawBoundingBoxes(); // Add this line to visualize the bounding boxes
+
 	}
 
 	private void initializeTimeline() {
