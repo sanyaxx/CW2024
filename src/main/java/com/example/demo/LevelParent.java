@@ -212,6 +212,21 @@ public abstract class LevelParent extends Observable {
 		return Math.abs(enemy.getTranslateX()) > screenWidth;
 	}
 
+	protected String getNextLevelName() {
+		if (currentLevelNumber < TOTAL_LEVELS) {
+			// Return the next level name based on the current level number
+			String nextLevelName = "com.example.demo.Level" + (currentLevelNumber + 1);
+			currentLevelNumber++; // Increment the current level number after getting the next level name
+			return nextLevelName;
+		} else {
+			// Handle the case when the last level is reached
+
+			//COMPLETE
+
+			return null;
+		}
+	}
+
 	protected void winGame() {
 		timeline.stop();
 		levelView.showWinImage();
