@@ -11,6 +11,10 @@ import javafx.scene.image.*;
 import javafx.scene.input.*;
 import javafx.util.Duration;
 
+//BOUNDING BOXES DELETE LATER
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+
 public abstract class LevelParent extends Observable {
 
 	private static final double SCREEN_HEIGHT_ADJUSTMENT = 150;
