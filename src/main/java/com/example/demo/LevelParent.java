@@ -36,8 +36,10 @@ public abstract class LevelParent extends Observable {
 	
 	private int currentNumberOfEnemies;
 	private final LevelView levelView;
+	private int currentLevelNumber; // To track the current level
+	protected static final int TOTAL_LEVELS = 3; // Track the total number of levels
 
-	public LevelParent(String backgroundImageName, double screenHeight, double screenWidth, int playerInitialHealth) {
+	public LevelParent(String backgroundImageName, double screenHeight, double screenWidth, int playerInitialHealth, int levelNumber) {
 		this.root = new Group();
 		this.scene = new Scene(root, screenWidth, screenHeight);
 		this.timeline = new Timeline();
@@ -53,6 +55,7 @@ public abstract class LevelParent extends Observable {
 		this.enemyMaximumYPosition = screenHeight - SCREEN_HEIGHT_ADJUSTMENT;
 		this.levelView = instantiateLevelView();
 		this.currentNumberOfEnemies = 0;
+		this.currentLevelNumber = levelNumber; // Set the current level number
 		initializeTimeline();
 		friendlyUnits.add(user);
 	}
