@@ -257,6 +257,12 @@ public abstract class LevelParent extends Observable {
 	protected void winGame() {
 		timeline.stop();
 		levelView.showWinImage();
+		String nextLevel = getNextLevelName();
+		if (nextLevel != null) {
+			goToNextLevel(nextLevel);
+		}
+	}
+
 	}
 
 	protected void loseGame() {
