@@ -96,7 +96,7 @@ public abstract class LevelParent extends Observable {
 		checkIfGameOver();
 
 		// Call the method to draw bounding boxes
-		drawBoundingBoxes(); // Add this line to visualize the bounding boxes
+		// drawBoundingBoxes(); // Add this line to visualize the bounding boxes
 
 	}
 
@@ -315,5 +315,4 @@ public abstract class LevelParent extends Observable {
 	private void updateNumberOfEnemies() {
 		currentNumberOfEnemies = enemyUnits.size();
 	}
-
 }
