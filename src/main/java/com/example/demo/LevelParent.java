@@ -73,6 +73,7 @@ public abstract class LevelParent extends Observable {
 		initializeBackground();
 		initializeFriendlyUnits();
 		levelView.showHeartDisplay();
+		levelView.showKillCountDisplay();  // Show the KillCountDisplay
 		return scene;
 	}
 
@@ -218,7 +219,7 @@ public abstract class LevelParent extends Observable {
 	private void handleEnemyPenetration() {
 		for (ActiveActorDestructible enemy : enemyUnits) {
 			if (enemyHasPenetratedDefenses(enemy)) {
-				user.takeDamage();
+				enemy.takeDamage();
 				enemy.destroy();
 			}
 		}
@@ -235,6 +236,7 @@ public abstract class LevelParent extends Observable {
 		if (kills > 0) { // Only increment if there are new kills
 			for (int i = 0; i < kills; i++) {
 				user.incrementKillCount();
+				levelView.incrementKillCount();
 			}
 		}
 		currentNumberOfEnemies = currentEnemyCount; // Update current number of enemies
