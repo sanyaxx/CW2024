@@ -10,7 +10,7 @@ public class Boss extends FighterPlane {
 	private static final double PROJECTILE_Y_POSITION_OFFSET = 75.0;
 	private static final double BOSS_FIRE_RATE = .04;
 	private static final double BOSS_SHIELD_PROBABILITY = .002;
-	private static final int IMAGE_HEIGHT = 300;
+	private static final int IMAGE_HEIGHT = 75;
 	private static final int VERTICAL_VELOCITY = 8;
 	private static final int HEALTH = 100;
 	private static final int MOVE_FREQUENCY_PER_CYCLE = 5;
@@ -24,14 +24,17 @@ public class Boss extends FighterPlane {
 	private int consecutiveMovesInSameDirection;
 	private int indexOfCurrentMove;
 	private int framesWithShieldActivated;
+	private final LevelViewLevelTwo levelView;
 
-	public Boss() {
+
+	public Boss(LevelViewLevelTwo levelView) {
 		super(IMAGE_NAME, IMAGE_HEIGHT, INITIAL_X_POSITION, INITIAL_Y_POSITION, HEALTH);
-		movePattern = new ArrayList<>();
+        movePattern = new ArrayList<>();
 		consecutiveMovesInSameDirection = 0;
 		indexOfCurrentMove = 0;
 		framesWithShieldActivated = 0;
 		isShielded = false;
+		this.levelView = levelView;
 		initializeMovePattern();
 	}
 
@@ -60,6 +63,7 @@ public class Boss extends FighterPlane {
 	public void takeDamage() {
 		if (!isShielded) {
 			super.takeDamage();
+			System.out.println("Current health: " + getHealth()); // Print current health
 		}
 	}
 
@@ -110,11 +114,15 @@ public class Boss extends FighterPlane {
 
 	private void activateShield() {
 		isShielded = true;
+		System.out.println("[DEBUG] Boss Shield activated.");
+		levelView.showShield();
 	}
 
 	private void deactivateShield() {
 		isShielded = false;
 		framesWithShieldActivated = 0;
+		System.out.println("[DEBUG] Boss Shield deactivated.");
+		levelView.hideShield();
 	}
 
 }
