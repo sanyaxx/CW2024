@@ -9,8 +9,8 @@ public class Level2 extends LevelParent {
 
 	public Level2(double screenHeight, double screenWidth) {
 		super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH, 2);
-		boss = new Boss();
-	}
+        boss = new Boss(levelView);
+    }
 
 	@Override
 	protected void initializeFriendlyUnits() {
@@ -39,5 +39,4 @@ public class Level2 extends LevelParent {
 		levelView = new LevelViewLevelTwo(getRoot(), PLAYER_INITIAL_HEALTH);
 		return levelView;
 	}
-
 }
