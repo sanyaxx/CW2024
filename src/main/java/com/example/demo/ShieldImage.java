@@ -24,6 +24,15 @@ public class ShieldImage extends ImageView {
 	
 	public void hideShield() {
 		this.setVisible(false);
+<<<<<<< Updated upstream
+=======
+		System.out.println("[DEBUG]ShieldImage Shield deactivated.");
+	}
+
+	public void updatePosition(double xPosition, double yPosition) {
+		this.setLayoutX(xPosition + 50);
+		this.setLayoutY(yPosition);
+>>>>>>> Stashed changes
 	}
 
 }
