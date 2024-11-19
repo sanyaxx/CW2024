@@ -327,4 +327,14 @@ public abstract class LevelParent extends Observable {
 		// Reset the penetrated enemy count for the next update
 		penetratedEnemyCount = 0;
 	}
+
+	boolean isEnemyPlaneOverlapping(ActiveActorDestructible newEnemy) {
+		for (ActiveActorDestructible enemy : enemyUnits) {
+			if (newEnemy.getBoundsInParent().intersects(enemy.getBoundsInParent())) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
+
