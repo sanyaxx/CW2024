@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.lang.reflect.InvocationTargetException;
 
+import com.example.demo.StartPage;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -19,8 +20,9 @@ public class Main extends Application {
 		stage.setResizable(false);
 		stage.setHeight(SCREEN_HEIGHT);
 		stage.setWidth(SCREEN_WIDTH);
-		myController = new Controller(stage);
-		myController.launchGame();
+
+		myController = new Controller(stage); // Initialize the controller
+		myController.launchGame(); // Launch the game which will show the Start Page
 	}
 
 	public static void main(String[] args) {
