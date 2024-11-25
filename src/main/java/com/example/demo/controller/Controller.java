@@ -10,7 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import com.example.demo.LevelParent;
-import com.example.demo.StartPage; // Import the StartPage class
+import com.example.demo.StartPage;
 
 public class Controller implements Observer {
 
@@ -21,22 +21,9 @@ public class Controller implements Observer {
 		this.stage = stage;
 	}
 
-	public void launchGame() throws ClassNotFoundException, NoSuchMethodException, SecurityException,
-			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		showStartPage(); // Show the Start Page first
-	}
-
-	private void showStartPage() throws ClassNotFoundException, NoSuchMethodException, SecurityException,
-			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		StartPage startPage = new StartPage(stage); // Create the StartPage instance
-		startPage.setOnPlayButtonClicked((Void) -> {
-			try {
-				goToLevel(LEVEL_ONE_CLASS_NAME); // Transition to Level 1 when Play button is clicked
-			} catch (Exception e) {
-				showError(e);
-			}
-		});
-		startPage.show(); // Show the Start Page
+	public void launchGame() throws SecurityException, IllegalArgumentException {
+		StartPage startPage = new StartPage(stage);
+		startPage.show();
 	}
 
 	private void goToLevel(String className) throws ClassNotFoundException, NoSuchMethodException, SecurityException,
