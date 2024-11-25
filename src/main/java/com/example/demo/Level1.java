@@ -9,7 +9,7 @@ public class Level1 extends LevelParent {
 	private static final int PLAYER_INITIAL_HEALTH = 5;
 
 	public Level1(double screenHeight, double screenWidth) {
-		super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH, 1);
+		super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
 	}
 
 	@Override
@@ -21,7 +21,9 @@ public class Level1 extends LevelParent {
 		} else if (userHasReachedKillTarget()) {
 			System.out.println("User  has reached kill target. Advancing to next level.");
 			endLevel();
-			goToNextLevel(getNextLevelName());
+			// Use the singleton instance of LevelManager
+			LevelManager levelManager = LevelManager.getInstance();
+			levelManager.goToNextLevel(levelManager.getNextLevelName());
 		}
 	}
 

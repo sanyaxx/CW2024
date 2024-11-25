@@ -7,8 +7,8 @@ public class Level2 extends LevelParent {
 	private final Boss boss;
 	private LevelViewLevelTwo levelView;
 
-	public Level2(double screenHeight, double screenWidth) {
-		super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH, 2);
+    public Level2(double screenHeight, double screenWidth) {
+		super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
         boss = new Boss(levelView);
     }
 
@@ -23,6 +23,7 @@ public class Level2 extends LevelParent {
 			loseGame();
 		}
 		else if (boss.isDestroyed()) {
+//			levelManager.goToNextLevel(levelManager.getNextLevelName());
 			winGame();
 		}
 	}
