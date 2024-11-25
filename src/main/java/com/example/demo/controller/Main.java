@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import java.lang.reflect.InvocationTargetException;
 
-import com.example.demo.StartPage;
 import com.example.demo.AppStage;
 import com.example.demo.LevelManager;
 import javafx.application.Application;
@@ -25,6 +24,10 @@ public class Main extends Application {
 		stage.setWidth(SCREEN_WIDTH);
 
 		LevelManager levelManager = LevelManager.getInstance();
+
+//		Store the game app stage in this class to access it in other classes
+		AppStage.getInstance().setPrimaryStage(stage);
+
 		myController = new Controller(stage); // Initialize the controller
 		myController.launchGame(); // Launch the game which will show the Start Page
 		levelManager.addObserver(myController); // Register observer
