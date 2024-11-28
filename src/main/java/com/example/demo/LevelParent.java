@@ -299,12 +299,15 @@ public abstract class LevelParent extends Observable {
 
 	public void endLevel() {
 		timeline.stop();
-		// Any additional cleanup before moving to the next level
+		levelView.levelCompletedOverlay.showOverlay();
+		levelView.getLevelCompletedOverlay();
 	}
 
 	protected void loseGame() {
 		timeline.stop();
-		levelView.showGameOverImage();
+		levelView.levelLostOverlay.showOverlay();
+		levelView.getLevelLostOverlay();
+//		levelView.showGameOverImage();
 	}
 
 	protected UserPlane getUser() {
