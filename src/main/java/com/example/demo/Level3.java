@@ -37,10 +37,7 @@ public class Level3 extends LevelParent {
         SCREEN_WIDTH = screenWidth;
         SCREEN_HEIGHT = screenHeight;
         friendlyUnits.add(user);
-//        startSurvivalTimer();
     }
-
-//    protected void
 
     @Override
     protected void initializeFriendlyUnits() {
