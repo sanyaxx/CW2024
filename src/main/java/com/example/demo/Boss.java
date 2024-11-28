@@ -68,7 +68,7 @@ public class Boss extends FighterPlane {
 	public void takeDamage() {
 		if (!isShielded) {
 			super.takeDamage();
-			System.out.println("Current health: " + getHealth()); // Print current health
+//			levelView.updateWinningParameterDisplay(getHealth(), ); // Returns health to LevelViewLevelTwo to update Boss Health Display
 		}
 	}
 
