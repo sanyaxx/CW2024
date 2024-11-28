@@ -165,7 +165,17 @@ public abstract class LevelParent extends Observable {
 		actors.removeAll(destroyedActors);
 	}
 
-	private void handlePlaneCollisions() {
+	protected void handleCoinCollisions() {
+		for (ActiveActorDestructible coin : coinUnits) {
+			if (coin.isDestroyed()) continue; // Skip if already destroyed
+			if (user.getBoundsInParent().intersects(coin.getBoundsInParent())) {
+				coin.takeDamage();
+				user.incrementScore();
+			}
+		}
+	}
+
+	protected void handlePlaneCollisions() {
 		handleCollisions(friendlyUnits, enemyUnits);
 	}
 
@@ -226,7 +236,18 @@ public abstract class LevelParent extends Observable {
 		}
 	}
 
-	private void updateLevelView() {
+	protected void handleCoinMovesOffScreen() {
+		for (ActiveActorDestructible coin : coinUnits) {
+			if (enemyHasPenetratedDefenses(coin)) {
+				coin.takeDamage();
+				coin.destroy();
+				offScreenCountCount++;
+				updateNumberOfCoins();
+			}
+		}
+	}
+
+	protected void updateLevelView() {
 		levelView.removeHearts(user.getHealth());
 		levelView.updateWinningParameterDisplay(user.getNumberOfKills(), user.getScore());
 	}
@@ -277,9 +298,18 @@ public abstract class LevelParent extends Observable {
 		return currentNumberOfEnemies;
 	}
 
+	protected int getCurrentNumberOfCoins() {
+		return currentNumberOfCoins;
+	}
+
 	protected void addEnemyUnit(ActiveActorDestructible enemy) {
 		enemyUnits.add(enemy);
 		root.getChildren().add(enemy);
+	}
+
+	protected void addCoinUnit(ActiveActorDestructible coin) {
+		coinUnits.add(coin);
+		root.getChildren().add(coin);
 	}
 
 	protected double getEnemyMaximumYPosition() {
@@ -302,6 +332,14 @@ public abstract class LevelParent extends Observable {
 		penetratedEnemyCount = 0;
 	}
 
+	private void updateNumberOfCoins() {
+		// Update currentNumberOfEnemies to reflect the number of enemies that have not penetrated defenses
+		currentNumberOfCoins = coinUnits.size() - offScreenCountCount;
+
+		// Reset the penetrated enemy count for the next update
+		offScreenCountCount = 0;
+	}
+
 	boolean isEnemyPlaneOverlapping(ActiveActorDestructible newEnemy) {
 		for (ActiveActorDestructible enemy : enemyUnits) {
 			if (newEnemy.getBoundsInParent().intersects(enemy.getBoundsInParent())) {
@@ -309,6 +347,37 @@ public abstract class LevelParent extends Observable {
 			}
 		}
 		return false;
+	}
+
+	boolean isCoinOverlapping(ActiveActorDestructible newCoin) {
+		for (ActiveActorDestructible coin : coinUnits) {
+			if (newCoin.getBoundsInParent().intersects(coin.getBoundsInParent())) {
+				return true; // Overlapping found
+			}
+		}
+		return false; // No overlap
+	}
+
+	public void onPauseButtonClicked() {
+		if (timeline.getStatus() == Animation.Status.RUNNING) {
+			timeline.pause(); // Pause the game timeline
+			levelView.pauseButton.getPauseButton().setVisible(false);
+			levelView.pauseOverlay.showOverlay();
+			System.out.println("Game paused.");
+//			levelView.getPauseOverlay();
+		}
+	}
+
+	public void onResumeButtonClicked() {
+		System.out.println("Resume button clicked."); // Debug statement
+		if (timeline.getStatus() == Animation.Status.PAUSED) {
+			levelView.pauseButton.getPauseButton().setVisible(true);
+			levelView.pauseOverlay.hideOverlay();
+			timeline.play();
+			System.out.println("Game resumed."); // Debug statement
+		} else {
+			System.out.println("Timeline is not paused."); // Debug statement
+		}
 	}
 }
 

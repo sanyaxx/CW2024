@@ -38,7 +38,8 @@ public class Level2 extends LevelParent {
 
 	@Override
 	protected LevelView instantiateLevelView() {
-		levelView = new LevelViewLevelTwo(getRoot(), PLAYER_INITIAL_HEALTH);
+		System.out.println("Score: " + getUser().getScore());
+		levelView = new LevelViewLevelTwo(getRoot(), PLAYER_INITIAL_HEALTH, getUser().getScore());
 		return levelView;
 	}
 
