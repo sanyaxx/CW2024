@@ -35,10 +35,10 @@ public class StartButton {
 
     // New method to handle the start button click
     public void handleStartButtonClick() {
-        int nextLevelNumber = levelManager.getNextLevelNumber();
-        System.out.println("nextLevelNumber: " + nextLevelNumber);
-        if (nextLevelNumber != -1) {
-            levelManager.showLevelStartScreen(nextLevelNumber); // Call goToNextLevel with the next level name
+        int levelNumber = levelManager.getCurrentLevelNumber();
+        System.out.println("currentLevelNumber: " + levelNumber);
+        if (levelNumber != -1) {
+            levelManager.showLevelStartScreen(levelNumber); // Call goToNextLevel with the next level name
         } else {
             System.out.println("No more levels available.");
         }
