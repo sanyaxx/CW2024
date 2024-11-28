@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -11,7 +12,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 public class StartPage {
-    private static final String BACKGROUND_IMAGE = "/com/example/demo/images/startPageBackground.jpg";
+    private static final String BACKGROUND_IMAGE = "/com/example/demo/images/startPageBackground.png";
     private Consumer<Void> onPlayButtonClicked; // Callback for play button click
     private Stage stage; // Store the stage reference
 
@@ -45,13 +46,15 @@ public class StartPage {
         layout.setTranslateX((stage.getWidth() - 400) / 2);
 
         // Create a root pane and add the background and layout
-        StackPane root = new StackPane();
+        Group root = new Group();
         root.getChildren().addAll(backgroundImageView, layout);
 
         // Set the scene
         Scene scene = new Scene(root, stage.getWidth(), stage.getHeight());
         stage.setScene(scene);
         stage.setTitle("Game Start Page");
+
+//        stage.setMaximized(true);
         stage.show();
     }
 }
