@@ -19,6 +19,10 @@ public abstract class FighterPlane extends ActiveActorDestructible {
 		}
 	}
 
+	public void rotatePlane(int angle) {
+		this.setRotate(angle);
+	}
+
 	protected double getProjectileXPosition(double xPositionOffset) {
 		return getLayoutX() + getTranslateX() + xPositionOffset;
 	}
