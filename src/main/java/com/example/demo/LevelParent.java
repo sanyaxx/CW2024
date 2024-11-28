@@ -25,12 +25,12 @@ public abstract class LevelParent extends Observable {
 	private final double enemyMaximumYPosition;
 
 	private final Group root;
-	private final Timeline timeline;
+	protected final Timeline timeline;
 	private final UserPlane user;
-	private final Scene scene;
+	protected final Scene scene;
 	private final ImageView background;
 
-	private final List<ActiveActorDestructible> friendlyUnits;
+	protected final List<ActiveActorDestructible> friendlyUnits;
 	private final List<ActiveActorDestructible> enemyUnits;
 	protected final List<ActiveActorDestructible> userProjectiles;
 	protected final List<ActiveActorDestructible> enemyProjectiles;
@@ -118,7 +118,7 @@ public abstract class LevelParent extends Observable {
 		timeline.getKeyFrames().add(gameLoop);
 	}
 
-	private void initializeBackground() {
+	protected void initializeBackground() {
 		background.setFocusTraversable(true);
 		background.setFitHeight(screenHeight);
 		background.setFitWidth(screenWidth);
@@ -139,7 +139,7 @@ public abstract class LevelParent extends Observable {
 		root.getChildren().add(background);
 	}
 
-	private void fireProjectile() {
+	protected void fireProjectile() {
 		ActiveActorDestructible projectile = user.fireProjectile();
 		root.getChildren().add(projectile);
 		userProjectiles.add(projectile);
@@ -156,7 +156,7 @@ public abstract class LevelParent extends Observable {
 		}
 	}
 
-	private void updateActors() {
+	protected void updateActors() {
 		friendlyUnits.forEach(plane -> plane.updateActor());
 		enemyUnits.forEach(enemy -> enemy.updateActor());
 		userProjectiles.forEach(projectile -> projectile.updateActor());
@@ -164,7 +164,7 @@ public abstract class LevelParent extends Observable {
 		coinUnits.forEach(coin -> coin.updateActor());
 	}
 
-	private void removeAllDestroyedActors() {
+	protected void removeAllDestroyedActors() {
 		removeDestroyedActors(friendlyUnits);
 		removeDestroyedActors(enemyUnits);
 		removeDestroyedActors(userProjectiles);
@@ -172,7 +172,7 @@ public abstract class LevelParent extends Observable {
 		removeDestroyedActors(coinUnits);
 	}
 
-	private void removeDestroyedActors(List<ActiveActorDestructible> actors) {
+	protected void removeDestroyedActors(List<ActiveActorDestructible> actors) {
 		List<ActiveActorDestructible> destroyedActors = actors.stream().filter(actor -> actor.isDestroyed())
 				.collect(Collectors.toList());
 		root.getChildren().removeAll(destroyedActors);
@@ -193,15 +193,15 @@ public abstract class LevelParent extends Observable {
 		handleCollisions(friendlyUnits, enemyUnits);
 	}
 
-	private void handleUserProjectileCollisions() {
+	protected void handleUserProjectileCollisions() {
 		handleCollisions(userProjectiles, enemyUnits);
 	}
 
-	private void handleEnemyProjectileCollisions() {
+	protected void handleEnemyProjectileCollisions() {
 		handleCollisions(enemyProjectiles, friendlyUnits);
 	}
 
-	private void handleCollisions(List<ActiveActorDestructible> actors1, List<ActiveActorDestructible> actors2) {
+	protected void handleCollisions(List<ActiveActorDestructible> actors1, List<ActiveActorDestructible> actors2) {
 		for (ActiveActorDestructible actor : actors2) {
 			if (actor.isDestroyed()) continue; // Skip if already destroyed
 			for (ActiveActorDestructible otherActor : actors1) {
@@ -239,7 +239,7 @@ public abstract class LevelParent extends Observable {
 //		}
 //	}
 
-	private void handleEnemyPenetration() {
+	protected void handleEnemyPenetration() {
 		for (ActiveActorDestructible enemy : enemyUnits) {
 			if (enemyHasPenetratedDefenses(enemy)) {
 				enemy.takeDamage();
@@ -281,7 +281,7 @@ public abstract class LevelParent extends Observable {
 		penetratedEnemyCount = 0;
 	}
 
-	private boolean enemyHasPenetratedDefenses(ActiveActorDestructible enemy) {
+	protected boolean enemyHasPenetratedDefenses(ActiveActorDestructible enemy) {
 		return Math.abs(enemy.getTranslateX()) > screenWidth;
 	}
 
