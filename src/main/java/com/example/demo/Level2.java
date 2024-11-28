@@ -40,4 +40,10 @@ public class Level2 extends LevelParent {
 		levelView = new LevelViewLevelTwo(getRoot(), PLAYER_INITIAL_HEALTH);
 		return levelView;
 	}
+
+	@Override
+	protected void updateLevelView() {
+		levelView.removeHearts(getUser().getHealth());
+		levelView.updateWinningParameterDisplay(boss.getHealth(), getUser().getScore());
+	}
 }
