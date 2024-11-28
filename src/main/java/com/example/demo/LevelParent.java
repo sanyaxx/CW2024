@@ -32,12 +32,17 @@ public abstract class LevelParent extends Observable {
 
 	private final List<ActiveActorDestructible> friendlyUnits;
 	private final List<ActiveActorDestructible> enemyUnits;
-	private final List<ActiveActorDestructible> userProjectiles;
-	private final List<ActiveActorDestructible> enemyProjectiles;
-	
+	protected final List<ActiveActorDestructible> userProjectiles;
+	protected final List<ActiveActorDestructible> enemyProjectiles;
+	protected final List<ActiveActorDestructible> coinUnits;
+
 	private int currentNumberOfEnemies;
+	private int currentNumberOfCoins;
 	private int penetratedEnemyCount;
+	private int offScreenCountCount;
 	private final LevelView levelView;
+	private int currentLevelNumber; // To track the current level
+	protected static final int TOTAL_LEVELS = 3; // Track the total number of levels
 
 	public LevelParent(String backgroundImageName, double screenHeight, double screenWidth, int playerInitialHealth) {
         this.root = new Group();
@@ -48,6 +53,7 @@ public abstract class LevelParent extends Observable {
 		this.enemyUnits = new ArrayList<>();
 		this.userProjectiles = new ArrayList<>();
 		this.enemyProjectiles = new ArrayList<>();
+		this.coinUnits = new ArrayList<>();
 
 		this.background = new ImageView(new Image(getClass().getResource(backgroundImageName).toExternalForm()));
 		this.screenHeight = screenHeight;
@@ -65,6 +71,8 @@ public abstract class LevelParent extends Observable {
 	protected abstract void checkIfGameOver();
 
 	protected abstract void spawnEnemyUnits();
+
+	protected abstract void spawnCoinUnits();
 
 	protected abstract LevelView instantiateLevelView();
 
