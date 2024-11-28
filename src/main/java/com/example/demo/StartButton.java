@@ -14,7 +14,7 @@ public class StartButton {
 
     public StartButton() {
         button = new Button();
-        Image playImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/demo/images/startGameButton.png")));
+        Image playImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/demo/images/startButton.png")));
         ImageView playImageView = new ImageView(playImage);
         playImageView.setFitWidth(250);
         playImageView.setFitHeight(120);
