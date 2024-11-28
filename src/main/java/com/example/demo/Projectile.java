@@ -6,6 +6,10 @@ public abstract class Projectile extends ActiveActorDestructible {
 		super(imageName, imageHeight, initialXPos, initialYPos);
 	}
 
+	public void rotateProjectile(int angle) {
+		this.setRotate(angle);
+	}
+
 	@Override
 	public void takeDamage() {
 		this.destroy();
