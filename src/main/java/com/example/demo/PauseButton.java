@@ -12,7 +12,7 @@ public class PauseButton {
 
     public PauseButton() {
         button = createButton();
-        button.setLayoutX(1250);
+        button.setLayoutX(1000);
         button.setLayoutY(25);
     }
 
