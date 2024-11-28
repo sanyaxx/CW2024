@@ -13,7 +13,6 @@ public class Main extends Application {
 	private static final double SCREEN_HEIGHT = (int) javafx.stage.Screen.getPrimary().getBounds().getHeight();;
 	private static final String TITLE = "Sky Battle";
 	private Controller myController;
-	private LevelManager levelManager;
 
 	@Override
 	public void start(Stage stage) throws ClassNotFoundException, NoSuchMethodException, SecurityException,
