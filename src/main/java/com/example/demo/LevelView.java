@@ -19,12 +19,14 @@ public class LevelView {
 	private final WinImage winImage;
 	private final GameOverImage gameOverImage;
 	private final HeartDisplay heartDisplay;
+	private final Stage stage;
 	public WinningParameter winningParameter;
 	public final PauseButton pauseButton;
 	public final PauseOverlay pauseOverlay;
 
 	public LevelView(Group root, int heartsToDisplay) {
 		this.root = root;
+		this.stage = AppStage.getInstance().getPrimaryStage();
 		this.heartDisplay = new HeartDisplay(HEART_DISPLAY_X_POSITION, HEART_DISPLAY_Y_POSITION, heartsToDisplay);
 		this.winImage = new WinImage(WIN_IMAGE_X_POSITION, WIN_IMAGE_Y_POSITION);
 		this.gameOverImage = new GameOverImage(LOSS_SCREEN_X_POSITION, LOSS_SCREEN_Y_POSITION);

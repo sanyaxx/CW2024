@@ -8,6 +8,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
+import javafx.stage.Stage;
 
 public class PauseOverlay {
     private final StackPane overlay; // Use StackPane to layer the background and buttons
@@ -15,16 +16,19 @@ public class PauseOverlay {
     private final ResumeButton resumeButton;
     private final StartPageButton startPageButton;
     private final VolumeButton volumeButton;
+    private final Stage stage;
+    private StartPage startPage;
 
     public PauseOverlay(Scene scene) {
         this.scene = scene;
-//        this.startPage = new StartPage(new Stage());
+        this.stage = AppStage.getInstance().getPrimaryStage();
         this.resumeButton = new ResumeButton();
         this.startPageButton = new StartPageButton();
         this.volumeButton = new VolumeButton();
+        this.startPage = new StartPage(stage);
 
         // Create a full-screen semi-transparent background
-        Rectangle background = new Rectangle(1500, 750);
+        Rectangle background = new Rectangle(stage.getWidth(), stage.getHeight());
         background.setFill(new Color(0, 0, 0, 0.7)); // Black with 70% opacity for a darker effect
 
         // Set actions for the buttons
@@ -78,6 +82,7 @@ public class PauseOverlay {
         // Logic to go to the main menu
         System.out.println("Going to the main menu..."); // Debug statement
         hideOverlay();
+        startPage.show();
     }
 
     private void adjustVolume() {
