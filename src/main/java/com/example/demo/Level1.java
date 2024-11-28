@@ -21,9 +21,8 @@ public class Level1 extends LevelParent {
 		} else if (userHasReachedKillTarget()) {
 			System.out.println("User  has reached kill target. Advancing to next level.");
 			endLevel();
-			// Use the singleton instance of LevelManager
 			LevelManager levelManager = LevelManager.getInstance();
-			levelManager.goToNextLevel(levelManager.getNextLevelName());
+			levelManager.incrementCurrentLevelNumber();
 		}
 	}
 

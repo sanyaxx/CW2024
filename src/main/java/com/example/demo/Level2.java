@@ -23,8 +23,9 @@ public class Level2 extends LevelParent {
 			loseGame();
 		}
 		else if (boss.isDestroyed()) {
-//			levelManager.goToNextLevel(levelManager.getNextLevelName());
-			winGame();
+			endLevel();
+			LevelManager levelManager = LevelManager.getInstance();
+			levelManager.incrementCurrentLevelNumber();
 		}
 	}
 
