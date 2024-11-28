@@ -83,10 +83,14 @@ public abstract class LevelParent extends Observable {
 
 	private void updateScene() {
 		spawnEnemyUnits();
+		spawnCoinUnits();
 		updateActors();
 		generateEnemyFire();
 		updateNumberOfEnemies();
+		updateNumberOfCoins();
+		handleCoinCollisions();
 		handleEnemyPenetration();
+		handleCoinMovesOffScreen();
 		handleUserProjectileCollisions();
 		handleEnemyProjectileCollisions();
 		handlePlaneCollisions();
@@ -149,6 +153,7 @@ public abstract class LevelParent extends Observable {
 		enemyUnits.forEach(enemy -> enemy.updateActor());
 		userProjectiles.forEach(projectile -> projectile.updateActor());
 		enemyProjectiles.forEach(projectile -> projectile.updateActor());
+		coinUnits.forEach(coin -> coin.updateActor());
 	}
 
 	private void removeAllDestroyedActors() {
@@ -156,6 +161,7 @@ public abstract class LevelParent extends Observable {
 		removeDestroyedActors(enemyUnits);
 		removeDestroyedActors(userProjectiles);
 		removeDestroyedActors(enemyProjectiles);
+		removeDestroyedActors(coinUnits);
 	}
 
 	private void removeDestroyedActors(List<ActiveActorDestructible> actors) {
