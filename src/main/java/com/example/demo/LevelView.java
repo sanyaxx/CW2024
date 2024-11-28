@@ -3,6 +3,7 @@ package com.example.demo;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 public class LevelView {
 
@@ -24,7 +25,7 @@ public class LevelView {
 	public final PauseButton pauseButton;
 	public final PauseOverlay pauseOverlay;
 
-	public LevelView(Group root, int heartsToDisplay) {
+	public LevelView(Group root, int heartsToDisplay, int score) {
 		this.root = root;
 		this.stage = AppStage.getInstance().getPrimaryStage();
 		this.heartDisplay = new HeartDisplay(HEART_DISPLAY_X_POSITION, HEART_DISPLAY_Y_POSITION, heartsToDisplay);

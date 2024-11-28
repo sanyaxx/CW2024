@@ -9,8 +9,8 @@ public class LevelViewLevelTwo extends LevelView {
 	private final Group root;
 	private final ShieldImage shieldImage;
 	
-	public LevelViewLevelTwo(Group root, int heartsToDisplay) {
-		super(root, heartsToDisplay);
+	public LevelViewLevelTwo(Group root, int heartsToDisplay, int score) {
+		super(root, heartsToDisplay, score);
 		this.root = root;
 		this.shieldImage = new ShieldImage(SHIELD_X_POSITION, SHIELD_Y_POSITION);
 		this.winningParameter = new WinningParameter("Boss Health", 100, "Coins", score);

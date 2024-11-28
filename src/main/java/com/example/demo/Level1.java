@@ -87,7 +87,7 @@ public class Level1 extends LevelParent {
 
 	@Override
 	protected LevelView instantiateLevelView() {
-		return new LevelView(getRoot(), PLAYER_INITIAL_HEALTH);
+		return new LevelView(getRoot(), PLAYER_INITIAL_HEALTH, getUser().getScore());
 	}
 
 	private boolean userHasReachedKillTarget() {
