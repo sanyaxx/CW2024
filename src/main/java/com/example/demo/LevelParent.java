@@ -64,6 +64,12 @@ public abstract class LevelParent extends Observable {
 		this.penetratedEnemyCount = 0;
 		initializeTimeline();
 		friendlyUnits.add(user);
+
+		// Set the action for the pause button
+		levelView.pauseButton.setOnPauseAction(this::onPauseButtonClicked);
+
+		// Set the action for the resume button
+		levelView.getResumeButton().setOnResumeAction(this::onResumeButtonClicked);
 	}
 
 	protected abstract void initializeFriendlyUnits();
@@ -81,6 +87,8 @@ public abstract class LevelParent extends Observable {
 		initializeFriendlyUnits();
 		levelView.showHeartDisplay();
 		levelView.showWinningParameterDisplay();
+		levelView.showPauseButton();
+		levelView.getPauseOverlay();
 		return scene;
 	}
 
@@ -272,7 +280,6 @@ public abstract class LevelParent extends Observable {
 		if (kills > 0) { // Only increment if there are new kills
 			for (int i = 0; i < kills; i++) {
 				user.incrementKillCount();
-				levelView.incrementKillCount();
 			}
 		}
 		currentNumberOfEnemies = currentEnemyCount; // Update current number of enemies
