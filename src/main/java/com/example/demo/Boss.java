@@ -9,7 +9,6 @@ public class Boss extends FighterPlane {
 	private static final double INITIAL_Y_POSITION = 400;
 	private static final double PROJECTILE_Y_POSITION_OFFSET = 75.0;
 	private static final double BOSS_FIRE_RATE = .04;
-	private static final double BOSS_SHIELD_PROBABILITY = .002;
 	private static final int IMAGE_HEIGHT = 75;
 	private static final int VERTICAL_VELOCITY = 8;
 	private static final int HEALTH = 100;
@@ -18,21 +17,25 @@ public class Boss extends FighterPlane {
 	private static final int MAX_FRAMES_WITH_SAME_MOVE = 10;
 	private static final int Y_POSITION_UPPER_BOUND = -100;
 	private static final int Y_POSITION_LOWER_BOUND = 475;
-	private static final int MAX_FRAMES_WITH_SHIELD = 500;
+	private static final int MIN_SHIELD_DURATION = 100;
+	private static final int MAX_SHIELD_DURATION = 250;
+	private static final int MIN_NO_SHIELD_DURATION = 150;
+	private static final int MAX_NO_SHIELD_DURATION = 450;
 	private final List<Integer> movePattern;
 	private boolean isShielded;
 	private int consecutiveMovesInSameDirection;
 	private int indexOfCurrentMove;
 	private int framesWithShieldActivated;
+	private int framesWithoutShieldActivated;
 	private final LevelViewLevelTwo levelView;
-
 
 	public Boss(LevelViewLevelTwo levelView) {
 		super(IMAGE_NAME, IMAGE_HEIGHT, INITIAL_X_POSITION, INITIAL_Y_POSITION, HEALTH);
-        movePattern = new ArrayList<>();
+		movePattern = new ArrayList<>();
 		consecutiveMovesInSameDirection = 0;
 		indexOfCurrentMove = 0;
 		framesWithShieldActivated = 0;
+		framesWithoutShieldActivated = 0;
 		isShielded = false;
 		this.levelView = levelView;
 		initializeMovePattern();
@@ -49,7 +52,7 @@ public class Boss extends FighterPlane {
 		// Synchronize the shield's position with the boss's position
 		levelView.updateShieldPosition(getLayoutX() + getTranslateX(), getLayoutY() + getTranslateY());
 	}
-	
+
 	@Override
 	public void updateActor() {
 		updatePosition();
@@ -60,7 +63,7 @@ public class Boss extends FighterPlane {
 	public ActiveActorDestructible fireProjectile() {
 		return bossFiresInCurrentFrame() ? new BossProjectile(getProjectileInitialPosition()) : null;
 	}
-	
+
 	@Override
 	public void takeDamage() {
 		if (!isShielded) {
@@ -79,9 +82,17 @@ public class Boss extends FighterPlane {
 	}
 
 	private void updateShield() {
-		if (isShielded) framesWithShieldActivated++;
-		else if (shieldShouldBeActivated()) activateShield();	
-		if (shieldExhausted()) deactivateShield();
+		if (isShielded) {
+			framesWithShieldActivated++;
+			if (framesWithShieldActivated >= MIN_SHIELD_DURATION + (int) (Math.random() * (MAX_SHIELD_DURATION - MIN_SHIELD_DURATION))) {
+				deactivateShield();
+			}
+		} else {
+			framesWithoutShieldActivated++;
+			if (framesWithoutShieldActivated >= MIN_NO_SHIELD_DURATION + (int) (Math.random() * (MAX_NO_SHIELD_DURATION - MIN_NO_SHIELD_DURATION))) {
+				activateShield();
+			}
+		}
 	}
 
 	private int getNextMove() {
@@ -106,25 +117,17 @@ public class Boss extends FighterPlane {
 		return getLayoutY() + getTranslateY() + PROJECTILE_Y_POSITION_OFFSET;
 	}
 
-	private boolean shieldShouldBeActivated() {
-		return Math.random() < BOSS_SHIELD_PROBABILITY;
-	}
-
-	private boolean shieldExhausted() {
-		return framesWithShieldActivated == MAX_FRAMES_WITH_SHIELD;
-	}
-
 	private void activateShield() {
 		isShielded = true;
-		System.out.println("[DEBUG] Boss Shield activated.");
+		framesWithShieldActivated = 0;
+		framesWithoutShieldActivated = 0;
 		levelView.showShield();
 	}
 
 	private void deactivateShield() {
 		isShielded = false;
 		framesWithShieldActivated = 0;
-		System.out.println("[DEBUG] Boss Shield deactivated.");
+		framesWithoutShieldActivated = 0;
 		levelView.hideShield();
 	}
-
 }
