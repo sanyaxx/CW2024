@@ -16,12 +16,12 @@ public class Level1 extends LevelParent {
 
 	@Override
 	protected void checkIfGameOver() {
-		System.out.println("Checking game over conditions...");
 		if (userIsDestroyed()) {
 			System.out.println("User has been destroyed. Game over.");
 			loseGame();
 		} else if (userHasReachedKillTarget()) {
-			System.out.println("User  has reached kill target. Advancing to next level.");
+			System.out.println("User has reached kill target. Advancing to next level.");
+			System.out.println("User Score: " + getUser().getScore());
 			endLevel();
 			LevelManager levelManager = LevelManager.getInstance();
 			levelManager.incrementCurrentLevelNumber();
