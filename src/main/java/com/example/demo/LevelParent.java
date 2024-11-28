@@ -3,7 +3,6 @@ package com.example.demo;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.example.demo.controller.Controller;
 import javafx.animation.*;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -315,6 +314,10 @@ public abstract class LevelParent extends Observable {
 		return root;
 	}
 
+	protected ImageView getBackground() {
+		return background;
+	}
+
 	protected int getCurrentNumberOfEnemies() {
 		return currentNumberOfEnemies;
 	}
@@ -339,6 +342,10 @@ public abstract class LevelParent extends Observable {
 
 	protected double getScreenWidth() {
 		return screenWidth;
+	}
+
+	protected double getScreenHeight() {
+		return screenHeight;
 	}
 
 	protected boolean userIsDestroyed() {
