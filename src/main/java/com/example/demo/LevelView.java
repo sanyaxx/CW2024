@@ -13,8 +13,6 @@ public class LevelView {
 	private static final int WIN_IMAGE_Y_POSITION = 175;
 	private static final int LOSS_SCREEN_X_POSITION = -160;
 	private static final int LOSS_SCREEN_Y_POSITION = -375;
-//	private static final int PAUSE_IMAGE_X_POSITION = 1250;
-//	private static final int PAUSE_IMAGE_Y_POSITION = 25;
 
 	private final Group root;
 	private final WinImage winImage;
@@ -24,6 +22,8 @@ public class LevelView {
 	public WinningParameter winningParameter;
 	public final PauseButton pauseButton;
 	public final PauseOverlay pauseOverlay;
+	public final LevelCompletedOverlay levelCompletedOverlay;
+	public final LevelLostOverlay levelLostOverlay;
 
 	public LevelView(Group root, int heartsToDisplay, int score) {
 		this.root = root;
@@ -33,7 +33,9 @@ public class LevelView {
 		this.gameOverImage = new GameOverImage(LOSS_SCREEN_X_POSITION, LOSS_SCREEN_Y_POSITION);
 		this.winningParameter = new WinningParameter("Kill Count", 0, "Coins", score);
 		this.pauseButton = new PauseButton();
-		this.pauseOverlay = new PauseOverlay(new Scene(new StackPane(), 1500, 750));
+		this.pauseOverlay = new PauseOverlay(new Scene(new StackPane(), stage.getWidth(), stage.getHeight()));
+		this.levelCompletedOverlay = new LevelCompletedOverlay(new Scene(new StackPane(), stage.getWidth(), stage.getHeight()));
+		this.levelLostOverlay = new LevelLostOverlay(new Scene(new StackPane(), stage.getWidth(), stage.getHeight()));
 	}
 
 	public void showHeartDisplay() {
@@ -64,5 +66,30 @@ public class LevelView {
 	public void updateWinningParameterDisplay(int parameterValue1, int parameterValue2) {
 		winningParameter.updateValue1(parameterValue1);
 		winningParameter.updateValue2(parameterValue2);
+	}
+
+	// Add the pause button to the root
+	public void showPauseButton() {
+		root.getChildren().add(pauseButton.getPauseButton());
+	}
+
+	public void getPauseOverlay() {
+		if (!root.getChildren().contains(pauseOverlay.getOverlay())) {
+			root.getChildren().add(pauseOverlay.getOverlay());
+		} else {
+			System.out.println("Overlay already exists in root");
+		}
+	}
+
+	public void getLevelCompletedOverlay() {
+		root.getChildren().add(levelCompletedOverlay.getOverlay());
+	}
+
+	public void getLevelLostOverlay() {
+		root.getChildren().add(levelLostOverlay.getOverlay());
+	}
+
+	public ResumeButton getResumeButton() {
+		return pauseOverlay.getResumeButton(); // Access the ResumeButton from PauseOverlay
 	}
 }
