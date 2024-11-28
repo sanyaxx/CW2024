@@ -13,12 +13,13 @@ public class UserPlane extends FighterPlane {
 	private static final int PROJECTILE_Y_POSITION_OFFSET = 20;
 	private int velocityMultiplier;
 	private int numberOfKills;
+	private static int score = 0; // Tracks the number of coins collected
 
 	public UserPlane(int initialHealth) {
 		super(IMAGE_NAME, IMAGE_HEIGHT, INITIAL_X_POSITION, INITIAL_Y_POSITION, initialHealth);
 		velocityMultiplier = 0;
 	}
-	
+
 	@Override
 	public void updatePosition() {
 		if (isMoving()) {
@@ -63,6 +64,14 @@ public class UserPlane extends FighterPlane {
 
 	public void incrementKillCount() {
 		numberOfKills++;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void incrementScore() {
+		score++;
 	}
 
 }
