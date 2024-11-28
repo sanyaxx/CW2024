@@ -215,11 +215,8 @@ public abstract class LevelParent extends Observable {
 			for (ActiveActorDestructible otherActor : actors1) {
 				if (otherActor.isDestroyed()) continue; // Skip if already destroyed
 				if (actor.getBoundsInParent().intersects(otherActor.getBoundsInParent())) {
-					// Optional: Add a small buffer or threshold check
-					if (actor.getBoundsInParent().intersects(otherActor.getBoundsInParent())) {
-						actor.takeDamage();
-						otherActor.takeDamage();
-					}
+					actor.takeDamage();
+					otherActor.takeDamage();
 				}
 			}
 		}
