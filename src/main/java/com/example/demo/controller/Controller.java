@@ -9,12 +9,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
-import com.example.demo.LevelParent;
+import com.example.demo.levels.LevelParent;
 import com.example.demo.StartPage;
 
 public class Controller implements Observer {
-
-	private static final String LEVEL_ONE_CLASS_NAME = "com.example.demo.Level1"; // Use Level1 directly
+	
 	private final Stage stage;
 
 	public Controller(Stage stage) {
