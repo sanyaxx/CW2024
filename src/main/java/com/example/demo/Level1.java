@@ -14,19 +14,6 @@ public class Level1 extends LevelParent {
 		super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
 	}
 
-	@Override
-	protected void checkIfGameOver() {
-		if (userIsDestroyed()) {
-			System.out.println("User has been destroyed. Game over.");
-			loseGame();
-		} else if (userHasReachedKillTarget()) {
-			System.out.println("User has reached kill target. Advancing to next level.");
-			System.out.println("User Score: " + getUser().getScore());
-			endLevel();
-			LevelManager levelManager = LevelManager.getInstance();
-			levelManager.incrementCurrentLevelNumber();
-		}
-	}
 
 	@Override
 	protected void initializeFriendlyUnits() {

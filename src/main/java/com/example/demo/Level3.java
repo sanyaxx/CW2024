@@ -45,17 +45,6 @@ public class Level3 extends LevelParent {
     }
 
     @Override
-    protected void checkIfGameOver() {
-        if (userIsDestroyed()) {
-            System.out.println("Game Over");
-            timer.stop();
-            loseGame();
-            timer.stop();
-        } else if (remainingTime <= 0) {
-            endLevel();
-            winGame();
-        }
-    }
 
     @Override
     protected boolean userIsDestroyed() {

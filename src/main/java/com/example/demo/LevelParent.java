@@ -282,24 +282,6 @@ public abstract class LevelParent extends Observable {
 		return Math.abs(enemy.getTranslateX()) > screenWidth;
 	}
 
-	protected void winGame() {
-		timeline.stop();
-		levelView.showWinImage();
-	}
-
-	public void endLevel() {
-		timeline.stop();
-		levelView.levelCompletedOverlay.showOverlay();
-		levelView.getLevelCompletedOverlay();
-	}
-
-	protected void loseGame() {
-		timeline.stop();
-		levelView.levelLostOverlay.showOverlay();
-		levelView.getLevelLostOverlay();
-//		levelView.showGameOverImage();
-	}
-
 	protected UserPlane getUser() {
 		return user;
 	}

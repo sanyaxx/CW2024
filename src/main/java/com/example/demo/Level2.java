@@ -12,22 +12,6 @@ public class Level2 extends LevelParent {
         boss = new Boss(levelView);
     }
 
-	@Override
-	protected void initializeFriendlyUnits() {
-		getRoot().getChildren().add(getUser());
-	}
-
-	@Override
-	protected void checkIfGameOver() {
-		if (userIsDestroyed()) {
-			loseGame();
-		}
-		else if (boss.isDestroyed()) {
-			endLevel();
-			LevelManager levelManager = LevelManager.getInstance();
-			levelManager.incrementCurrentLevelNumber();
-		}
-	}
 
 	@Override
 	protected void spawnEnemyUnits() {
