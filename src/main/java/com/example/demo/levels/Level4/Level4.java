@@ -1,6 +1,6 @@
-package com.example.demo.levels;
-
-import com.example.demo.*;
+package com.example.demo.levels.Level4;
+import com.example.demo.levels.LevelParent;
+import com.example.demo.levels.LevelView;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;

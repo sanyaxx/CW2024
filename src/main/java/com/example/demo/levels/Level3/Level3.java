@@ -1,6 +1,6 @@
-package com.example.demo.levels;
-
-import com.example.demo.*;
+package com.example.demo.levels.Level3;
+import com.example.demo.levels.LevelParent;
+import com.example.demo.levels.LevelView;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
