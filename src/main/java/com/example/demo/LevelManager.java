@@ -32,7 +32,7 @@ public class LevelManager extends Observable {
 
     public String getNextLevelName() {
         if (currentLevelNumber < TOTAL_LEVELS_PLUS1) {
-            return "com.example.demo.Level" + (currentLevelNumber);
+            return "com.example.demo.levels.Level" + (currentLevelNumber);
         } else {
             return null; // No more levels
         }
