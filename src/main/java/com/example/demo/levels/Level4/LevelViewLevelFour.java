@@ -1,5 +1,7 @@
-package com.example.demo;
+package com.example.demo.levels.Level4;
 
+import com.example.demo.functionalClasses.DisplayWinningParameter;
+import com.example.demo.levels.LevelView;
 import javafx.scene.Group;
 
 public class LevelViewLevelFour extends LevelView {
@@ -9,10 +11,10 @@ public class LevelViewLevelFour extends LevelView {
     public LevelViewLevelFour(Group root, int heartsToDisplay, int score) {
         super(root, heartsToDisplay, score);
         this.root = root;
-        this.winningParameter = new WinningParameter("Fuel Time Left", 10);
+        this.displayWinningParameter = new DisplayWinningParameter("Fuel Time Left", 10);
     }
 
     public void updateWinningParameterDisplay(int parameterValue) {
-        winningParameter.updateValue1(parameterValue);
+        displayWinningParameter.updateValue1(parameterValue);
     }
 }

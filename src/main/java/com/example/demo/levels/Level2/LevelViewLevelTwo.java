@@ -1,5 +1,8 @@
-package com.example.demo;
+package com.example.demo.levels.Level2;
 
+import com.example.demo.actors.additionalUnits.ShieldImage;
+import com.example.demo.functionalClasses.DisplayWinningParameter;
+import com.example.demo.levels.LevelView;
 import javafx.scene.Group;
 
 public class LevelViewLevelTwo extends LevelView {
@@ -13,7 +16,7 @@ public class LevelViewLevelTwo extends LevelView {
 		super(root, heartsToDisplay, score);
 		this.root = root;
 		this.shieldImage = new ShieldImage(SHIELD_X_POSITION, SHIELD_Y_POSITION);
-		this.winningParameter = new WinningParameter("Boss Health", 100, "Coins", score);
+		this.displayWinningParameter = new DisplayWinningParameter("Boss Health", 100, "Coins", score);
 		addImagesToRoot();
 	}
 	

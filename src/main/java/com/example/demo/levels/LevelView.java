@@ -1,9 +1,10 @@
-package com.example.demo;
+package com.example.demo.levels;
 
+import com.example.demo.functionalClasses.DisplayHeart;
+import com.example.demo.PauseButton;
+import com.example.demo.activityManagers.PauseHandler;
+import com.example.demo.functionalClasses.DisplayWinningParameter;
 import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 
 public class LevelView {
 
@@ -11,15 +12,15 @@ public class LevelView {
 	private static final double HEART_DISPLAY_Y_POSITION = 25;
 
 	private final Group root;
-	private final HeartDisplay heartDisplay;
-	public WinningParameter winningParameter;
+	private final DisplayHeart heartDisplay;
+	public DisplayWinningParameter displayWinningParameter;
 	public final PauseButton pauseButton;
 	public final PauseHandler pauseHandler;
 
 	public LevelView(Group root, int heartsToDisplay, int score) {
 		this.root = root;
-		this.heartDisplay = new HeartDisplay(HEART_DISPLAY_X_POSITION, HEART_DISPLAY_Y_POSITION, heartsToDisplay);
-		this.winningParameter = new WinningParameter("Kill Count", 0, "Coins", score);
+		this.heartDisplay = new DisplayHeart(HEART_DISPLAY_X_POSITION, HEART_DISPLAY_Y_POSITION, heartsToDisplay);
+		this.displayWinningParameter = new DisplayWinningParameter("Kill Count", 0, "Coins", score);
 		this.pauseButton = new PauseButton();
 		this.pauseHandler = new PauseHandler(this, root);
 
@@ -27,7 +28,7 @@ public class LevelView {
 		pauseButton.setOnPauseAction(pauseHandler::pauseGame);
 
 		// Set the action for the resume button
-		(pauseHandler.getResumeButton()).setOnResumeAction(pauseHandler::resumeGame);
+		(pauseHandler.getResumeButton()).setOnAction(event -> pauseHandler.resumeGame());
 	}
 
 
@@ -43,13 +44,13 @@ public class LevelView {
 	}
 
 	public void showWinningParameterDisplay() {
-		root.getChildren().add(winningParameter.getContainer());
+		root.getChildren().add(displayWinningParameter.getContainer());
 	}
 
 	// Overloaded method to update the winning parameters with two values
 	public void updateWinningParameterDisplay(int parameterValue1, int parameterValue2) {
-		winningParameter.updateValue1(parameterValue1);
-		winningParameter.updateValue2(parameterValue2);
+		displayWinningParameter.updateValue1(parameterValue1);
+		displayWinningParameter.updateValue2(parameterValue2);
 	}
 
 	// Add the pause button to the root
