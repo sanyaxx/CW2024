@@ -6,7 +6,7 @@ import java.util.*;
 public class LevelManager extends Observable {
     private static LevelManager instance;
     private int currentLevelNumber; // To track the current level
-    private static final int TOTAL_LEVELS_PLUS1 = 3 + 1; // Track the total number of levels
+    protected static final int TOTAL_LEVELS_PLUS1 = 4 + 1; // Track the total number of levels
 
     // Private constructor initializes currentLevelNumber to 1
     private LevelManager() {
