@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.functionalClasses;
 
 public class GenerateLevelScore {
     private int livesRemaining;

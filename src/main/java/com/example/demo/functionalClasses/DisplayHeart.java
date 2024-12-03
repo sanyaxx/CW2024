@@ -1,10 +1,10 @@
-package com.example.demo;
+package com.example.demo.functionalClasses;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
-public class HeartDisplay {
+public class DisplayHeart {
 	
 	private static final String HEART_IMAGE_NAME = "/com/example/demo/images/heart.png";
 	private static final int HEART_HEIGHT = 50;
@@ -14,7 +14,7 @@ public class HeartDisplay {
 	private double containerYPosition;
 	private int numberOfHeartsToDisplay;
 	
-	public HeartDisplay(double xPosition, double yPosition, int heartsToDisplay) {
+	public DisplayHeart(double xPosition, double yPosition, int heartsToDisplay) {
 		this.containerXPosition = xPosition;
 		this.containerYPosition = yPosition;
 		this.numberOfHeartsToDisplay = heartsToDisplay;

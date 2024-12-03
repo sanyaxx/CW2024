@@ -20,4 +20,5 @@ module com.example.demo {
     opens com.example.demo.actors.additionalUnits to javafx.fxml;
     opens com.example.demo.notUsed to javafx.fxml;
     opens com.example.demo.screensAndOverlays to javafx.fxml;
+    opens com.example.demo.functionalClasses to javafx.fxml;
 }

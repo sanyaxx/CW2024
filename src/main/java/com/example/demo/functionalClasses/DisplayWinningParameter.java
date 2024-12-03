@@ -1,12 +1,13 @@
-package com.example.demo;
+package com.example.demo.functionalClasses;
 
+import com.example.demo.gameConfig.AppStage;
 import javafx.scene.text.Text;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class WinningParameter {
+public class DisplayWinningParameter {
     private static final double DISPLAY_Y_POSITION = 25;   // Position from the top
     private int value1;
     private int value2;
@@ -16,7 +17,7 @@ public class WinningParameter {
     private Text parameterText2;
     private final HBox container;
 
-    public WinningParameter(String parameterName1, int initialValue1, String parameterName2, int initialValue2) {
+    public DisplayWinningParameter(String parameterName1, int initialValue1, String parameterName2, int initialValue2) {
         this.parameterName1 = parameterName1;
         this.value1 = initialValue1;
         this.parameterName2 = parameterName2;
@@ -34,7 +35,7 @@ public class WinningParameter {
         this.container.setTranslateY(DISPLAY_Y_POSITION);
     }
 
-    public WinningParameter(String parameterName1, int initialValue1) {
+    public DisplayWinningParameter(String parameterName1, int initialValue1) {
         this.parameterName1 = parameterName1;
         this.value1 = initialValue1;
         this.parameterName2 = null; // No second parameter
