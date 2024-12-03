@@ -29,6 +29,7 @@ public class Level3 extends LevelParent {
         this.user = new UserTank(PLAYER_INITIAL_HEALTH);
         this.enemyRockets = new ArrayList<>();
         this.background = getBackground();
+        this.coinsCollectedInLevel = 0;
         SCREEN_WIDTH = screenWidth;
         SCREEN_HEIGHT = screenHeight;
         friendlyUnits.add(user);
@@ -62,6 +63,12 @@ public class Level3 extends LevelParent {
             levelEndHandler.handleLevelLoss(getUser().getScore());
         } else if (remainingTime <= 0) {
             LevelManager levelManager = LevelManager.getInstance();
+            GenerateLevelScore scoreCalculator = new GenerateLevelScore(getUser().getHealth(), coinsCollectedInLevel);
+
+            int calculatedScore = scoreCalculator.calculateScore();
+            String starImage = scoreCalculator.getStarImage(); // Get the corresponding star image path
+
+            getUser().setLevelScore(levelManager.getCurrentLevelNumber(), calculatedScore);
             levelEndHandler.handleLevelCompletion(getUser().getScore(), starImage, getUser());
 
             levelManager.incrementCurrentLevelNumber();

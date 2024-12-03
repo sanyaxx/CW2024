@@ -15,10 +15,16 @@ public class UserPlane extends FighterPlane {
 	private int numberOfKills = 0;
 	private static int score = 0; // Tracks the number of coins collected
 	private static int rotationAngle = 0; // Default set to facing East
+	// Protected array to hold level scores
+	protected int[] levelScores;
 
 	public UserPlane(int initialHealth) {
 		super(IMAGE_NAME, IMAGE_HEIGHT, INITIAL_X_POSITION, INITIAL_Y_POSITION, initialHealth);
 		velocityMultiplier = 0;
+
+		// Initialize the level scores array for 4 levels (for example)
+		levelScores = new int[4]; // Adjust size according to the number of levels
+	}
 	}
 
 	@Override
@@ -32,12 +38,12 @@ public class UserPlane extends FighterPlane {
 			}
 		}
 	}
-	
+
 	@Override
 	public void updateActor() {
 		updatePosition();
 	}
-	
+
 	@Override
 	public ActiveActorDestructible fireProjectile() {
 		return new UserProjectile(PROJECTILE_X_POSITION, getProjectileYPosition(PROJECTILE_Y_POSITION_OFFSET), rotationAngle);
@@ -75,4 +81,22 @@ public class UserPlane extends FighterPlane {
 		score++;
 	}
 
+}
+	// Method to set the score for a specific level
+	public void setLevelScore(int level, int score) {
+		if (level >= 0 && level <= levelScores.length) {
+			levelScores[level - 1] = score;
+		} else {
+			throw new IndexOutOfBoundsException("Invalid level index: " + level);
+		}
+	}
+
+	// Method to get the score for a specific level
+	public int getLevelScore(int level) {
+		if (level >= 0 && level <= levelScores.length) {
+			return levelScores[level];
+		} else {
+			throw new IndexOutOfBoundsException("Invalid level index: " + level);
+		}
+	}
 }

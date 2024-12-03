@@ -40,6 +40,7 @@ public abstract class LevelParent extends Observable {
 	private int currentNumberOfCoins;
 	private int penetratedEnemyCount;
 	private int offScreenCoinCount;
+	protected int coinsCollectedInLevel;
 	private final LevelView levelView;
 	private static final double COIN_SPAWN_PROBABILITY = .15;
 	private static final int TOTAL_COINS = 20;

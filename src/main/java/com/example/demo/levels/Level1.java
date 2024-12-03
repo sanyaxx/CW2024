@@ -12,6 +12,7 @@ public class Level1 extends LevelParent {
 
 	public Level1(double screenHeight, double screenWidth) {
 		super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
+		this.coinsCollectedInLevel = 0;
 	}
 
 	@Override
@@ -29,6 +30,12 @@ public class Level1 extends LevelParent {
 			System.out.println("User  Score: " + userScore);
 
 			LevelManager levelManager = LevelManager.getInstance();
+			GenerateLevelScore scoreCalculator = new GenerateLevelScore(getUser().getHealth(), coinsCollectedInLevel);
+
+			int calculatedScore = scoreCalculator.calculateScore();
+			String starImage = scoreCalculator.getStarImage(); // Get the corresponding star image path
+
+			getUser().setLevelScore(levelManager.getCurrentLevelNumber(), calculatedScore);
 			levelEndHandler.handleLevelCompletion(userScore, starImage, getUser());
 
 			levelManager.incrementCurrentLevelNumber();
