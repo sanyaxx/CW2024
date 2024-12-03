@@ -14,9 +14,11 @@ public class Level3 extends LevelParent {
 
     private static final String BACKGROUND_IMAGE_NAME = "/com/example/demo/images/level3Background.jpg";
     private static final int PLAYER_INITIAL_HEALTH = 5;
+    private static final int SURVIVAL_TIME_SECONDS = 15; // Time to survive in seconds
     private static double SCREEN_WIDTH;
     private static double SCREEN_HEIGHT;
     private final UserTank user;
+    private int frameCount = 0;
 
     private final List<ActiveActorDestructible> enemyRockets;
 
@@ -27,6 +29,7 @@ public class Level3 extends LevelParent {
     public Level3(double screenHeight, double screenWidth) {
         super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
         this.user = new UserTank(PLAYER_INITIAL_HEALTH);
+        this.remainingTime = SURVIVAL_TIME_SECONDS;
         this.enemyRockets = new ArrayList<>();
         this.background = getBackground();
         this.coinsCollectedInLevel = 0;
@@ -180,6 +183,7 @@ public class Level3 extends LevelParent {
     @Override
     public Scene initializeScene() {
         super.initializeScene();
+        user.faceEast();
         return scene;
     }
 
@@ -191,6 +195,17 @@ public class Level3 extends LevelParent {
             }
         }
         return false;
+    }
+
+    protected void updateSurvivalTimer() {
+        frameCount++;
+
+        // Check if 2 frames have passed (20 * 50ms = 1000ms)
+        if (frameCount >= 20) {
+            remainingTime--; // Update remaining time
+            levelView.updateWinningParameterDisplay(remainingTime); // Update the display
+            frameCount = 0; // Reset the frame count
+        }
     }
 
     protected void removeAllDestroyedActors() {
