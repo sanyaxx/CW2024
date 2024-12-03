@@ -64,11 +64,6 @@ public abstract class LevelParent extends Observable {
 		initializeTimeline();
 		friendlyUnits.add(user);
 
-		// Set the action for the pause button
-		levelView.pauseButton.setOnPauseAction(this::onPauseButtonClicked);
-
-		// Set the action for the resume button
-		levelView.getResumeButton().setOnResumeAction(this::onResumeButtonClicked);
 	}
 
 	protected abstract void initializeFriendlyUnits();
@@ -87,7 +82,6 @@ public abstract class LevelParent extends Observable {
 		levelView.showHeartDisplay();
 		levelView.showWinningParameterDisplay();
 		levelView.showPauseButton();
-		levelView.getPauseOverlay();
 		return scene;
 	}
 
@@ -386,26 +380,5 @@ public abstract class LevelParent extends Observable {
 		return false; // No overlap
 	}
 
-	public void onPauseButtonClicked() {
-		if (timeline.getStatus() == Animation.Status.RUNNING) {
-			timeline.pause(); // Pause the game timeline
-			levelView.pauseButton.getPauseButton().setVisible(false);
-			levelView.pauseOverlay.showOverlay();
-			System.out.println("Game paused.");
-//			levelView.getPauseOverlay();
-		}
-	}
-
-	public void onResumeButtonClicked() {
-		System.out.println("Resume button clicked."); // Debug statement
-		if (timeline.getStatus() == Animation.Status.PAUSED) {
-			levelView.pauseButton.getPauseButton().setVisible(true);
-			levelView.pauseOverlay.hideOverlay();
-			timeline.play();
-			System.out.println("Game resumed."); // Debug statement
-		} else {
-			System.out.println("Timeline is not paused."); // Debug statement
-		}
-	}
 }
 
