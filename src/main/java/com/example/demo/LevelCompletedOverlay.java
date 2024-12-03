@@ -125,7 +125,13 @@ public class LevelCompletedOverlay {
         System.out.println("Going to the next level..."); // Debug statement
         hideOverlay();
         LevelManager levelManager = LevelManager.getInstance();
-        levelManager.showLevelStartScreen(levelManager.getCurrentLevelNumber());
+        if (levelManager.getCurrentLevelNumber() == LevelManager.TOTAL_LEVELS_PLUS1) {
+             levelEndHandler.handleGameWon(user);
+        }
+        else {
+            levelManager.showLevelStartScreen(levelManager.getCurrentLevelNumber());
+        }
+
     }
 
     private void goToStartPage() {
