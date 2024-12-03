@@ -1,4 +1,10 @@
 package com.example.demo.levels.Level3;
+
+import com.example.demo.activityManagers.LevelManager;
+import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.Planes.enemyPlanes.EnemyRocket;
+import com.example.demo.actors.Planes.friendlyPlanes.UserTank;
+import com.example.demo.functionalClasses.GenerateLevelScore;
 import com.example.demo.levels.LevelParent;
 import com.example.demo.levels.LevelView;
 import javafx.event.EventHandler;
@@ -188,7 +194,7 @@ public class Level3 extends LevelParent {
     }
 
     @Override
-    boolean isEnemyPlaneOverlapping(ActiveActorDestructible newEnemyRocket) {
+    protected boolean isEnemyPlaneOverlapping(ActiveActorDestructible newEnemyRocket) {
         for (ActiveActorDestructible enemy : enemyRockets) {
             if (newEnemyRocket.getBoundsInParent().intersects(enemy.getBoundsInParent())) {
                 return true;

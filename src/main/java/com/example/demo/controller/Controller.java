@@ -10,7 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import com.example.demo.levels.LevelParent;
-import com.example.demo.StartPage;
+import com.example.demo.screensAndOverlays.StartScreen;
 
 public class Controller implements Observer {
 	
@@ -21,8 +21,8 @@ public class Controller implements Observer {
 	}
 
 	public void launchGame() throws SecurityException, IllegalArgumentException {
-		StartPage startPage = new StartPage(stage);
-		startPage.show();
+		StartScreen startScreen = new StartScreen(stage);
+		startScreen.show();
 	}
 
 	private void goToLevel(String className) throws ClassNotFoundException, NoSuchMethodException, SecurityException,

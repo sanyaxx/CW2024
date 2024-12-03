@@ -1,4 +1,9 @@
 package com.example.demo.levels.Level1;
+
+import com.example.demo.activityManagers.LevelManager;
+import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.Planes.enemyPlanes.EnemyPlane;
+import com.example.demo.functionalClasses.GenerateLevelScore;
 import com.example.demo.levels.LevelParent;
 import com.example.demo.levels.LevelView;
 

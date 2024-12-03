@@ -1,5 +1,8 @@
 package com.example.demo.levels.Level2;
 
+import com.example.demo.activityManagers.LevelManager;
+import com.example.demo.actors.Planes.enemyPlanes.Boss;
+import com.example.demo.functionalClasses.GenerateLevelScore;
 import com.example.demo.levels.LevelParent;
 import com.example.demo.levels.LevelView;
 

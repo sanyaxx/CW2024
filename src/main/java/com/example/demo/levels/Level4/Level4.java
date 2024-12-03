@@ -1,4 +1,13 @@
 package com.example.demo.levels.Level4;
+
+import com.example.demo.activityManagers.LevelManager;
+import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.Planes.enemyPlanes.EnemyRocket;
+import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
+import com.example.demo.actors.additionalUnits.FinishLine;
+import com.example.demo.actors.additionalUnits.FuelToken;
+import com.example.demo.actors.additionalUnits.Obstacle;
+import com.example.demo.functionalClasses.GenerateLevelScore;
 import com.example.demo.levels.LevelParent;
 import com.example.demo.levels.LevelView;
 import javafx.animation.AnimationTimer;

@@ -3,7 +3,12 @@ package com.example.demo.levels;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.example.demo.*;
+import com.example.demo.activityManagers.LevelEndHandler;
+import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.Planes.FighterPlane;
+import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
+import com.example.demo.actors.additionalUnits.Coins;
+import com.example.demo.gameConfig.GameTimeline;
 import javafx.animation.*;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -371,7 +376,7 @@ public abstract class LevelParent extends Observable {
 		offScreenCoinCount = 0;
 	}
 
-	boolean isEnemyPlaneOverlapping(ActiveActorDestructible newEnemy) {
+	protected boolean isEnemyPlaneOverlapping(ActiveActorDestructible newEnemy) {
 		for (ActiveActorDestructible enemy : enemyUnits) {
 			if (newEnemy.getBoundsInParent().intersects(enemy.getBoundsInParent())) {
 				return true;

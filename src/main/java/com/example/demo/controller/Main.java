@@ -2,8 +2,8 @@ package com.example.demo.controller;
 
 import java.lang.reflect.InvocationTargetException;
 
-import com.example.demo.AppStage;
-import com.example.demo.LevelManager;
+import com.example.demo.gameConfig.AppStage;
+import com.example.demo.activityManagers.LevelManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
