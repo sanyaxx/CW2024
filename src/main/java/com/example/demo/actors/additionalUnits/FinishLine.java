@@ -1,4 +1,7 @@
-package com.example.demo;
+package com.example.demo.actors.additionalUnits;
+
+import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.Planes.FighterPlane;
 
 public class FinishLine extends FighterPlane {
 

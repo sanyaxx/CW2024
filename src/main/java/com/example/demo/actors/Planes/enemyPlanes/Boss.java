@@ -1,4 +1,9 @@
-package com.example.demo;
+package com.example.demo.actors.Planes.enemyPlanes;
+
+import com.example.demo.actors.Projectiles.enemyProjectiles.BossProjectile;
+import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.Planes.FighterPlane;
+import com.example.demo.levels.Level2.LevelViewLevelTwo;
 
 import java.util.*;
 

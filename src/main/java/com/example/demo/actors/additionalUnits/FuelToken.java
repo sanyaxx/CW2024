@@ -1,4 +1,6 @@
-package com.example.demo;
+package com.example.demo.actors.additionalUnits;
+
+import com.example.demo.actors.ActiveActorDestructible;
 
 public class FuelToken extends ActiveActorDestructible {
 

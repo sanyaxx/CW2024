@@ -1,6 +1,9 @@
-package com.example.demo;
+package com.example.demo.actors.Planes.enemyPlanes;
 
-public class EnemyRocket extends FighterPlane{
+import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.Planes.FighterPlane;
+
+public class EnemyRocket extends FighterPlane {
 
     private static final String IMAGE_NAME = "enemyRocket.png";
     private static final int IMAGE_HEIGHT = 80;

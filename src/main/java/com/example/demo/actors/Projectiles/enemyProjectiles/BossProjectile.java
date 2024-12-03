@@ -1,4 +1,6 @@
-package com.example.demo;
+package com.example.demo.actors.Projectiles.enemyProjectiles;
+
+import com.example.demo.actors.Projectiles.Projectile;
 
 public class BossProjectile extends Projectile {
 	

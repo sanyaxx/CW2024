@@ -1,5 +1,8 @@
-package com.example.demo;
+package com.example.demo.actors.Planes.friendlyPlanes;
 
+import com.example.demo.actors.Projectiles.userProjectiles.UserProjectile;
+import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.Planes.FighterPlane;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;

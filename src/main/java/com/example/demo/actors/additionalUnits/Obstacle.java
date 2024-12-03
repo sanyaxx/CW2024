@@ -1,6 +1,8 @@
-package com.example.demo;
+package com.example.demo.actors.additionalUnits;
 
-public class Obstacle extends ActiveActorDestructible{
+import com.example.demo.actors.ActiveActorDestructible;
+
+public class Obstacle extends ActiveActorDestructible {
 
     private static final String IMAGE_NAME = "obstacle.png";
     private static final int IMAGE_HEIGHT = 300;

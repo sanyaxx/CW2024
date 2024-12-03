@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.actors.additionalUnits;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,12 +21,10 @@ public class ShieldImage extends ImageView {
 	public void showShield() {
 		this.setVisible(true);
 		this.toFront();
-		System.out.println("[DEBUG]ShieldImage Shield activated.");
 	}
 	
 	public void hideShield() {
 		this.setVisible(false);
-		System.out.println("[DEBUG]ShieldImage Shield deactivated.");
 	}
 
 	public void updatePosition(double xPosition, double yPosition) {

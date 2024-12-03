@@ -1,4 +1,6 @@
-package com.example.demo;
+package com.example.demo.actors.Planes;
+
+import com.example.demo.actors.ActiveActorDestructible;
 
 public abstract class FighterPlane extends ActiveActorDestructible {
 

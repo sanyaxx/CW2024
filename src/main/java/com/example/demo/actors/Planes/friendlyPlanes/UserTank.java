@@ -1,4 +1,9 @@
-package com.example.demo;
+package com.example.demo.actors.Planes.friendlyPlanes;
+
+import com.example.demo.actors.Projectiles.userProjectiles.UserProjectile;
+import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.Planes.FighterPlane;
+import com.example.demo.gameConfig.AppStage;
 
 public class UserTank extends FighterPlane {
 
