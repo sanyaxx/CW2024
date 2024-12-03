@@ -18,4 +18,5 @@ module com.example.demo {
     opens com.example.demo.actors.Projectiles.enemyProjectiles to javafx.fxml;
     opens com.example.demo.actors.Projectiles.userProjectiles to javafx.fxml;
     opens com.example.demo.actors.additionalUnits to javafx.fxml;
+    opens com.example.demo.screensAndOverlays to javafx.fxml;
 }

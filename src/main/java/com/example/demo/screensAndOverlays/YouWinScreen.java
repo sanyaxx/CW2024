@@ -1,5 +1,8 @@
-package com.example.demo;
+package com.example.demo.screensAndOverlays;
 
+import com.example.demo.functionalClasses.GenerateLevelScore;
+import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
+import com.example.demo.gameConfig.AppStage;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -8,7 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
@@ -22,11 +24,11 @@ import javafx.stage.Stage;
 
 import java.util.Objects;
 
-public class GameWon {
+public class YouWinScreen {
     private final Scene scene; // Scene for this page
     private final Stage stage;
 
-    public GameWon(UserPlane user) {
+    public YouWinScreen(UserPlane user) {
         this.stage = AppStage.getInstance().getPrimaryStage();
 
         // Create a full-screen semi-transparent background

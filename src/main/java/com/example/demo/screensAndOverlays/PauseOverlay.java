@@ -1,6 +1,9 @@
-package com.example.demo;
+package com.example.demo.screensAndOverlays;
 
+import com.example.demo.activityManagers.ButtonFactory;
+import com.example.demo.gameConfig.AppStage;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -13,31 +16,36 @@ import javafx.stage.Stage;
 public class PauseOverlay {
     private final StackPane overlay; // Use StackPane to layer the background and buttons
     private final Scene scene;
-    private final ResumeButton resumeButton;
-    private final StartPageButton startPageButton;
-    private final VolumeButton volumeButton;
     private final Stage stage;
-    private StartPage startPage;
+    private StartScreen startScreen;
+    Button resumeButton;
+
+    // Button image paths
+    private static final String RESUME_BUTTON_IMAGE = "/com/example/demo/images/resumeButton.png";
+    private static final String START_PAGE_BUTTON_IMAGE = "/com/example/demo/images/menuButton.png";
+    private static final String VOLUME_BUTTON_IMAGE = "/com/example/demo/images/volumeButton.png";
 
     public PauseOverlay(Scene scene) {
         this.scene = scene;
         this.stage = AppStage.getInstance().getPrimaryStage();
-        this.resumeButton = new ResumeButton();
-        this.startPageButton = new StartPageButton();
-        this.volumeButton = new VolumeButton();
-        this.startPage = new StartPage(stage);
+        this.startScreen = new StartScreen(stage);
 
         // Create a full-screen semi-transparent background
         Rectangle background = new Rectangle(stage.getWidth(), stage.getHeight());
         background.setFill(new Color(0, 0, 0, 0.7)); // Black with 70% opacity for a darker effect
 
+        // Create buttons dynamically using ButtonFactory
+        resumeButton = ButtonFactory.createImageButton(RESUME_BUTTON_IMAGE, 100, 100);
+        Button startPageButton = ButtonFactory.createImageButton(START_PAGE_BUTTON_IMAGE, 100, 100);
+        Button volumeButton = ButtonFactory.createImageButton(VOLUME_BUTTON_IMAGE, 100, 100);
+
         // Set actions for the buttons
-        resumeButton.setOnResumeAction(this::hideOverlay);
-        startPageButton.setOnStartPageAction(this::goToStartPage);
-        volumeButton.setOnVolumeAction(this::hideOverlay);
+        resumeButton.setOnAction(event -> hideOverlay());
+        startPageButton.setOnAction(event -> goToStartPage());
+        volumeButton.setOnAction(event -> adjustVolume());
 
         // Create an HBox to hold the buttons in a line
-        HBox buttonContainer = new HBox(20, resumeButton.getResumeButton(), startPageButton.getStartPageButton(), volumeButton.getVolumeButton());
+        HBox buttonContainer = new HBox(20, resumeButton, startPageButton, volumeButton);
         buttonContainer.setAlignment(Pos.CENTER); // Center the buttons horizontally
         buttonContainer.setStyle("-fx-padding: 20;"); // Add some padding
 
@@ -56,7 +64,6 @@ public class PauseOverlay {
         root.getChildren().add(overlay);
     }
 
-
     public void showOverlay() {
         overlay.setVisible(true);
         overlay.toFront();
@@ -74,7 +81,7 @@ public class PauseOverlay {
         return overlay; // Return the overlay
     }
 
-    public ResumeButton getResumeButton() {
+    public Button getResumeButton() {
         return resumeButton; // Return the instance of ResumeButton
     }
 
@@ -82,11 +89,11 @@ public class PauseOverlay {
         // Logic to go to the main menu
         System.out.println("Going to the main menu..."); // Debug statement
         hideOverlay();
-        startPage.show();
+        startScreen.show();
     }
 
     private void adjustVolume() {
-        // Logic to adjust volume
         System.out.println("Adjusting volume..."); // Debug statement
+        hideOverlay();
     }
 }

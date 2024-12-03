@@ -1,48 +1,48 @@
-package com.example.demo;
+package com.example.demo.screensAndOverlays;
 
+import com.example.demo.RestartButton;
+import com.example.demo.activityManagers.LevelManager;
+import com.example.demo.gameConfig.AppStage;
+import com.example.demo.notUsed.StartPageButton;
 import javafx.animation.ScaleTransition;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.effect.GaussianBlur;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.Objects;
 
-public class LevelCompletedOverlay {
+
+public class LevelLostOverlay {
     private final StackPane overlay; // Use StackPane to layer the background and buttons
     private final Scene scene;
-    private final NextLevelButton nextLevelButton;
+    private final RestartButton restartButton;
     private final StartPageButton startPageButton;
-    private final Text completionMessage; // Using Text for the title
-    private final Label scoreLabel; // Label to display the user's score
+    private final Text completionMessage;
+    private final Label scoreLabel;
+    private final ImageView starRatingImageView;
     private final Stage stage;
-    private final ImageView starRatingImageView; // ImageView to display the star rating image
-    private LevelEndHandler levelEndHandler;
-    private final UserPlane user;
 
-    public LevelCompletedOverlay(Scene scene, int userScore, String imagePath, UserPlane user) {
+    public LevelLostOverlay(Scene scene, int userScore) {
         this.scene = scene;
-        this.user = user;
-        this.levelEndHandler = new LevelEndHandler(new Group());
         this.stage = AppStage.getInstance().getPrimaryStage();
-        this.nextLevelButton = new NextLevelButton();
+        this.restartButton = new RestartButton();
         this.startPageButton = new StartPageButton();
 
         // Create a full-screen semi-transparent background
@@ -50,7 +50,7 @@ public class LevelCompletedOverlay {
         background.setFill(new Color(0, 0, 0, 0.8)); // Black with 80% opacity for a darker effect
 
         // Create a message indicating level completion with enhanced styling
-        completionMessage = new Text("Level Completed!");
+        completionMessage = new Text("Level Failed!");
         completionMessage.setFont(Font.font("Arial", FontWeight.BOLD, 48)); // Larger font size
         completionMessage.setFill(new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
                 new Stop(0, Color.SILVER),
@@ -59,9 +59,9 @@ public class LevelCompletedOverlay {
         completionMessage.setStyle("-fx-padding: 20;"); // Add padding
 
         // Create an instance of GenerateLevelScore to get the star rating
-        Image starImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
+        Image starImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/demo/images/0stars.png")));
         starRatingImageView = new ImageView(starImage);
-        starRatingImageView.setFitWidth(600); // Set desired width
+        starRatingImageView.setFitWidth(600); // Set width
         starRatingImageView.setPreserveRatio(true); // Preserve aspect ratio
 
         // Add animation to the star image
@@ -80,15 +80,15 @@ public class LevelCompletedOverlay {
         scoreLabel.setStyle("-fx-font-size: 24; -fx-font-weight: bold;"); // Style the score label
 
         // Set actions for the buttons
+        restartButton.setOnRestartPageAction(this::restartLevel);
         startPageButton.setOnStartPageAction(this::goToStartPage);
-        nextLevelButton.setOnNextLevelAction(this::goToNextLevel);
 
-        // Create an HBox to hold the buttons in the new order
-        HBox buttonContainer = new HBox(900, startPageButton.getStartPageButton(), nextLevelButton.getNextLevelButton());
+        // Create an HBox to hold the buttons in a line
+        HBox buttonContainer = new HBox(900, restartButton.getRestartButton(), startPageButton.getStartPageButton());
         buttonContainer.setAlignment(Pos.CENTER); // Center the buttons horizontally
         buttonContainer.setStyle("-fx-padding: 20;"); // Add some padding
 
-        // Create a VBox to center the message, image, score, and button container vertically
+        // Create a VBox to center the message and button container vertically
         VBox vbox = new VBox(20, completionMessage, starRatingImageView, scoreLabel, buttonContainer);
         vbox.setAlignment(Pos.CENTER); // Center the content vertically
         vbox.setStyle("-fx-padding: 30;"); // Add some padding around the buttons
@@ -112,7 +112,7 @@ public class LevelCompletedOverlay {
         overlay.toFront();
         GaussianBlur blur = new GaussianBlur(50); // Increase blur for a more pronounced effect
         scene.getRoot().setEffect(blur);
-        System.out.println("Level Completed overlay is now visible."); // Debug statement
+        System.out.println("Level Lost overlay is now visible."); // Debug statement
     }
 
     public void hideOverlay() {
@@ -120,25 +120,19 @@ public class LevelCompletedOverlay {
         scene.getRoot().setEffect(null);
     }
 
-    private void goToNextLevel() {
+    private void restartLevel() {
         // Logic to go to the next level
         System.out.println("Going to the next level..."); // Debug statement
         hideOverlay();
         LevelManager levelManager = LevelManager.getInstance();
-        if (levelManager.getCurrentLevelNumber() == LevelManager.TOTAL_LEVELS_PLUS1) {
-             levelEndHandler.handleGameWon(user);
-        }
-        else {
-            levelManager.showLevelStartScreen(levelManager.getCurrentLevelNumber());
-        }
-
+        levelManager.showLevelStartScreen(levelManager.getCurrentLevelNumber());
     }
 
     private void goToStartPage() {
         // Logic to go to the main menu
         System.out.println("Going to the main menu..."); // Debug statement
         hideOverlay();
-        StartPage startPage = new StartPage(AppStage.getInstance().getPrimaryStage());
-        startPage.show();
+        StartScreen startScreen = new StartScreen(AppStage.getInstance().getPrimaryStage());
+        startScreen.show();
     }
 }
