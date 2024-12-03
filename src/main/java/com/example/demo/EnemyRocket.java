@@ -3,7 +3,7 @@ package com.example.demo;
 public class EnemyRocket extends FighterPlane{
 
     private static final String IMAGE_NAME = "enemyRocket.png";
-    private static final int IMAGE_HEIGHT = 50;
+    private static final int IMAGE_HEIGHT = 80;
     private static final int INITIAL_HEALTH = 1;
     private static final double FIRE_RATE = .01;
     private static final int HORIZONTAL_VELOCITY = -10;

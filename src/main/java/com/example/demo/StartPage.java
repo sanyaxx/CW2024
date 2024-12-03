@@ -31,30 +31,29 @@ public class StartPage {
         ImageView titleImageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/demo/images/gameTitle1.png"))));
         titleImageView.setFitWidth(400);
         titleImageView.setPreserveRatio(true);
+        titleImageView.setLayoutX((stage.getWidth() - titleImageView.getFitWidth()) / 2); // Center the title
+        titleImageView.setLayoutY(20); // Set Y position for title
 
         // Create buttons
         StartButton startButton = new StartButton();
         startButton.setOnAction(e -> startButton.handleStartButtonClick());
+        startButton.getButton().setLayoutX(stage.getWidth()/2 - 10); // Set X position for start button
+        startButton.getButton().setLayoutY(stage.getHeight() - 167); // Set Y position for start button
 
         QuitButton quitButton = new QuitButton();
         quitButton.setOnAction(e -> System.exit(0));
-
-        // Layout the title and buttons in a VBox
-        VBox layout = new VBox(20);
-        layout.getChildren().addAll(titleImageView, startButton.getButton(), quitButton.getButton());
-        layout.setTranslateY(50);
-        layout.setTranslateX((stage.getWidth() - 400) / 2);
+        quitButton.getButton().setLayoutX(stage.getWidth()/2 - 278); // Set X position for quit button
+        quitButton.getButton().setLayoutY(stage.getHeight() - 167); // Set Y position for quit button
 
         // Create a root pane and add the background and layout
         Group root = new Group();
-        root.getChildren().addAll(backgroundImageView, layout);
+        root.getChildren().addAll(backgroundImageView, titleImageView, startButton.getButton(), quitButton.getButton());
 
         // Set the scene
         Scene scene = new Scene(root, stage.getWidth(), stage.getHeight());
         stage.setScene(scene);
         stage.setTitle("Game Start Page");
 
-//        stage.setMaximized(true);
         stage.show();
     }
 }

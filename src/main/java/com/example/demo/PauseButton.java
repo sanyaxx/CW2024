@@ -12,16 +12,16 @@ public class PauseButton {
 
     public PauseButton() {
         button = createButton();
-        button.setLayoutX(1000);
-        button.setLayoutY(25);
+        button.setLayoutX(1180);
+        button.setLayoutY(15);
     }
 
     private Button createButton() {
         Button button = new Button();
         Image image = new Image(getClass().getResourceAsStream(IMAGE_PATH));
         ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(100); // Set desired button size
-        imageView.setFitHeight(100);
+        imageView.setFitWidth(75); // Set desired button size
+        imageView.setFitHeight(75);
         imageView.setPreserveRatio(true); // Preserve aspect ratio
 
         button.setGraphic(imageView);

@@ -16,8 +16,8 @@ public class StartButton {
         button = new Button();
         Image playImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/demo/images/startButton.png")));
         ImageView playImageView = new ImageView(playImage);
-        playImageView.setFitWidth(250);
-        playImageView.setFitHeight(120);
+        playImageView.setFitWidth(270);
+        playImageView.setFitHeight(225);
         playImageView.setPreserveRatio(true);
         levelManager = LevelManager.getInstance();
 

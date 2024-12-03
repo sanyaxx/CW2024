@@ -15,8 +15,8 @@ public class QuitButton {
         button = new Button();
         Image quitImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/demo/images/quitButton.png")));
         ImageView quitImageView = new ImageView(quitImage);
-        quitImageView.setFitWidth(250);
-        quitImageView.setFitHeight(120);
+        quitImageView.setFitWidth(260);
+        quitImageView.setFitHeight(225);
         quitImageView.setPreserveRatio(true);
 
         button.setGraphic(quitImageView);
