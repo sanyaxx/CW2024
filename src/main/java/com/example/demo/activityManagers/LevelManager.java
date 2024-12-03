@@ -1,4 +1,6 @@
-package com.example.demo;
+package com.example.demo.activityManagers;
+
+import com.example.demo.screensAndOverlays.LevelStartScreen;
 
 import java.util.*;
 
@@ -6,7 +8,7 @@ import java.util.*;
 public class LevelManager extends Observable {
     private static LevelManager instance;
     private int currentLevelNumber; // To track the current level
-    protected static final int TOTAL_LEVELS_PLUS1 = 4 + 1; // Track the total number of levels
+    public static final int TOTAL_LEVELS_PLUS1 = 4 + 1; // Track the total number of levels
 
     // Private constructor initializes currentLevelNumber to 1
     private LevelManager() {
@@ -32,7 +34,7 @@ public class LevelManager extends Observable {
 
     public String getNextLevelName() {
         if (currentLevelNumber < TOTAL_LEVELS_PLUS1) {
-            return "com.example.demo.levels.Level" + (currentLevelNumber);
+            return "com.example.demo.levels.Level" + (currentLevelNumber) + ".Level" + (currentLevelNumber);
         } else {
             return null; // No more levels
         }

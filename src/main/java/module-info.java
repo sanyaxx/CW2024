@@ -6,6 +6,7 @@ module com.example.demo {
     exports com.example.demo.controller;
     opens com.example.demo.levels to javafx.fxml;
     opens com.example.demo.levels.Level1 to javafx.fxml;
+    opens com.example.demo.activityManagers to javafx.fxml;
     opens com.example.demo.levels.Level2 to javafx.fxml;
     opens com.example.demo.levels.Level3 to javafx.fxml;
     opens com.example.demo.levels.Level4 to javafx.fxml;

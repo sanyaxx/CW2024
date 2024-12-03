@@ -1,5 +1,12 @@
-package com.example.demo;
+package com.example.demo.activityManagers;
 
+import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
+import com.example.demo.gameConfig.AppStage;
+import com.example.demo.gameConfig.GameTimeline;
+import com.example.demo.notUsed.WinImage;
+import com.example.demo.screensAndOverlays.LevelCompletedOverlay;
+import com.example.demo.screensAndOverlays.LevelLostOverlay;
+import com.example.demo.screensAndOverlays.YouWinScreen;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -17,7 +24,7 @@ public class LevelEndHandler {
     private final WinImage winImage;
     private LevelCompletedOverlay levelCompletedOverlay; // Declare without instantiation
     private LevelLostOverlay levelLostOverlay;
-    private GameWon gameWon;
+    private YouWinScreen youWinScreen;
 
     public LevelEndHandler(Group root) {
         this.root = root;
@@ -55,9 +62,9 @@ public class LevelEndHandler {
     public void handleGameWon(UserPlane user) {
         // Stop the game timeline
         timeline.stop();
-        gameWon = new GameWon(user);
-//        gameWon.showOverlay();
-//        root.getChildren().add(gameWon.getOverlay());
+        youWinScreen = new YouWinScreen(user);
+//        youWinScreen.showOverlay();
+//        root.getChildren().add(youWinScreen.getOverlay());
         System.out.println("Game won!");
     }
 }

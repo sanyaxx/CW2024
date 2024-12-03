@@ -1,9 +1,14 @@
-package com.example.demo;
+package com.example.demo.activityManagers;
 
+import com.example.demo.screensAndOverlays.PauseOverlay;
+import com.example.demo.gameConfig.AppStage;
+import com.example.demo.gameConfig.GameTimeline;
+import com.example.demo.levels.LevelView;
 import javafx.animation.Animation;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -22,7 +27,7 @@ public class PauseHandler {
         this.pauseOverlay = new PauseOverlay(new Scene(new StackPane(), stage.getWidth(), stage.getHeight()));
     }
 
-    public ResumeButton getResumeButton() {
+    public Button getResumeButton() {
         return pauseOverlay.getResumeButton(); // Access the ResumeButton from PauseOverlay
     }
 
