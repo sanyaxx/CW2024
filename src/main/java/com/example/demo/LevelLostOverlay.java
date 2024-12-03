@@ -1,15 +1,28 @@
 package com.example.demo;
 
+import javafx.animation.ScaleTransition;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.util.Objects;
 
 
 public class LevelLostOverlay {
@@ -17,37 +30,64 @@ public class LevelLostOverlay {
     private final Scene scene;
     private final RestartButton restartButton;
     private final StartPageButton startPageButton;
-    private final Label completionMessage;
+    private final Text completionMessage;
+    private final Label scoreLabel;
+    private final ImageView starRatingImageView;
     private final Stage stage;
 
-    public LevelLostOverlay(Scene scene) {
+    public LevelLostOverlay(Scene scene, int userScore) {
         this.scene = scene;
         this.stage = AppStage.getInstance().getPrimaryStage();
         this.restartButton = new RestartButton();
         this.startPageButton = new StartPageButton();
 
         // Create a full-screen semi-transparent background
-        Rectangle background = new Rectangle();
-        background.setFill(new Color(0, 0, 0, 0.7)); // Black with 70% opacity for a darker effect
+        Rectangle background = new Rectangle(stage.getWidth(), stage.getHeight());
+        background.setFill(new Color(0, 0, 0, 0.8)); // Black with 80% opacity for a darker effect
 
-        // Create a message indicating level completion
-        completionMessage = new Label("Level Lost!");
-        completionMessage.setTextFill(Color.WHITE);
-        completionMessage.setStyle("-fx-font-size: 36; -fx-font-weight: bold;"); // Style the message
+        // Create a message indicating level completion with enhanced styling
+        completionMessage = new Text("Level Failed!");
+        completionMessage.setFont(Font.font("Arial", FontWeight.BOLD, 48)); // Larger font size
+        completionMessage.setFill(new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
+                new Stop(0, Color.SILVER),
+                new Stop(1, Color.WHITESMOKE))); // Gradient color
+        completionMessage.setEffect(new DropShadow(10, Color.BLACK)); // Add drop shadow for depth
+        completionMessage.setStyle("-fx-padding: 20;"); // Add padding
+
+        // Create an instance of GenerateLevelScore to get the star rating
+        Image starImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/demo/images/0stars.png")));
+        starRatingImageView = new ImageView(starImage);
+        starRatingImageView.setFitWidth(600); // Set width
+        starRatingImageView.setPreserveRatio(true); // Preserve aspect ratio
+
+        // Add animation to the star image
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.5), starRatingImageView);
+        scaleTransition.setFromX(1.0);
+        scaleTransition.setFromY(1.0);
+        scaleTransition.setToX(1.2); // Enlarge to 120%
+        scaleTransition.setToY(1.2);
+        scaleTransition.setCycleCount(1);
+        scaleTransition.setAutoReverse(true);
+        scaleTransition.play();
+
+        // Create a label to display the user's score
+        scoreLabel = new Label("Your Score: " + userScore);
+        scoreLabel.setTextFill(Color.SILVER);
+        scoreLabel.setStyle("-fx-font-size: 24; -fx-font-weight: bold;"); // Style the score label
 
         // Set actions for the buttons
         restartButton.setOnRestartPageAction(this::restartLevel);
         startPageButton.setOnStartPageAction(this::goToStartPage);
 
         // Create an HBox to hold the buttons in a line
-        HBox buttonContainer = new HBox(20, restartButton.getRestartButton(), startPageButton.getStartPageButton());
+        HBox buttonContainer = new HBox(900, restartButton.getRestartButton(), startPageButton.getStartPageButton());
         buttonContainer.setAlignment(Pos.CENTER); // Center the buttons horizontally
         buttonContainer.setStyle("-fx-padding: 20;"); // Add some padding
 
         // Create a VBox to center the message and button container vertically
-        VBox vbox = new VBox(20, completionMessage, buttonContainer);
+        VBox vbox = new VBox(20, completionMessage, starRatingImageView, scoreLabel, buttonContainer);
         vbox.setAlignment(Pos.CENTER); // Center the content vertically
-        vbox.setStyle("-fx-padding: 50;"); // Add some padding around the buttons
+        vbox.setStyle("-fx-padding: 30;"); // Add some padding around the buttons
 
         // Create the overlay
         overlay = new StackPane();
