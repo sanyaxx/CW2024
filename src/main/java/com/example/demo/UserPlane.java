@@ -32,6 +32,10 @@ public class UserPlane extends FighterPlane {
 		// Initialize the level scores array for 4 levels (for example)
 		levelScores = new int[4]; // Adjust size according to the number of levels
 	}
+
+	public void resetPosition() {
+		setLayoutX(INITIAL_X_POSITION);
+		setLayoutY(INITIAL_Y_POSITION);
 	}
 
 	@Override
@@ -66,6 +70,10 @@ public class UserPlane extends FighterPlane {
 
 	public void moveDown() {
 		velocityMultiplier = 1;
+	}
+
+	public void fallDown() {
+		velocityMultiplier = 0.5;
 	}
 
 	public void stop() {
