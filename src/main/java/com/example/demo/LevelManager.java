@@ -10,7 +10,7 @@ public class LevelManager extends Observable {
 
     // Private constructor initializes currentLevelNumber to 1
     private LevelManager() {
-        this.currentLevelNumber = 1;
+        this.currentLevelNumber = 4;
     }
 
     public static LevelManager getInstance() {
@@ -25,7 +25,7 @@ public class LevelManager extends Observable {
        levelStartScreen.show(); // Show the level start screen with level name and aim
     }
 
-    // Increment the current level number- called when a level completed
+    // Increment the current level number: called when a level completed
     public void incrementCurrentLevelNumber() {
         currentLevelNumber++;
     }
