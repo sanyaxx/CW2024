@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.gameConfig;
 
 import javafx.animation.Timeline;
 
