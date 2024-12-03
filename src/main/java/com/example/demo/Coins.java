@@ -1,18 +1,14 @@
 package com.example.demo;
 
-public class Coins extends FighterPlane {
+public class Coins extends ActiveActorDestructible {
 
     private static final String IMAGE_NAME = "coin.png";
-    private static final int IMAGE_HEIGHT = 70;
+    private static final int IMAGE_HEIGHT = 40;
     private static final int HORIZONTAL_VELOCITY = -10;
-    private static final int INITIAL_HEALTH = 1;
 
     public Coins(double initialXPos, double initialYPos) {
-        super(IMAGE_NAME, IMAGE_HEIGHT, initialXPos, initialYPos, INITIAL_HEALTH);
+        super(IMAGE_NAME, IMAGE_HEIGHT, initialXPos, initialYPos);
     }
-
-    @Override
-    public ActiveActorDestructible fireProjectile(){ return null;}
 
     @Override
     public void updatePosition() {
@@ -22,5 +18,10 @@ public class Coins extends FighterPlane {
     @Override
     public void updateActor() {
         updatePosition();
+    }
+
+    @Override
+    public void takeDamage() {
+        this.destroy();
     }
 }
