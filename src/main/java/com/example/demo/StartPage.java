@@ -3,17 +3,13 @@ package com.example.demo;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.util.Objects;
-import java.util.function.Consumer;
 
 public class StartPage {
     private static final String BACKGROUND_IMAGE = "/com/example/demo/images/startPageBackground.png";
-    private Consumer<Void> onPlayButtonClicked; // Callback for play button click
     private Stage stage; // Store the stage reference
 
     public StartPage(Stage stage) {
