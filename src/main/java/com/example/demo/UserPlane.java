@@ -1,5 +1,9 @@
 package com.example.demo;
 
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.util.Duration;
+
 public class UserPlane extends FighterPlane {
 
 	private static final String IMAGE_NAME = "userplane.png";
@@ -11,10 +15,13 @@ public class UserPlane extends FighterPlane {
 	private static final int VERTICAL_VELOCITY = 8;
 	private static int PROJECTILE_X_POSITION = 120;
 	private static int PROJECTILE_Y_POSITION_OFFSET = 20;
-	private int velocityMultiplier;
+	private double velocityMultiplier;
 	private int numberOfKills = 0;
 	private static int score = 0; // Tracks the number of coins collected
+	private static int fuel = 10; // Tracks the amount of fuel remaining
 	private static int rotationAngle = 0; // Default set to facing East
+	private Animation scaleTransition;
+
 	// Protected array to hold level scores
 	protected int[] levelScores;
 
@@ -81,7 +88,35 @@ public class UserPlane extends FighterPlane {
 		score++;
 	}
 
-}
+	public void decrementFuel() {
+		fuel--;
+	}
+
+	public int getFuelLeft() {
+		return fuel;
+	}
+
+	public void setFuelLeft() {
+		fuel = 10;
+	}
+
+	public void incrementFuel() {
+		fuel = fuel + 5;
+	}
+
+	public void startCooldown() {
+		FadeTransition fadeTransition = new FadeTransition(Duration.millis(200), this);
+		fadeTransition.setFromValue(1.0);
+		fadeTransition.setToValue(0.0);
+		fadeTransition.setCycleCount(6); // Flash 6 times
+		fadeTransition.setAutoReverse(true);
+		fadeTransition.play();
+	}
+
+	public void endCooldown() {
+		this.setOpacity(1.0); // Ensure it's fully visible after cooldown
+	}
+
 	// Method to set the score for a specific level
 	public void setLevelScore(int level, int score) {
 		if (level >= 0 && level <= levelScores.length) {
