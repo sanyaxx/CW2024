@@ -2,13 +2,11 @@ package com.example.demo;
 
 import javafx.scene.text.Text;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class WinningParameter {
-    private static final double DISPLAY_X_POSITION = 1000;  // Position from the left
     private static final double DISPLAY_Y_POSITION = 25;   // Position from the top
     private int value1;
     private int value2;
@@ -31,7 +29,8 @@ public class WinningParameter {
         // Initialize the container with both parameters
         this.container = new HBox(10); // 10 pixels spacing between elements
         this.container.getChildren().addAll(parameterText1, parameterText2);
-        this.container.setTranslateX(DISPLAY_X_POSITION);
+
+        // Initially set the Y position
         this.container.setTranslateY(DISPLAY_Y_POSITION);
     }
 
@@ -47,7 +46,7 @@ public class WinningParameter {
         // Initialize the container with only the first parameter
         this.container = new HBox(10); // 10 pixels spacing between elements
         this.container.getChildren().add(parameterText1);
-        this.container.setTranslateX(DISPLAY_X_POSITION);
+
         this.container.setTranslateY(DISPLAY_Y_POSITION);
     }
 
@@ -65,6 +64,7 @@ public class WinningParameter {
     public void updateValue1(int newValue) {
         value1 = newValue;
         parameterText1.setText(parameterName1 + ": " + value1);
+        updatePosition(); // Update position whenever value changes
     }
 
     // Method to update the value of the second parameter and display
@@ -72,7 +72,15 @@ public class WinningParameter {
         if (parameterName2 != null) { // Ensure the second parameter exists
             value2 = newValue;
             parameterText2.setText(parameterName2 + ": " + value2);
+            updatePosition(); // Update position whenever value changes
         }
+    }
+
+    // Method to update the position of the container
+    private void updatePosition() {
+        double screenWidth = AppStage.getInstance().getPrimaryStage().getWidth(); // Get the current screen width
+        double containerWidth = container.getWidth(); // Get the current width of the container
+        this.container.setTranslateX((screenWidth - containerWidth) / 2); // Center the container
     }
 
     // Getter for the display container
@@ -80,12 +88,4 @@ public class WinningParameter {
         return container;
     }
 
-    // Getter for the values
-    public int getValue1() {
-        return value1;
-    }
-
-    public int getValue2() {
-        return value2;
-    }
 }
