@@ -8,12 +8,10 @@ public class EnemyRocket extends FighterPlane{
     private static final double FIRE_RATE = .01;
     private static final int HORIZONTAL_VELOCITY = -10;
     private static final int VERTICAL_VELOCITY = 10; // Speed for vertical movement
-    private final LevelViewLevelThree levelView;
     private int direction;
 
-    public EnemyRocket(LevelViewLevelThree levelView, double initialXPos, double initialYPos, int direction) {
+    public EnemyRocket(double initialXPos, double initialYPos, int direction) {
         super(IMAGE_NAME, IMAGE_HEIGHT, initialXPos, initialYPos, INITIAL_HEALTH);
-        this.levelView = levelView;
         this.direction = direction; // Set the direction
     }
 
