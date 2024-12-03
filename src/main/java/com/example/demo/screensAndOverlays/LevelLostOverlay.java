@@ -1,12 +1,12 @@
 package com.example.demo.screensAndOverlays;
 
-import com.example.demo.RestartButton;
+import com.example.demo.activityManagers.ButtonFactory;
 import com.example.demo.activityManagers.LevelManager;
 import com.example.demo.gameConfig.AppStage;
-import com.example.demo.notUsed.StartPageButton;
 import javafx.animation.ScaleTransition;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
@@ -32,25 +32,20 @@ import java.util.Objects;
 public class LevelLostOverlay {
     private final StackPane overlay; // Use StackPane to layer the background and buttons
     private final Scene scene;
-    private final RestartButton restartButton;
-    private final StartPageButton startPageButton;
-    private final Text completionMessage;
-    private final Label scoreLabel;
-    private final ImageView starRatingImageView;
-    private final Stage stage;
+
+    private static final String RESTART_BUTTON_IMAGE = "/com/example/demo/images/restartButton.png";
+    private static final String MENU_BUTTON_IMAGE = "/com/example/demo/images/menuButton.png";
 
     public LevelLostOverlay(Scene scene, int userScore) {
         this.scene = scene;
-        this.stage = AppStage.getInstance().getPrimaryStage();
-        this.restartButton = new RestartButton();
-        this.startPageButton = new StartPageButton();
+        Stage stage = AppStage.getInstance().getPrimaryStage();
 
         // Create a full-screen semi-transparent background
         Rectangle background = new Rectangle(stage.getWidth(), stage.getHeight());
         background.setFill(new Color(0, 0, 0, 0.8)); // Black with 80% opacity for a darker effect
 
         // Create a message indicating level completion with enhanced styling
-        completionMessage = new Text("Level Failed!");
+        Text completionMessage = new Text("Level Failed!");
         completionMessage.setFont(Font.font("Arial", FontWeight.BOLD, 48)); // Larger font size
         completionMessage.setFill(new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
                 new Stop(0, Color.SILVER),
@@ -60,7 +55,7 @@ public class LevelLostOverlay {
 
         // Create an instance of GenerateLevelScore to get the star rating
         Image starImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/demo/images/0stars.png")));
-        starRatingImageView = new ImageView(starImage);
+        ImageView starRatingImageView = new ImageView(starImage);
         starRatingImageView.setFitWidth(600); // Set width
         starRatingImageView.setPreserveRatio(true); // Preserve aspect ratio
 
@@ -75,16 +70,19 @@ public class LevelLostOverlay {
         scaleTransition.play();
 
         // Create a label to display the user's score
-        scoreLabel = new Label("Your Score: " + userScore);
+        Label scoreLabel = new Label("Your Score: " + userScore);
         scoreLabel.setTextFill(Color.SILVER);
         scoreLabel.setStyle("-fx-font-size: 24; -fx-font-weight: bold;"); // Style the score label
 
+        Button menuButton = ButtonFactory.createImageButton(MENU_BUTTON_IMAGE, 100, 100);
+        Button restartButton = ButtonFactory.createImageButton(RESTART_BUTTON_IMAGE, 100, 100);
+
         // Set actions for the buttons
-        restartButton.setOnRestartPageAction(this::restartLevel);
-        startPageButton.setOnStartPageAction(this::goToStartPage);
+        menuButton.setOnAction(event -> goToMainMenuPage());
+        restartButton.setOnAction(event -> restartLevel());
 
         // Create an HBox to hold the buttons in a line
-        HBox buttonContainer = new HBox(900, restartButton.getRestartButton(), startPageButton.getStartPageButton());
+        HBox buttonContainer = new HBox(900, restartButton, menuButton);
         buttonContainer.setAlignment(Pos.CENTER); // Center the buttons horizontally
         buttonContainer.setStyle("-fx-padding: 20;"); // Add some padding
 
@@ -128,7 +126,7 @@ public class LevelLostOverlay {
         levelManager.showLevelStartScreen(levelManager.getCurrentLevelNumber());
     }
 
-    private void goToStartPage() {
+    private void goToMainMenuPage() {
         // Logic to go to the main menu
         System.out.println("Going to the main menu..."); // Debug statement
         hideOverlay();

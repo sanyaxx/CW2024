@@ -1,6 +1,7 @@
 package com.example.demo.screensAndOverlays;
 
 import com.example.demo.NextLevelButton;
+import com.example.demo.activityManagers.ButtonFactory;
 import com.example.demo.activityManagers.LevelEndHandler;
 import com.example.demo.activityManagers.LevelManager;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
@@ -9,6 +10,7 @@ import com.example.demo.notUsed.StartPageButton;
 import javafx.animation.ScaleTransition;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -34,29 +36,25 @@ import java.util.Objects;
 public class LevelCompletedOverlay {
     private final StackPane overlay; // Use StackPane to layer the background and buttons
     private final Scene scene;
-    private final NextLevelButton nextLevelButton;
-    private final StartPageButton startPageButton;
-    private final Text completionMessage; // Using Text for the title
-    private final Label scoreLabel; // Label to display the user's score
-    private final Stage stage;
-    private final ImageView starRatingImageView; // ImageView to display the star rating image
-    private LevelEndHandler levelEndHandler;
+    private final LevelEndHandler levelEndHandler;
     private final UserPlane user;
+
+    private static final String NEXT_BUTTON_IMAGE = "/com/example/demo/images/nextButton.png";
+    private static final String MENU_BUTTON_IMAGE = "/com/example/demo/images/menuButton.png";
 
     public LevelCompletedOverlay(Scene scene, int userScore, String imagePath, UserPlane user) {
         this.scene = scene;
         this.user = user;
         this.levelEndHandler = new LevelEndHandler(new Group());
-        this.stage = AppStage.getInstance().getPrimaryStage();
-        this.nextLevelButton = new NextLevelButton();
-        this.startPageButton = new StartPageButton();
+        Stage stage = AppStage.getInstance().getPrimaryStage();
 
         // Create a full-screen semi-transparent background
         Rectangle background = new Rectangle(stage.getWidth(), stage.getHeight());
         background.setFill(new Color(0, 0, 0, 0.8)); // Black with 80% opacity for a darker effect
 
         // Create a message indicating level completion with enhanced styling
-        completionMessage = new Text("Level Completed!");
+        // Using Text for the title
+        Text completionMessage = new Text("Level Completed!");
         completionMessage.setFont(Font.font("Arial", FontWeight.BOLD, 48)); // Larger font size
         completionMessage.setFill(new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
                 new Stop(0, Color.SILVER),
@@ -66,7 +64,8 @@ public class LevelCompletedOverlay {
 
         // Create an instance of GenerateLevelScore to get the star rating
         Image starImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
-        starRatingImageView = new ImageView(starImage);
+        // ImageView to display the star rating image
+        ImageView starRatingImageView = new ImageView(starImage);
         starRatingImageView.setFitWidth(600); // Set desired width
         starRatingImageView.setPreserveRatio(true); // Preserve aspect ratio
 
@@ -81,16 +80,20 @@ public class LevelCompletedOverlay {
         scaleTransition.play();
 
         // Create a label to display the user's score
-        scoreLabel = new Label("Your Score: " + userScore);
+        // Label to display the user's score
+        Label scoreLabel = new Label("Your Score: " + userScore);
         scoreLabel.setTextFill(Color.SILVER);
         scoreLabel.setStyle("-fx-font-size: 24; -fx-font-weight: bold;"); // Style the score label
 
+        Button startPageButton = ButtonFactory.createImageButton(MENU_BUTTON_IMAGE, 100, 100);
+        Button nextLevelButton = ButtonFactory.createImageButton(NEXT_BUTTON_IMAGE, 100, 100);
+
         // Set actions for the buttons
-        startPageButton.setOnStartPageAction(this::goToStartPage);
-        nextLevelButton.setOnNextLevelAction(this::goToNextLevel);
+        startPageButton.setOnAction(event ->goToStartPage());
+        nextLevelButton.setOnAction(event ->goToNextLevel());
 
         // Create an HBox to hold the buttons in the new order
-        HBox buttonContainer = new HBox(900, startPageButton.getStartPageButton(), nextLevelButton.getNextLevelButton());
+        HBox buttonContainer = new HBox(900, startPageButton, nextLevelButton);
         buttonContainer.setAlignment(Pos.CENTER); // Center the buttons horizontally
         buttonContainer.setStyle("-fx-padding: 20;"); // Add some padding
 
