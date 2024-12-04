@@ -1,12 +1,10 @@
 package com.example.demo.screensAndOverlays;
 
-import com.example.demo.NextLevelButton;
 import com.example.demo.activityManagers.ButtonFactory;
 import com.example.demo.activityManagers.LevelEndHandler;
 import com.example.demo.activityManagers.LevelManager;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
 import com.example.demo.gameConfig.AppStage;
-import com.example.demo.notUsed.StartPageButton;
 import javafx.animation.ScaleTransition;
 import javafx.scene.Group;
 import javafx.scene.Scene;

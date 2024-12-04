@@ -1,16 +1,16 @@
-package com.example.demo;
+package com.example.demo.notUsed;
 
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class RestartButton {
+public class NextLevelButton {
     private final Button button;
 
     // Predefined image path for the main menu button
-    private static final String IMAGE_PATH = "/com/example/demo/images/restartButton.png";
+    private static final String IMAGE_PATH = "/com/example/demo/images/nextButton.png";
 
-    public RestartButton() {
+    public NextLevelButton() {
         button = createButton();
     }
 
@@ -28,12 +28,12 @@ public class RestartButton {
         return button;
     }
 
-    public Button getRestartButton() {
+    public Button getNextLevelButton() {
         return button;
     }
 
     // Method to set the action for the button
-    public void setOnRestartPageAction(Runnable action) {
+    public void setOnNextLevelAction(Runnable action) {
         button.setOnAction(event -> action.run());
     }
 }
