@@ -59,6 +59,11 @@ public class UserPlane extends FighterPlane {
 	}
 
 	@Override
+	public boolean isFriendly() {
+		return true;
+	}
+
+	@Override
 	public ActiveActorDestructible fireProjectile() {
 		return new UserProjectile(PROJECTILE_X_POSITION, getProjectileYPosition(PROJECTILE_Y_POSITION_OFFSET), rotationAngle);
 	}
@@ -145,4 +150,10 @@ public class UserPlane extends FighterPlane {
 			throw new IndexOutOfBoundsException("Invalid level index: " + level);
 		}
 	}
+
+	@Override
+	public boolean isCollectible() {
+		return false;
+	}
+
 }

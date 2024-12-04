@@ -22,5 +22,15 @@ public class BossProjectile extends Projectile {
 	public void updateActor() {
 		updatePosition();
 	}
-	
+
+	@Override
+	public boolean isFriendly() {
+		return false;
+	}
+
+	@Override
+	public boolean isCollectible() {
+		return false;
+	}
+
 }

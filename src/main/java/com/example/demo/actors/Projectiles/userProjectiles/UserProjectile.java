@@ -41,5 +41,16 @@ public class UserProjectile extends Projectile {
 	public void updateActor() {
 		updatePosition();
 	}
+
+	@Override
+	public boolean isFriendly() {
+		return true;
+	}
+
+	@Override
+	public boolean isCollectible() {
+		return false;
+	}
+
 	
 }

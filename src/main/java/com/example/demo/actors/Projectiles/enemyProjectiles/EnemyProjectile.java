@@ -22,5 +22,15 @@ public class EnemyProjectile extends Projectile {
 		updatePosition();
 	}
 
+	@Override
+	public boolean isFriendly() {
+		return false;
+	}
+
+
+	@Override
+	public boolean isCollectible() {
+		return false;
+	}
 
 }

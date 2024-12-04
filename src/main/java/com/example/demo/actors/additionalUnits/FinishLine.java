@@ -26,4 +26,15 @@ public class FinishLine extends FighterPlane {
     public void updateActor() {
         updatePosition();
     }
+
+    @Override
+    public boolean isFriendly() {
+        return true;
+    }
+
+    @Override
+    public boolean isCollectible() {
+        return false;
+    }
+
 }

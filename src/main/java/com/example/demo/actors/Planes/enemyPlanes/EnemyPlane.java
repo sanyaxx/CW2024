@@ -38,4 +38,14 @@ public class EnemyPlane extends FighterPlane {
 		updatePosition();
 	}
 
+	@Override
+	public boolean isFriendly() {
+		return false;
+	}
+
+	@Override
+	public boolean isCollectible() {
+		return false;
+	}
+
 }

@@ -57,8 +57,18 @@ public class UserTank extends FighterPlane {
     }
 
     @Override
+    public boolean isFriendly() {
+        return true;
+    }
+
+    @Override
     public ActiveActorDestructible fireProjectile() {
         return new UserProjectile(PROJECTILE_X_POSITION, PROJECTILE_Y_POSITION, rotationAngle);
+    }
+
+    @Override
+    public boolean isCollectible() {
+        return false;
     }
 
 }

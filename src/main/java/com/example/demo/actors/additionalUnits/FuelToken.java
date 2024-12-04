@@ -23,7 +23,18 @@ public class FuelToken extends ActiveActorDestructible {
     }
 
     @Override
+    public boolean isFriendly() {
+        return true;
+    }
+
+    @Override
     public void takeDamage() {
         this.destroy();
+
+    @Override
+    public boolean isCollectible() {
+        return true;
     }
+
+
 }

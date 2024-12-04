@@ -65,6 +65,11 @@ public class Boss extends FighterPlane {
 	}
 
 	@Override
+	public boolean isFriendly() {
+		return false;
+	}
+
+	@Override
 	public ActiveActorDestructible fireProjectile() {
 		return bossFiresInCurrentFrame() ? new BossProjectile(getProjectileInitialPosition()) : null;
 	}
@@ -134,5 +139,10 @@ public class Boss extends FighterPlane {
 		framesWithShieldActivated = 0;
 		framesWithoutShieldActivated = 0;
 		levelView.hideShield();
+	}
+
+	@Override
+	public boolean isCollectible() {
+		return false;
 	}
 }

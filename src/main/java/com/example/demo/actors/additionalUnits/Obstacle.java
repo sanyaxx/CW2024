@@ -27,7 +27,17 @@ public class Obstacle extends ActiveActorDestructible {
     }
 
     @Override
+    public boolean isFriendly() {
+        return false;
+    }
+
+    @Override
     public void takeDamage() {
+    }
+
+    @Override
+    public boolean isCollectible() {
+        return false;
     }
 
 }

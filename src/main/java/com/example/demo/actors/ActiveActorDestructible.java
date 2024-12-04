@@ -1,6 +1,6 @@
 package com.example.demo.actors;
 
-public abstract class ActiveActorDestructible extends ActiveActor implements Destructible {
+public abstract class ActiveActorDestructible extends ActiveActor implements Destructible, Collectible {
 
 	private boolean isDestroyed;
 
@@ -14,8 +14,13 @@ public abstract class ActiveActorDestructible extends ActiveActor implements Des
 
 	public abstract void updateActor();
 
+	public abstract boolean isFriendly();
+
 	@Override
 	public abstract void takeDamage();
+
+	@Override
+	public abstract boolean isCollectible();
 
 	@Override
 	public void destroy() {

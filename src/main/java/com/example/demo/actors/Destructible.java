@@ -4,6 +4,8 @@ public interface Destructible {
 
 	void takeDamage();
 
+	boolean isFriendly();
+
 	void destroy();
 	
 }

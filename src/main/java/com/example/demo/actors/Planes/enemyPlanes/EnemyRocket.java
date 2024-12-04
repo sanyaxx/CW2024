@@ -57,4 +57,15 @@ public class EnemyRocket extends FighterPlane {
     public void updateActor() {
         updatePosition();
     }
+
+    @Override
+    public boolean isFriendly() {
+        return false;
+    }
+
+    @Override
+    public boolean isCollectible() {
+        return false;
+    }
+
 }
