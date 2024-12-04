@@ -1,5 +1,6 @@
 package com.example.demo.actors.Projectiles;
 
+import com.example.demo.ActorManager;
 import com.example.demo.actors.ActiveActorDestructible;
 
 public abstract class Projectile extends ActiveActorDestructible {
@@ -14,7 +15,7 @@ public abstract class Projectile extends ActiveActorDestructible {
 
 	@Override
 	public void takeDamage() {
-		this.destroy();
+		ActorManager.getInstance().removeActor(this);
 	}
 
 	@Override

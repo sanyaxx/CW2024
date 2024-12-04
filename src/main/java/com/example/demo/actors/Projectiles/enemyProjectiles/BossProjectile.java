@@ -29,6 +29,11 @@ public class BossProjectile extends Projectile {
 	}
 
 	@Override
+	public void takeDamage() {
+		super.takeDamage();
+	}
+
+	@Override
 	public boolean isCollectible() {
 		return false;
 	}

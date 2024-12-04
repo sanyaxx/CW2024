@@ -27,6 +27,10 @@ public class EnemyProjectile extends Projectile {
 		return false;
 	}
 
+	@Override
+	public void takeDamage() {
+		super.takeDamage();
+	}
 
 	@Override
 	public boolean isCollectible() {

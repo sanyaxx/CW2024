@@ -156,4 +156,8 @@ public class UserPlane extends FighterPlane {
 		return false;
 	}
 
+	@Override
+	public void takeDamage() {
+		super.takeDamage();
+	}
 }

@@ -1,5 +1,6 @@
 package com.example.demo.actors.additionalUnits;
 
+import com.example.demo.ActorManager;
 import com.example.demo.actors.ActiveActorDestructible;
 
 public class Coins extends ActiveActorDestructible {
@@ -29,7 +30,8 @@ public class Coins extends ActiveActorDestructible {
 
     @Override
     public void takeDamage() {
-        this.destroy();
+        ActorManager.getInstance().removeActor(this);
+    }
 
     @Override
     public boolean isCollectible() {

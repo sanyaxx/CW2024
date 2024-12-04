@@ -52,5 +52,9 @@ public class UserProjectile extends Projectile {
 		return false;
 	}
 
+	@Override
+	public void takeDamage() {
+		super.takeDamage();
+	}
 	
 }

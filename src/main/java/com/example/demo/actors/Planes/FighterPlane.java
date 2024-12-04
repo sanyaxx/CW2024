@@ -1,5 +1,6 @@
 package com.example.demo.actors.Planes;
 
+import com.example.demo.ActorManager;
 import com.example.demo.actors.ActiveActorDestructible;
 
 public abstract class FighterPlane extends ActiveActorDestructible {
@@ -17,7 +18,8 @@ public abstract class FighterPlane extends ActiveActorDestructible {
 	public void takeDamage() {
 		health--;
 		if (healthAtZero()) {
-			this.destroy();
+			this.setDestroyed(true);
+			ActorManager.getInstance().removeActor(this);
 		}
 	}
 

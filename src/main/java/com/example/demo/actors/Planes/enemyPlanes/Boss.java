@@ -1,5 +1,6 @@
 package com.example.demo.actors.Planes.enemyPlanes;
 
+import com.example.demo.ActorManager;
 import com.example.demo.actors.Projectiles.enemyProjectiles.BossProjectile;
 import com.example.demo.actors.ActiveActorDestructible;
 import com.example.demo.actors.Planes.FighterPlane;

@@ -48,4 +48,9 @@ public class EnemyPlane extends FighterPlane {
 		return false;
 	}
 
+	@Override
+	public void takeDamage() {
+		super.takeDamage();
+	}
+
 }
