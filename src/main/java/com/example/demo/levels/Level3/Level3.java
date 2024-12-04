@@ -193,16 +193,6 @@ public class Level3 extends LevelParent {
         return scene;
     }
 
-    @Override
-    protected boolean isEnemyPlaneOverlapping(ActiveActorDestructible newEnemyRocket) {
-        for (ActiveActorDestructible enemy : enemyRockets) {
-            if (newEnemyRocket.getBoundsInParent().intersects(enemy.getBoundsInParent())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     protected void updateSurvivalTimer() {
         frameCount++;
 

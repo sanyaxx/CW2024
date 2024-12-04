@@ -68,11 +68,11 @@ public class Level1 extends LevelParent {
 				ActiveActorDestructible newEnemy = new EnemyPlane(getScreenWidth(), newEnemyInitialYPosition);
 
 				// Check for overlapping with existing enemies
-				if (!isEnemyPlaneOverlapping(newEnemy)) {
-					addEnemyUnit(newEnemy);
-				} else {
+				if (isOverlapping(newEnemy, enemyUnits)) {
 					// If overlapping, decrement i to try again
 					i--;
+				} else {
+					addEnemyUnit(newEnemy);
 				}
 			}
 		}

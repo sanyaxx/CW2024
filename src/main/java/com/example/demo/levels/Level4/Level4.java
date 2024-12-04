@@ -160,7 +160,7 @@ public class Level4 extends LevelParent {
         if (currentTime - lastObstacleSpawnTime >= OBSTACLE_SPAWN_INTERVAL_NANOS) {
             // Spawn the obstacle at a fixed position
             ActiveActorDestructible newObstacle = new Obstacle(SCREEN_WIDTH - OBSTACLE_DIMENSIONS, SCREEN_HEIGHT - OBSTACLE_DIMENSIONS);
-            if (!isObstacleOverlapping(newObstacle)) {
+            if (!isOverlapping(newObstacle, obstacles)) {
                 obstacles.add(newObstacle);
                 getRoot().getChildren().add(newObstacle);
                 newObstacle.toFront();
@@ -360,14 +360,5 @@ public class Level4 extends LevelParent {
         removeDestroyedActors(userProjectiles);
         removeDestroyedActors(enemyRockets);
         removeDestroyedActors(fuelUnits);
-    }
-
-    boolean isObstacleOverlapping(ActiveActorDestructible newObstacle) {
-        for (ActiveActorDestructible obstacle : obstacles) {
-            if (newObstacle.getBoundsInParent().intersects(obstacle.getBoundsInParent())) {
-                return true;
-            }
-        }
-        return false;
     }
 }

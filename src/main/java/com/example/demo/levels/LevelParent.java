@@ -36,7 +36,7 @@ public abstract class LevelParent extends Observable {
 	public final LevelEndHandler levelEndHandler;
 
 	protected final List<ActiveActorDestructible> friendlyUnits;
-	private final List<ActiveActorDestructible> enemyUnits;
+	protected final List<ActiveActorDestructible> enemyUnits;
 	protected final List<ActiveActorDestructible> userProjectiles;
 	protected final List<ActiveActorDestructible> enemyProjectiles;
 	protected final List<ActiveActorDestructible> coinUnits;
@@ -238,7 +238,7 @@ public abstract class LevelParent extends Observable {
 				ActiveActorDestructible newCoin = new Coins(getScreenWidth(), newCoinInitialYPosition);
 
 				// Check for overlapping with existing coins
-				if (!isCoinOverlapping(newCoin)) {
+				if (!isOverlapping(newCoin, coinUnits)) {
 					addCoinUnit(newCoin); // Assuming you have a method to add the coin to the game
 				} else {
 					// If overlapping, decrement i to try again
@@ -376,22 +376,10 @@ public abstract class LevelParent extends Observable {
 		offScreenCoinCount = 0;
 	}
 
-	protected boolean isEnemyPlaneOverlapping(ActiveActorDestructible newEnemy) {
-		for (ActiveActorDestructible enemy : enemyUnits) {
-			if (newEnemy.getBoundsInParent().intersects(enemy.getBoundsInParent())) {
-				return true;
-			}
-		}
-		return false;
+	protected boolean isOverlapping(ActiveActorDestructible actor, List<ActiveActorDestructible> existingActors) {
+		return existingActors.stream()
+				.anyMatch(existing -> actor.getBoundsInParent().intersects(existing.getBoundsInParent()));
 	}
 
-	boolean isCoinOverlapping(ActiveActorDestructible newCoin) {
-		for (ActiveActorDestructible coin : coinUnits) {
-			if (newCoin.getBoundsInParent().intersects(coin.getBoundsInParent())) {
-				return true; // Overlapping found
-			}
-		}
-		return false; // No overlap
-	}
 }
 
