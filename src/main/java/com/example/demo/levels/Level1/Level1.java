@@ -71,4 +71,10 @@ public class Level1 extends LevelParent {
 		return getUser().getNumberOfKills() >= KILLS_TO_ADVANCE;
 	}
 
+	@Override
+	public void update() {
+		super.update();
+		spawnEnemyUnits();
+		updateLevelView();
+	}
 }

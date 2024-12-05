@@ -67,4 +67,11 @@ public class Level2 extends LevelParent {
 		levelView.removeHearts(getUser().getHealth());
 		levelView.updateWinningParameterDisplay(boss.getHealth(), getUser().getScore());
 	}
+
+	@Override
+	public void update() {
+		super.update();
+		spawnEnemyUnits();
+		updateLevelView();
+	}
 }
