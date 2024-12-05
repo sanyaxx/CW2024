@@ -16,7 +16,7 @@ public class ActorManager implements Updatable {
     // Lists to manage actors
     private final List<ActiveActorDestructible> actorsToAdd = Collections.synchronizedList(new ArrayList<>());
     private final List<ActiveActorDestructible> actorsToRemove = Collections.synchronizedList(new ArrayList<>());
-    private final List<ActiveActorDestructible> activeActors = Collections.synchronizedList(new ArrayList<>());
+    public final List<ActiveActorDestructible> activeActors = Collections.synchronizedList(new ArrayList<>());
 
     // Private constructor to prevent instantiation from outside
     private ActorManager() {}
@@ -76,7 +76,7 @@ public class ActorManager implements Updatable {
     public void updateActors() {
         synchronized (activeActors) {
             for (ActiveActorDestructible actor : activeActors) {
-                actor.updateActor();
+                actor.update();
             }
         }
     }
@@ -95,15 +95,16 @@ public class ActorManager implements Updatable {
             actorsToRemove.clear();
         }
         synchronized (activeActors) {
-            activeActors.clear();
+            // Retain the first actor if it exists
+            if (!activeActors.isEmpty()) {
+                ActiveActorDestructible firstActor = activeActors.get(0);
+                activeActors.clear(); // Clear all
+                activeActors.add(firstActor); // Re-add the first actor
+            }
         }
-
-        if (root != null) {
-            root.getChildren().clear();
-        }
-
-        System.out.println("Level cleared: All actors have been removed and lists reset.");
+        System.out.println("Level cleared: All actors removed.");
     }
+
 
     // Update actors and the scene
     @Override
