@@ -29,7 +29,11 @@ public class LevelManager extends Observable {
 
     // Increment the current level number: called when a level completed
     public void incrementCurrentLevelNumber() {
-        currentLevelNumber++;
+        if (currentLevelNumber < TOTAL_LEVELS_PLUS1 - 1) { // Only increment if not at the last level
+            currentLevelNumber++;
+        } else {
+            System.out.println("No more levels to increment.");
+        }
     }
 
     public String getNextLevelName() {
