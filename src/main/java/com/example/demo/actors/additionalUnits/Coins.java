@@ -19,7 +19,7 @@ public class Coins extends ActiveActorDestructible {
     }
 
     @Override
-    public void updateActor() {
+    public void update() {
         updatePosition();
     }
 

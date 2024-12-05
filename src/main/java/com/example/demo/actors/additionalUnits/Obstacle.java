@@ -22,7 +22,7 @@ public class Obstacle extends ActiveActorDestructible {
     }
 
     @Override
-    public void updateActor() {
+    public void update() {
         updatePosition();
     }
 

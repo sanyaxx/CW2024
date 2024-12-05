@@ -38,7 +38,7 @@ public class UserProjectile extends Projectile {
 	}
 	
 	@Override
-	public void updateActor() {
+	public void update() {
 		updatePosition();
 	}
 

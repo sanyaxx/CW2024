@@ -54,7 +54,7 @@ public class EnemyRocket extends FighterPlane {
     }
 
     @Override
-    public void updateActor() {
+    public void update() {
         updatePosition();
     }
 

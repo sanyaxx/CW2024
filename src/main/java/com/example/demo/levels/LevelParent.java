@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.example.demo.ActorManager;
+import com.example.demo.Updatable;
 import com.example.demo.activityManagers.CollisionHandler;
 import com.example.demo.activityManagers.LevelEndHandler;
 import com.example.demo.actors.ActiveActorDestructible;
@@ -24,7 +25,7 @@ import javafx.scene.input.*;
 import javafx.util.Duration;
 
 
-public abstract class LevelParent extends Observable {
+public abstract class LevelParent extends Observable implements Updatable {
 
 	private static final double SCREEN_HEIGHT_ADJUSTMENT = 150;
 	private static final int MILLISECOND_DELAY = 50;

@@ -52,7 +52,7 @@ public class UserTank extends FighterPlane {
     }
 
     @Override
-    public void updateActor() {
+    public void update() {
         updatePosition();
     }
 

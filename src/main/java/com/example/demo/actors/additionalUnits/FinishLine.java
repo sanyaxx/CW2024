@@ -23,7 +23,7 @@ public class FinishLine extends FighterPlane {
     }
 
     @Override
-    public void updateActor() {
+    public void update() {
         updatePosition();
     }
 

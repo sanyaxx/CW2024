@@ -34,7 +34,7 @@ public class EnemyPlane extends FighterPlane {
 	}
 
 	@Override
-	public void updateActor() {
+	public void update() {
 		updatePosition();
 	}
 
