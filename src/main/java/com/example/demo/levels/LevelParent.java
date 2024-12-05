@@ -1,20 +1,17 @@
 package com.example.demo.levels;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import com.example.demo.ActorManager;
 import com.example.demo.Updatable;
 import com.example.demo.activityManagers.CollisionHandler;
 import com.example.demo.activityManagers.LevelEndHandler;
+import com.example.demo.activityManagers.LevelManager;
 import com.example.demo.actors.ActiveActorDestructible;
-import com.example.demo.actors.Planes.FighterPlane;
 import com.example.demo.actors.Planes.enemyPlanes.EnemyPlane;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
-import com.example.demo.actors.Projectiles.Projectile;
-import com.example.demo.actors.Projectiles.userProjectiles.UserProjectile;
 import com.example.demo.actors.additionalUnits.Coins;
-import com.example.demo.actors.additionalUnits.FuelToken;
+import com.example.demo.functionalClasses.GenerateLevelScore;
 import com.example.demo.gameConfig.GameTimeline;
 import javafx.animation.*;
 import javafx.event.EventHandler;
@@ -28,31 +25,22 @@ import javafx.util.Duration;
 public abstract class LevelParent extends Observable implements Updatable {
 
 	private static final double SCREEN_HEIGHT_ADJUSTMENT = 150;
-	private static final int MILLISECOND_DELAY = 50;
+
 	private final double screenHeight;
 	private final double screenWidth;
 	private final double enemyMaximumYPosition;
 
 	private final Group root;
-	protected final Timeline timeline;
 	private final UserPlane user;
 	protected final Scene scene;
 	private final ImageView background;
 	public final LevelEndHandler levelEndHandler;
 	public final ActorManager actorManager;
 	public final CollisionHandler collisionHandler;
-
-//	protected final List<ActiveActorDestructible> friendlyUnits;
-//	protected final List<ActiveActorDestructible> enemyUnits;
-//	protected final List<ActiveActorDestructible> userProjectiles;
-//	protected final List<ActiveActorDestructible> enemyProjectiles;
-//	protected final List<ActiveActorDestructible> coinUnits;
-	protected final List<ActiveActorDestructible> removeActorsFromScene;
+	public final LevelManager levelManager;
 
 	public int currentNumberOfEnemies;
 	protected int currentNumberOfCoins;
-//	private int penetratedEnemyCount;
-//	private int offScreenCoinCount;
 	protected int coinsCollectedInLevel;
 	private final LevelView levelView;
 	private static final double COIN_SPAWN_PROBABILITY = .15;
@@ -61,14 +49,8 @@ public abstract class LevelParent extends Observable implements Updatable {
 	public LevelParent(String backgroundImageName, double screenHeight, double screenWidth, int playerInitialHealth) {
         this.root = new Group();
 		this.scene = new Scene(root, screenWidth, screenHeight);
-		this.timeline = GameTimeline.getInstance().createTimeline();
+
 		this.user = new UserPlane(playerInitialHealth);
-//		this.friendlyUnits = new ArrayList<>();
-//		this.enemyUnits = new ArrayList<>();
-//		this.userProjectiles = new ArrayList<>();
-//		this.enemyProjectiles = new ArrayList<>();
-//		this.coinUnits = new ArrayList<>();
-		this.removeActorsFromScene = new ArrayList<>();
 
 		this.background = new ImageView(new Image(getClass().getResource(backgroundImageName).toExternalForm()));
 		this.screenHeight = screenHeight;
@@ -76,19 +58,14 @@ public abstract class LevelParent extends Observable implements Updatable {
 		this.enemyMaximumYPosition = screenHeight - SCREEN_HEIGHT_ADJUSTMENT;
 		this.levelView = instantiateLevelView();
 		this.currentNumberOfEnemies = 0;
-//		this.penetratedEnemyCount = 0;
 		this.levelEndHandler = new LevelEndHandler(root);
 		this.collisionHandler = new CollisionHandler(this);
 		this.actorManager = ActorManager.getInstance();
-
-		initializeTimeline();
-		actorManager.activeActors.add(user);
-//		friendlyUnits.add(user);
+		this.levelManager = LevelManager.getInstance();
+		actorManager.setRoot(root);
 	}
 
 	protected abstract void initializeFriendlyUnits();
-
-	protected abstract void checkIfGameOver();
 
 	protected abstract void spawnEnemyUnits();
 
@@ -105,37 +82,17 @@ public abstract class LevelParent extends Observable implements Updatable {
 
 	public void startGame() {
 		background.requestFocus();
-		timeline.play();
+		GameTimeline.getInstance().getTimeline().play();
 	}
 
-	protected void updateScene() {
-		spawnEnemyUnits();
+	@Override
+	public void update() {
 		spawnCoinUnits();
-		updateActors();
-
 		generateEnemyFire();
-//		updateNumberOfEnemies();
-//		updateNumberOfCoins();
-//		handleCoinCollisions();
 		handleDefensesPenetration();
-//		handleCoinMovesOffScreen();
-//		handleUserProjectileCollisions();
-//		handleEnemyProjectileCollisions();
-//		handlePlaneCollisions();
 		checkCollisions();
-//		removeAllDestroyedActors();
-//		updateKillCount();
-		actorManager.addActorsToScene(root);
-		actorManager.removeActorsFromScene(root);
-		updateLevelView();
-		checkIfGameOver();
-
-	}
-
-	private void initializeTimeline() {
-		timeline.setCycleCount(Timeline.INDEFINITE);
-		KeyFrame gameLoop = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> updateScene());
-		timeline.getKeyFrames().add(gameLoop);
+		checkGameOverConditions();
+//		actorManager.updateScene(root);
 	}
 
 	protected void initializeBackground() {
@@ -162,8 +119,6 @@ public abstract class LevelParent extends Observable implements Updatable {
 	protected void fireProjectile() {
 		ActiveActorDestructible projectile = user.fireProjectile();
 		actorManager.addActor(projectile);
-//		root.getChildren().add(projectile);
-//		userProjectiles.add(projectile);
 	}
 
 	protected void checkCollisions() {
@@ -180,22 +135,9 @@ public abstract class LevelParent extends Observable implements Updatable {
 
 	protected void spawnEnemyProjectile(ActiveActorDestructible projectile) {
 		if (projectile != null) {
-//			root.getChildren().add(projectile);
 			actorManager.addActor(projectile);
-//			enemyProjectiles.add(projectile);
 		}
 	}
-
-	protected void updateActors() {
-		actorManager.getActiveActors().forEach(ActiveActorDestructible::updateActor);
-//		friendlyUnits.forEach(plane -> plane.updateActor());
-//		enemyUnits.forEach(enemy -> enemy.updateActor());
-//		userProjectiles.forEach(projectile -> projectile.updateActor());
-//		enemyProjectiles.forEach(projectile -> projectile.updateActor());
-//		coinUnits.forEach(coin -> coin.updateActor());
-	}
-
-
 
 	protected void spawnCoinUnits() {
 		// Define how many coins we want to spawn
@@ -235,23 +177,13 @@ public abstract class LevelParent extends Observable implements Updatable {
 		}
 	}
 
-//	protected void handleCoinMovesOffScreen() {
-//		for (ActiveActorDestructible coin : coinUnits) {
-//			if (enemyHasPenetratedDefenses(coin)) {
-//				coin.takeDamage();
-//				offScreenCoinCount++;
-//				updateNumberOfCoins();
-//			}
-//		}
-//	}
-
 	protected void updateLevelView() {
 		levelView.removeHearts(user.getHealth());
 		levelView.updateWinningParameterDisplay(user.getNumberOfKills(), user.getScore());
 	}
 
 	protected boolean entityHasPenetratedDefenses(ActiveActorDestructible actor) {
-		return Math.abs(actor.getTranslateX()) > screenWidth;
+		return Math.abs(actor.getTranslateX()) > screenWidth + actor.getFitWidth();
 	}
 
 	public UserPlane getUser() {
@@ -274,16 +206,6 @@ public abstract class LevelParent extends Observable implements Updatable {
 		return currentNumberOfCoins;
 	}
 
-//	protected void addEnemyUnit(ActiveActorDestructible enemy) {
-//		enemyUnits.add(enemy);
-//		root.getChildren().add(enemy);
-//	}
-//
-//	protected void addCoinUnit(ActiveActorDestructible coin) {
-//		coinUnits.add(coin);
-//		root.getChildren().add(coin);
-//	}
-
 	protected double getEnemyMaximumYPosition() {
 		return enemyMaximumYPosition;
 	}
@@ -299,22 +221,6 @@ public abstract class LevelParent extends Observable implements Updatable {
 	protected boolean userIsDestroyed() {
 		return user.isDestroyed();
 	}
-
-//	protected void updateNumberOfEnemies() {
-//		// Update currentNumberOfEnemies to reflect the number of enemies that have not penetrated defenses
-//		currentNumberOfEnemies = enemyUnits.size() - penetratedEnemyCount;
-//
-//		// Reset the penetrated enemy count for the next update
-//		penetratedEnemyCount = 0;
-//	}
-
-//	protected void updateNumberOfCoins() {
-//		// Update currentNumberOfEnemies to reflect the number of enemies that have not penetrated defenses
-//		currentNumberOfCoins = coinUnits.size() - offScreenCoinCount;
-//
-//		// Reset the penetrated enemy count for the next update
-//		offScreenCoinCount = 0;
-//	}
 
 	protected boolean isOverlapping(ActiveActorDestructible actor, List<ActiveActorDestructible> existingActors) {
 		return existingActors.stream()
