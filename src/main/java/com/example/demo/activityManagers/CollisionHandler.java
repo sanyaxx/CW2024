@@ -2,6 +2,7 @@ package com.example.demo.activityManagers;
 
 import com.example.demo.actors.ActiveActorDestructible;
 import com.example.demo.actors.Planes.FighterPlane;
+import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
 import com.example.demo.actors.Projectiles.Projectile;
 import com.example.demo.actors.Projectiles.userProjectiles.UserProjectile;
 import com.example.demo.actors.additionalUnits.Coins;
@@ -40,10 +41,10 @@ public class CollisionHandler {
     }
 
     protected void handleCollectibleInteraction(ActiveActorDestructible actor1, ActiveActorDestructible actor2) {
-        if (actor1.isCollectible() && !actor2.isCollectible()) {
+        if (actor1.isCollectible() && !actor2.isCollectible() && actor2 instanceof UserPlane) {
             actor1.takeDamage();
             handleCollectibleEffect(actor1);
-        } else if (!actor1.isCollectible() && actor2.isCollectible()) {
+        } else if (!actor1.isCollectible() && actor1 instanceof UserPlane && actor2.isCollectible()) {
             actor2.takeDamage();
             handleCollectibleEffect(actor2);
         }
