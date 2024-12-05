@@ -1,8 +1,11 @@
 package com.example.demo.levels.Level2;
 
+import com.example.demo.ActorManager;
 import com.example.demo.activityManagers.LevelManager;
 import com.example.demo.actors.Planes.enemyPlanes.Boss;
+import com.example.demo.actors.Planes.enemyPlanes.EnemyPlane;
 import com.example.demo.functionalClasses.GenerateLevelScore;
+import com.example.demo.gameConfig.GameTimeline;
 import com.example.demo.levels.LevelParent;
 import com.example.demo.levels.LevelView;
 
@@ -17,6 +20,8 @@ public class Level2 extends LevelParent {
 		super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
         boss = new Boss(levelView);
 		this.coinsCollectedInLevel = 0;
+
+		initializeLevel(this);
     }
 
 	@Override
@@ -25,29 +30,29 @@ public class Level2 extends LevelParent {
 	}
 
 	@Override
-	protected void checkIfGameOver() {
-		if (userIsDestroyed()) {
-			levelEndHandler.handleLevelLoss(getUser().getScore());
-		}
-		else if (boss.isDestroyed()) {
-			LevelManager levelManager = LevelManager.getInstance();
-			GenerateLevelScore scoreCalculator = new GenerateLevelScore(getUser().getHealth(), coinsCollectedInLevel);
+	protected boolean hasLevelBeenLost() {
+		return userIsDestroyed(); // User loss condition
+	}
 
-			int calculatedScore = scoreCalculator.calculateScore();
-			String starImage = scoreCalculator.getStarImage(); // Get the corresponding star image path
-
-			getUser().setLevelScore(levelManager.getCurrentLevelNumber(), calculatedScore);
-			levelEndHandler.handleLevelCompletion(getUser().getScore(), starImage, getUser());
-
-			levelManager.incrementCurrentLevelNumber();
-		}
+	@Override
+	protected boolean hasLevelBeenWon() {
+		return boss.isDestroyed(); // Win condition specific to this level
 	}
 
 	@Override
 	protected void spawnEnemyUnits() {
 		if (getCurrentNumberOfEnemies() == 0) {
-			addEnemyUnit(boss);
+			actorManager.addActor(boss);
 		}
+	}
+
+	@Override
+	protected void generateEnemyFire() {
+		actorManager.getActiveActors().forEach(actor -> {
+			if (actor instanceof Boss) {
+				spawnEnemyProjectile(((Boss) actor).fireProjectile());
+			}
+		});
 	}
 
 	@Override
