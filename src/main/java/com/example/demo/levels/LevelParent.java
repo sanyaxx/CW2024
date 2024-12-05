@@ -227,5 +227,44 @@ public abstract class LevelParent extends Observable implements Updatable {
 				.anyMatch(existing -> actor.getBoundsInParent().intersects(existing.getBoundsInParent()));
 	}
 
+	protected void initializeLevel(LevelParent level){
+		actorManager.clearLevel();
+		actorManager.activeActors.add(user);
+		GameTimeline.getInstance().clearUpdatable();
+		GameTimeline.getInstance().addUpdatable(level);
+		GameTimeline.getInstance().addUpdatable(actorManager);
+	}
+
+	protected final void checkGameOverConditions() {
+		int userScore = getUser().getScore(); // Common logic for all levels
+
+		// Check if the user has lost
+		if (hasLevelBeenLost()) {
+			System.out.println("Level failed. Game over.");
+			levelEndHandler.handleLevelLoss(userScore);
+			return; // Exit early
+		}
+
+		// Check if the user has won
+		if (hasLevelBeenWon()) {
+			System.out.println("Level completed. Advancing to next level.");
+			System.out.println("User Score: " + userScore);
+
+			GenerateLevelScore scoreCalculator = new GenerateLevelScore(getUser().getHealth(), coinsCollectedInLevel);
+
+			int calculatedScore = scoreCalculator.calculateScore();
+			String starImage = scoreCalculator.getStarImage();
+
+			getUser().setLevelScore(levelManager.getCurrentLevelNumber(), calculatedScore);
+			levelEndHandler.handleLevelCompletion(userScore, starImage, getUser());
+
+			levelManager.incrementCurrentLevelNumber();
+		}
+	}
+
+	protected abstract boolean hasLevelBeenLost();
+
+	protected abstract boolean hasLevelBeenWon();
+
 }
 
