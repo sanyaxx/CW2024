@@ -1,5 +1,6 @@
-package com.example.demo;
+package com.example.demo.activityManagers;
 
+import com.example.demo.Updatable;
 import com.example.demo.actors.ActiveActorDestructible;
 import javafx.scene.Group;
 
@@ -95,12 +96,7 @@ public class ActorManager implements Updatable {
             actorsToRemove.clear();
         }
         synchronized (activeActors) {
-            // Retain the first actor if it exists
-            if (!activeActors.isEmpty()) {
-                ActiveActorDestructible firstActor = activeActors.get(0);
-                activeActors.clear(); // Clear all
-                activeActors.add(firstActor); // Re-add the first actor
-            }
+            activeActors.clear(); // Clear all
         }
         System.out.println("Level cleared: All actors removed.");
     }
