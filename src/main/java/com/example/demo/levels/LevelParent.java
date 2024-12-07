@@ -4,22 +4,16 @@ import java.util.*;
 
 import com.example.demo.activityManagers.*;
 import com.example.demo.Updatable;
-import com.example.demo.activityManagers.CollisionHandler;
-import com.example.demo.activityManagers.LevelEndHandler;
-import com.example.demo.activityManagers.LevelManager;
 import com.example.demo.actors.ActiveActorDestructible;
 import com.example.demo.actors.Planes.enemyPlanes.EnemyPlane;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
 import com.example.demo.actors.additionalUnits.Coins;
-import com.example.demo.functionalClasses.GenerateLevelScore;
 import com.example.demo.gameConfig.GameTimeline;
-import javafx.animation.*;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.*;
 import javafx.scene.input.*;
-import javafx.util.Duration;
 
 
 public abstract class LevelParent extends Observable implements Updatable {
@@ -39,13 +33,12 @@ public abstract class LevelParent extends Observable implements Updatable {
 	public final ActorManager actorManager;
 	public final CollisionHandler collisionHandler;
 	public final LevelManager levelManager;
+	protected SpawnHandler spawnHandler;
 
 	public int currentNumberOfEnemies;
 	protected int currentNumberOfCoins;
 	protected int coinsCollectedInLevel;
 	private final LevelView levelView;
-	private static final double COIN_SPAWN_PROBABILITY = .15;
-	private static final int TOTAL_COINS = 20;
 
 	public LevelParent(String backgroundImageName, double screenHeight, double screenWidth, int playerInitialHealth) {
         this.root = new Group();
@@ -71,15 +64,12 @@ public abstract class LevelParent extends Observable implements Updatable {
 		actorManager.setRoot(root);
 	}
 
-	protected abstract void initializeFriendlyUnits();
-
 	protected abstract void spawnEnemyUnits();
 
 	protected abstract LevelView instantiateLevelView();
 
 	public Scene initializeScene() {
 		initializeBackground();
-		initializeFriendlyUnits();
 		levelView.showHeartDisplay();
 		levelView.showWinningParameterDisplay();
 		levelView.showPauseButton();
@@ -95,10 +85,9 @@ public abstract class LevelParent extends Observable implements Updatable {
 	public void update() {
 		spawnCoinUnits();
 		generateEnemyFire();
-		handleDefensesPenetration();
 		checkCollisions();
 		checkGameOverConditions();
-//		actorManager.updateScene(root);
+		handleDefensesPenetration();
 	}
 
 	protected void initializeBackground() {
@@ -139,33 +128,19 @@ public abstract class LevelParent extends Observable implements Updatable {
 		});
 	}
 
+	protected void spawnCoinUnits() {
+		currentNumberOfCoins += spawnHandler.spawnActors(
+				() -> new Coins(screenWidth, Math.random() * getEnemyMaximumYPosition()), // Supplier for new coins
+				5, // Maximum spawn at a time
+				0.15, // Spawn probability
+				currentNumberOfCoins, // Current count
+				20 // Total allowed
+		);
+	}
+
 	protected void spawnEnemyProjectile(ActiveActorDestructible projectile) {
 		if (projectile != null) {
 			actorManager.addActor(projectile);
-		}
-	}
-
-	protected void spawnCoinUnits() {
-		// Define how many coins we want to spawn
-		int coinsToSpawn = Math.min(5 - currentNumberOfCoins, TOTAL_COINS - currentNumberOfCoins);
-		if (currentNumberOfCoins < 3) {
-			coinsToSpawn = Math.min(3 - currentNumberOfCoins, TOTAL_COINS - currentNumberOfCoins);
-		}
-
-		for (int i = 0; i < coinsToSpawn; i++) {
-			if (Math.random() < COIN_SPAWN_PROBABILITY) { // Assuming you have a COIN_SPAWN_PROBABILITY constant
-				double newCoinInitialYPosition = Math.random() * getEnemyMaximumYPosition(); // Assuming you have a method to get max Y position for coins
-				ActiveActorDestructible newCoin = new Coins(getScreenWidth(), newCoinInitialYPosition);
-
-				// Check for overlapping with existing coins
-				if (!isOverlapping(newCoin, actorManager.getActiveActors())) {
-					actorManager.addActor(newCoin);
-					currentNumberOfCoins++;
-				} else {
-					// If overlapping, decrement i to try again
-					i--;
-				}
-			}
 		}
 	}
 
@@ -228,12 +203,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 		return user.isDestroyed();
 	}
 
-	protected boolean isOverlapping(ActiveActorDestructible actor, List<ActiveActorDestructible> existingActors) {
-		return existingActors.stream()
-				.anyMatch(existing -> actor.getBoundsInParent().intersects(existing.getBoundsInParent()));
-	}
-
-	protected void initializeLevel(LevelParent level){
+	protected void initializeLevel(LevelParent level, ActiveActorDestructible user){
 		actorManager.clearLevel();
 		actorManager.addActor(user);
 		GameTimeline.getInstance().clearUpdatable();
