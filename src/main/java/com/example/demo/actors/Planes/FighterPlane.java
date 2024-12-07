@@ -1,6 +1,6 @@
 package com.example.demo.actors.Planes;
 
-import com.example.demo.ActorManager;
+import com.example.demo.activityManagers.ActorManager;
 import com.example.demo.actors.ActiveActorDestructible;
 
 public abstract class FighterPlane extends ActiveActorDestructible {
@@ -42,5 +42,12 @@ public abstract class FighterPlane extends ActiveActorDestructible {
 	public int getHealth() {
 		return health;
 	}
-		
+
+	public void incrementHealth() {
+		this.health++ ;
+	}
+
+	public void decrementHealth() {
+		this.health-- ;
+	}
 }

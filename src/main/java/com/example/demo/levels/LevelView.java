@@ -1,5 +1,6 @@
 package com.example.demo.levels;
 
+import com.example.demo.activityManagers.LevelStateHandler;
 import com.example.demo.functionalClasses.DisplayHeart;
 import com.example.demo.PauseButton;
 import com.example.demo.activityManagers.PauseHandler;
@@ -23,12 +24,6 @@ public class LevelView {
 		this.displayWinningParameter = new DisplayWinningParameter("Kill Count", 0, "Coins", score);
 		this.pauseButton = new PauseButton();
 		this.pauseHandler = new PauseHandler(this, root);
-
-		// Set the action for the pause button
-		pauseButton.setOnPauseAction(pauseHandler::pauseGame);
-
-		// Set the action for the resume button
-		(pauseHandler.getResumeButton()).setOnAction(event -> pauseHandler.resumeGame());
 	}
 
 

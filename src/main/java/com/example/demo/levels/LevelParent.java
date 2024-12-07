@@ -2,7 +2,7 @@ package com.example.demo.levels;
 
 import java.util.*;
 
-import com.example.demo.ActorManager;
+import com.example.demo.activityManagers.*;
 import com.example.demo.Updatable;
 import com.example.demo.activityManagers.CollisionHandler;
 import com.example.demo.activityManagers.LevelEndHandler;
@@ -32,9 +32,10 @@ public abstract class LevelParent extends Observable implements Updatable {
 
 	private final Group root;
 	private final UserPlane user;
-	protected final Scene scene;
+	public final Scene scene;
 	private final ImageView background;
-	public final LevelEndHandler levelEndHandler;
+
+	public final LevelStateHandler levelStateHandler;
 	public final ActorManager actorManager;
 	public final CollisionHandler collisionHandler;
 	public final LevelManager levelManager;
@@ -49,19 +50,24 @@ public abstract class LevelParent extends Observable implements Updatable {
 	public LevelParent(String backgroundImageName, double screenHeight, double screenWidth, int playerInitialHealth) {
         this.root = new Group();
 		this.scene = new Scene(root, screenWidth, screenHeight);
-
 		this.user = new UserPlane(playerInitialHealth);
-
 		this.background = new ImageView(new Image(getClass().getResource(backgroundImageName).toExternalForm()));
 		this.screenHeight = screenHeight;
 		this.screenWidth = screenWidth;
 		this.enemyMaximumYPosition = screenHeight - SCREEN_HEIGHT_ADJUSTMENT;
 		this.levelView = instantiateLevelView();
 		this.currentNumberOfEnemies = 0;
-		this.levelEndHandler = new LevelEndHandler(root);
+
+		this.screenHeight = screenHeight;
+		this.screenWidth = screenWidth;
+
+		this.levelStateHandler = new LevelStateHandler();
 		this.collisionHandler = new CollisionHandler(this);
 		this.actorManager = ActorManager.getInstance();
 		this.levelManager = LevelManager.getInstance();
+		this.spawnHandler = new SpawnHandler(actorManager, screenWidth, screenHeight);
+
+		levelView.pauseButton.setOnPauseAction(() -> levelStateHandler.handleLevelPaused(root, user));
 		actorManager.setRoot(root);
 	}
 
@@ -229,7 +235,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 
 	protected void initializeLevel(LevelParent level){
 		actorManager.clearLevel();
-		actorManager.activeActors.add(user);
+		actorManager.addActor(user);
 		GameTimeline.getInstance().clearUpdatable();
 		GameTimeline.getInstance().addUpdatable(level);
 		GameTimeline.getInstance().addUpdatable(actorManager);
@@ -241,30 +247,19 @@ public abstract class LevelParent extends Observable implements Updatable {
 		// Check if the user has lost
 		if (hasLevelBeenLost()) {
 			System.out.println("Level failed. Game over.");
-			levelEndHandler.handleLevelLoss(userScore);
-			return; // Exit early
+			levelStateHandler.showRedeemLife(root, user);
 		}
 
 		// Check if the user has won
 		if (hasLevelBeenWon()) {
 			System.out.println("Level completed. Advancing to next level.");
 			System.out.println("User Score: " + userScore);
-
-			GenerateLevelScore scoreCalculator = new GenerateLevelScore(getUser().getHealth(), coinsCollectedInLevel);
-
-			int calculatedScore = scoreCalculator.calculateScore();
-			String starImage = scoreCalculator.getStarImage();
-
-			getUser().setLevelScore(levelManager.getCurrentLevelNumber(), calculatedScore);
-			levelEndHandler.handleLevelCompletion(userScore, starImage, getUser());
-
-			levelManager.incrementCurrentLevelNumber();
+			levelStateHandler.handleLevelCompletion(root, user, coinsCollectedInLevel);
 		}
 	}
 
 	protected abstract boolean hasLevelBeenLost();
 
 	protected abstract boolean hasLevelBeenWon();
-
 }
 

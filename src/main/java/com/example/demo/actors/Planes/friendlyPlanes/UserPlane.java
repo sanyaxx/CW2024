@@ -1,5 +1,6 @@
 package com.example.demo.actors.Planes.friendlyPlanes;
 
+import com.example.demo.activityManagers.ActorManager;
 import com.example.demo.actors.Projectiles.userProjectiles.UserProjectile;
 import com.example.demo.actors.ActiveActorDestructible;
 import com.example.demo.actors.Planes.FighterPlane;
@@ -100,6 +101,10 @@ public class UserPlane extends FighterPlane {
 		return score;
 	}
 
+	public void decrementScore() { // when life redeemed
+		score -= 5;
+	}
+
 	public void incrementScore() {
 		score++;
 	}
@@ -158,6 +163,20 @@ public class UserPlane extends FighterPlane {
 
 	@Override
 	public void takeDamage() {
-		super.takeDamage();
+		decrementHealth();
+		if (getHealth() == 0) {
+			this.setDestroyed(true);
+		}
+	}
+
+	public void destroyUser() {
+		this.setDestroyed(true);
+		ActorManager.getInstance().removeActor(this);
+	}
+
+	public void reviveUser() {
+		this.decrementScore();
+		this.incrementHealth();
+		this.setDestroyed(false);
 	}
 }

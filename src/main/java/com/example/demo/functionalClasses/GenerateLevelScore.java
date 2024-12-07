@@ -1,24 +1,13 @@
 package com.example.demo.functionalClasses;
 
 public class GenerateLevelScore {
-    private int livesRemaining;
-    private int coinsCollected;
 
     // Constructor for lives and coins
-    public GenerateLevelScore(int livesRemaining, int coinsCollected) {
-        this.livesRemaining = livesRemaining;
-        this.coinsCollected = coinsCollected;
-    }
-
-    // Constructor for direct score
-    public GenerateLevelScore(int score) {
-        // Generate star rating based on the provided score
-        String starImagePath = getStarImagePath(score);
-        // If you need to store the star image path for future reference, you can do so here.
+    public GenerateLevelScore() {
     }
 
     // Method to get star image path based on score
-    private String getStarImagePath(int score) {
+    public String getStarImagePath(int score) {
         return switch (score) {
             case 3 -> "/com/example/demo/images/3stars.png"; // Path to the 3-star image
             case 2 -> "/com/example/demo/images/2stars.png"; // Path to the 2-star image
@@ -28,7 +17,7 @@ public class GenerateLevelScore {
     }
 
     // Method to calculate score based on lives and coins
-    public int calculateScore() {
+    public int calculateScore(int livesRemaining, int coinsCollected) {
         int score = 0;
 
         // Example scoring logic
@@ -43,11 +32,5 @@ public class GenerateLevelScore {
         }
 
         return score;
-    }
-
-    // Method to get the star image based on lives and coins
-    public String getStarImage() {
-        int score = calculateScore(); // Calculate the score based on lives and coins
-        return getStarImagePath(score); // Return the corresponding star image path
     }
 }
