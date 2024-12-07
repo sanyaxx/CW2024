@@ -20,8 +20,8 @@ public abstract class LevelParent extends Observable implements Updatable {
 
 	private static final double SCREEN_HEIGHT_ADJUSTMENT = 150;
 
-	private final double screenHeight;
-	private final double screenWidth;
+	protected final double screenHeight;
+	protected final double screenWidth;
 	private final double enemyMaximumYPosition;
 
 	private final Group root;
@@ -45,8 +45,6 @@ public abstract class LevelParent extends Observable implements Updatable {
 		this.scene = new Scene(root, screenWidth, screenHeight);
 		this.user = new UserPlane(playerInitialHealth);
 		this.background = new ImageView(new Image(getClass().getResource(backgroundImageName).toExternalForm()));
-		this.screenHeight = screenHeight;
-		this.screenWidth = screenWidth;
 		this.enemyMaximumYPosition = screenHeight - SCREEN_HEIGHT_ADJUSTMENT;
 		this.levelView = instantiateLevelView();
 		this.currentNumberOfEnemies = 0;
@@ -189,14 +187,6 @@ public abstract class LevelParent extends Observable implements Updatable {
 
 	protected double getEnemyMaximumYPosition() {
 		return enemyMaximumYPosition;
-	}
-
-	protected double getScreenWidth() {
-		return screenWidth;
-	}
-
-	protected double getScreenHeight() {
-		return screenHeight;
 	}
 
 	protected boolean userIsDestroyed() {

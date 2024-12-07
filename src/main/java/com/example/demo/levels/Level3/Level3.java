@@ -16,8 +16,6 @@ public class Level3 extends LevelParent {
     private static final String BACKGROUND_IMAGE_NAME = "/com/example/demo/images/level3Background.jpg";
     private static final int PLAYER_INITIAL_HEALTH = 5;
     private static final int SURVIVAL_TIME_SECONDS = 15; // Time to survive in seconds
-    private static double SCREEN_WIDTH;
-    private static double SCREEN_HEIGHT;
     private final UserTank user;
     private int frameCount = 0;
 
@@ -30,8 +28,9 @@ public class Level3 extends LevelParent {
         this.user = new UserTank(PLAYER_INITIAL_HEALTH);
         this.remainingTime = SURVIVAL_TIME_SECONDS;
         this.coinsCollectedInLevel = 0;
-        SCREEN_WIDTH = screenWidth;
-        SCREEN_HEIGHT = screenHeight;
+        this.background = getBackground();
+
+        initializeLevel(this, user);
     }
 
     @Override
