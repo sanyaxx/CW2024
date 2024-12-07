@@ -1,9 +1,7 @@
 package com.example.demo.levels;
 
-import com.example.demo.activityManagers.LevelStateHandler;
 import com.example.demo.functionalClasses.DisplayHeart;
 import com.example.demo.PauseButton;
-import com.example.demo.activityManagers.PauseHandler;
 import com.example.demo.functionalClasses.DisplayWinningParameter;
 import javafx.scene.Group;
 
@@ -16,14 +14,12 @@ public class LevelView {
 	private final DisplayHeart heartDisplay;
 	public DisplayWinningParameter displayWinningParameter;
 	public final PauseButton pauseButton;
-	public final PauseHandler pauseHandler;
 
 	public LevelView(Group root, int heartsToDisplay, int score) {
 		this.root = root;
 		this.heartDisplay = new DisplayHeart(HEART_DISPLAY_X_POSITION, HEART_DISPLAY_Y_POSITION, heartsToDisplay);
 		this.displayWinningParameter = new DisplayWinningParameter("Kill Count", 0, "Coins", score);
 		this.pauseButton = new PauseButton();
-		this.pauseHandler = new PauseHandler(this, root);
 	}
 
 

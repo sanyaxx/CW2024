@@ -1,10 +1,11 @@
-package com.example.demo.screensAndOverlays;
+package com.example.demo.notUsed;
 
 import com.example.demo.activityManagers.ButtonFactory;
-import com.example.demo.activityManagers.LevelEndHandler;
+import com.example.demo.activityManagers.LevelStateHandler;
 import com.example.demo.activityManagers.LevelManager;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
 import com.example.demo.gameConfig.AppStage;
+import com.example.demo.screensAndOverlays.StartScreen;
 import javafx.animation.ScaleTransition;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -34,16 +35,16 @@ import java.util.Objects;
 public class LevelCompletedOverlay {
     private final StackPane overlay; // Use StackPane to layer the background and buttons
     private final Scene scene;
-    private final LevelEndHandler levelEndHandler;
+    private final LevelStateHandler levelStateHandler;
     private final UserPlane user;
 
     private static final String NEXT_BUTTON_IMAGE = "/com/example/demo/images/nextButton.png";
     private static final String MENU_BUTTON_IMAGE = "/com/example/demo/images/menuButton.png";
 
-    public LevelCompletedOverlay(Scene scene, int userScore, String imagePath, UserPlane user) {
+    public LevelCompletedOverlay(Group root, Scene scene, int userScore, String imagePath, UserPlane user, Group root1) {
         this.scene = scene;
         this.user = user;
-        this.levelEndHandler = new LevelEndHandler(new Group());
+        this.levelStateHandler = new LevelStateHandler();
         Stage stage = AppStage.getInstance().getPrimaryStage();
 
         // Create a full-screen semi-transparent background
@@ -106,7 +107,6 @@ public class LevelCompletedOverlay {
         overlay.setVisible(false); // Initially hidden
 
         // Add the overlay to the existing scene
-        StackPane root = (StackPane) scene.getRoot();
         root.getChildren().add(overlay);
     }
 
@@ -132,12 +132,12 @@ public class LevelCompletedOverlay {
         System.out.println("Going to the next level..."); // Debug statement
         hideOverlay();
         LevelManager levelManager = LevelManager.getInstance();
-        if (levelManager.getCurrentLevelNumber() == LevelManager.TOTAL_LEVELS_PLUS1) {
-             levelEndHandler.handleGameWon(user);
-        }
-        else {
-            levelManager.showLevelStartScreen(levelManager.getCurrentLevelNumber());
-        }
+//        if (levelManager.getCurrentLevelNumber() == LevelManager.TOTAL_LEVELS_PLUS1) {
+//             levelStateHandler.handleGameWon(user);
+//        }
+//        else {
+//            levelManager.showLevelStartScreen(levelManager.getCurrentLevelNumber());
+//        }
 
     }
 
