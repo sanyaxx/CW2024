@@ -1,11 +1,6 @@
 package com.example.demo.levels.Level2;
 
-import com.example.demo.ActorManager;
-import com.example.demo.activityManagers.LevelManager;
 import com.example.demo.actors.Planes.enemyPlanes.Boss;
-import com.example.demo.actors.Planes.enemyPlanes.EnemyPlane;
-import com.example.demo.functionalClasses.GenerateLevelScore;
-import com.example.demo.gameConfig.GameTimeline;
 import com.example.demo.levels.LevelParent;
 import com.example.demo.levels.LevelView;
 
@@ -21,13 +16,8 @@ public class Level2 extends LevelParent {
         boss = new Boss(levelView);
 		this.coinsCollectedInLevel = 0;
 
-		initializeLevel(this);
+		initializeLevel(this, getUser());
     }
-
-	@Override
-	protected void initializeFriendlyUnits() {
-		getRoot().getChildren().add(getUser());
-	}
 
 	@Override
 	protected boolean hasLevelBeenLost() {
