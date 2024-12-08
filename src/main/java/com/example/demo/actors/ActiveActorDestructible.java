@@ -1,7 +1,5 @@
 package com.example.demo.actors;
 
-import com.example.demo.Updatable;
-
 public abstract class ActiveActorDestructible extends ActiveActor implements Destructible, Collectible, Updatable {
 
 	private boolean isDestroyed;
@@ -23,7 +21,7 @@ public abstract class ActiveActorDestructible extends ActiveActor implements Des
 	@Override
 	public abstract void takeDamage();
 
-	@Override
+    @Override
 	public abstract boolean isCollectible();
 
 	@Override

@@ -1,6 +1,6 @@
 package com.example.demo.activityManagers;
 
-import com.example.demo.Updatable;
+import com.example.demo.actors.Updatable;
 import com.example.demo.actors.ActiveActorDestructible;
 import javafx.scene.Group;
 

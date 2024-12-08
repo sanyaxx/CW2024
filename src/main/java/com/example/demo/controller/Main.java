@@ -19,7 +19,7 @@ public class Main extends Application {
 			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		stage.setTitle(TITLE);
 		stage.setResizable(true);
-//		stage.setMaximized(true);
+		stage.setMaximized(true);
 		stage.setHeight(SCREEN_HEIGHT);
 		stage.setWidth(SCREEN_WIDTH);
 

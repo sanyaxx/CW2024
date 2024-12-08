@@ -8,9 +8,13 @@ import java.util.function.Supplier;
 public class SpawnHandler {
 
     private final ActorManager actorManager;
+    private final double screenWidth;
+    private final double screenHeight;
 
     public SpawnHandler(ActorManager actorManager, double screenWidth, double screenHeight) {
         this.actorManager = actorManager;
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
     }
 
     /**
@@ -28,7 +32,6 @@ public class SpawnHandler {
         int spawnedCount = 0;
 
         int actorsToSpawn = Math.min(maxSpawnCount - currentCount, maxTotal - currentCount);
-
         for (int i = 0; i < actorsToSpawn; i++) {
             if (Math.random() < spawnProbability) {
                 ActiveActorDestructible newActor = actorSupplier.get();

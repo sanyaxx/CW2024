@@ -1,5 +1,6 @@
 package com.example.demo.actors.Planes.enemyPlanes;
 
+import com.example.demo.activityManagers.ActorManager;
 import com.example.demo.actors.ActiveActorDestructible;
 import com.example.demo.actors.Planes.FighterPlane;
 
@@ -26,7 +27,6 @@ public class EnemyRocket extends FighterPlane {
     @Override
     public void takeDamage() {
         super.takeDamage();
-//        levelView.updateWinningParameterDisplay(getHealth());
     }
 
     @Override

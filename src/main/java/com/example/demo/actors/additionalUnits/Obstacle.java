@@ -1,5 +1,6 @@
 package com.example.demo.actors.additionalUnits;
 
+import com.example.demo.activityManagers.ActorManager;
 import com.example.demo.actors.ActiveActorDestructible;
 
 public class Obstacle extends ActiveActorDestructible {
@@ -12,7 +13,7 @@ public class Obstacle extends ActiveActorDestructible {
         super(IMAGE_NAME, IMAGE_HEIGHT, initialXPos, initialYPos);
     }
 
-    public static int getImageHeight() {
+    public static int getDimensions() {
         return IMAGE_HEIGHT;
     }
 
@@ -33,6 +34,10 @@ public class Obstacle extends ActiveActorDestructible {
 
     @Override
     public void takeDamage() {
+    }
+
+    public void destroy() {
+        ActorManager.getInstance().removeActor(this);
     }
 
     @Override

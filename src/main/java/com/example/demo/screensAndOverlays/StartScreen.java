@@ -60,6 +60,7 @@ public class StartScreen {
         stage.setScene(scene);
         stage.setTitle("Game Start Page");
 
+        stage.setMaximized(true);
         stage.show();
     }
 

@@ -1,11 +1,10 @@
 package com.example.demo.gameConfig;
 
-import com.example.demo.Updatable;
+import com.example.demo.actors.Updatable;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
