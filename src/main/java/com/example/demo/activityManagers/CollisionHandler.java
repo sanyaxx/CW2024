@@ -55,11 +55,13 @@ public class CollisionHandler {
             return;
         }
 
-        if ((actor1 instanceof FighterPlane && actor2 instanceof FighterPlane)||
+        if ((actor1 instanceof FighterPlane && actor2 instanceof FighterPlane) ||
                 (actor1 instanceof UserProjectile && actor2 instanceof FighterPlane) ||
-                (actor1 instanceof FighterPlane && actor2 instanceof UserProjectile)){
-            levelParent.getUser().incrementKillCount();
-            levelParent.currentNumberOfEnemies--;
+                (actor1 instanceof FighterPlane && actor2 instanceof UserProjectile)) {
+            levelParent.userStatsManager.incrementKillCount();
+            if (levelParent.currentNumberOfEnemies > 0) { // ensures that the number is only decremented if > 0
+                levelParent.currentNumberOfEnemies--;
+            }
         }
 
         actor1.takeDamage();
@@ -68,9 +70,10 @@ public class CollisionHandler {
 
     protected void handleCollectibleEffect(ActiveActorDestructible actor) {
         if (actor instanceof Coins) {
-            levelParent.getUser().incrementScore();
+            levelParent.userStatsManager.incrementCoinsCollected();
+            levelParent.coinsCollectedInLevel++;
         } else if (actor instanceof FuelToken) {
-            levelParent.getUser().incrementFuel();
+            levelParent.getUser().incrementFuelLeft();
         }
     }
 
