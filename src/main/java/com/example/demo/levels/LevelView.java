@@ -15,10 +15,11 @@ public class LevelView {
 	public DisplayWinningParameter displayWinningParameter;
 	public final PauseButton pauseButton;
 
-	public LevelView(Group root, int heartsToDisplay, int score) {
+	public LevelView(Group root, int heartsToDisplay, int bulletCount) {
 		this.root = root;
 		this.heartDisplay = new DisplayHeart(HEART_DISPLAY_X_POSITION, HEART_DISPLAY_Y_POSITION, heartsToDisplay);
-		this.displayWinningParameter = new DisplayWinningParameter("Kill Count", 0, "Coins", score);
+
+		this.displayWinningParameter = new DisplayWinningParameter("/com/example/demo/images/killCount.png", 0, "/com/example/demo/images/ammoCount.png", bulletCount, "/com/example/demo/images/coin.png", 0);
 		this.pauseButton = new PauseButton();
 	}
 
@@ -39,9 +40,10 @@ public class LevelView {
 	}
 
 	// Overloaded method to update the winning parameters with two values
-	public void updateWinningParameterDisplay(int parameterValue1, int parameterValue2) {
+	public void updateWinningParameterDisplay(int parameterValue1, int parameterValue2, int parameterValue3) {
 		displayWinningParameter.updateValue1(parameterValue1);
 		displayWinningParameter.updateValue2(parameterValue2);
+		displayWinningParameter.updateValue3(parameterValue3);
 	}
 
 	// Add the pause button to the root

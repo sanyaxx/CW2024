@@ -3,7 +3,8 @@ package com.example.demo.levels;
 import java.util.*;
 
 import com.example.demo.activityManagers.*;
-import com.example.demo.Updatable;
+import com.example.demo.activityManagers.UserStatsManager;
+import com.example.demo.actors.Updatable;
 import com.example.demo.actors.ActiveActorDestructible;
 import com.example.demo.actors.Planes.enemyPlanes.EnemyPlane;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
@@ -34,10 +35,12 @@ public abstract class LevelParent extends Observable implements Updatable {
 	public final CollisionHandler collisionHandler;
 	public final LevelManager levelManager;
 	protected SpawnHandler spawnHandler;
+	public final UserStatsManager userStatsManager;
 
 	public int currentNumberOfEnemies;
 	protected int currentNumberOfCoins;
-	protected int coinsCollectedInLevel;
+	protected int bulletsLeft;
+	public int coinsCollectedInLevel;
 	private final LevelView levelView;
 
 	public LevelParent(String backgroundImageName, double screenHeight, double screenWidth, int playerInitialHealth) {
@@ -48,6 +51,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 		this.enemyMaximumYPosition = screenHeight - SCREEN_HEIGHT_ADJUSTMENT;
 		this.levelView = instantiateLevelView();
 		this.currentNumberOfEnemies = 0;
+		this.coinsCollectedInLevel = 0;
 
 		this.screenHeight = screenHeight;
 		this.screenWidth = screenWidth;
@@ -57,6 +61,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 		this.actorManager = ActorManager.getInstance();
 		this.levelManager = LevelManager.getInstance();
 		this.spawnHandler = new SpawnHandler(actorManager, screenWidth, screenHeight);
+		this.userStatsManager = UserStatsManager.getInstance();
 
 		levelView.pauseButton.setOnPauseAction(() -> levelStateHandler.handleLevelPaused(root, user));
 		actorManager.setRoot(root);
@@ -81,9 +86,10 @@ public abstract class LevelParent extends Observable implements Updatable {
 
 	@Override
 	public void update() {
+		if (!user.isCollisionCooldownActive()) {
+			checkCollisions();
+		}
 		spawnCoinUnits();
-		generateEnemyFire();
-		checkCollisions();
 		checkGameOverConditions();
 		handleDefensesPenetration();
 	}
@@ -97,7 +103,10 @@ public abstract class LevelParent extends Observable implements Updatable {
 				KeyCode kc = e.getCode();
 				if (kc == KeyCode.UP) user.moveUp();
 				if (kc == KeyCode.DOWN) user.moveDown();
-				if (kc == KeyCode.SPACE) fireProjectile();
+				if (kc == KeyCode.SPACE) {
+					fireProjectile();
+					bulletsLeft--;
+				}
 			}
 		});
 		background.setOnKeyReleased(new EventHandler<KeyEvent>() {
@@ -158,11 +167,11 @@ public abstract class LevelParent extends Observable implements Updatable {
 
 	protected void updateLevelView() {
 		levelView.removeHearts(user.getHealth());
-		levelView.updateWinningParameterDisplay(user.getNumberOfKills(), user.getScore());
+		levelView.updateWinningParameterDisplay(userStatsManager.getNumberOfKills(), bulletsLeft, coinsCollectedInLevel);
 	}
 
 	protected boolean entityHasPenetratedDefenses(ActiveActorDestructible actor) {
-		return Math.abs(actor.getTranslateX()) > screenWidth + actor.getFitWidth();
+		return (((Math.abs(actor.getTranslateX()) > (screenWidth))));
 	}
 
 	public UserPlane getUser() {
@@ -202,19 +211,14 @@ public abstract class LevelParent extends Observable implements Updatable {
 	}
 
 	protected final void checkGameOverConditions() {
-		int userScore = getUser().getScore(); // Common logic for all levels
-
 		// Check if the user has lost
 		if (hasLevelBeenLost()) {
-			System.out.println("Level failed. Game over.");
 			levelStateHandler.showRedeemLife(root, user);
 		}
 
 		// Check if the user has won
 		if (hasLevelBeenWon()) {
-			System.out.println("Level completed. Advancing to next level.");
-			System.out.println("User Score: " + userScore);
-			levelStateHandler.handleLevelCompletion(root, user, coinsCollectedInLevel);
+			levelStateHandler.handleLevelCompletion(root, user, bulletsLeft);
 		}
 	}
 

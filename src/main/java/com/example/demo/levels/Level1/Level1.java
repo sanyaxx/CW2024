@@ -15,6 +15,7 @@ public class Level1 extends LevelParent {
 	public Level1(double screenHeight, double screenWidth) {
 		super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
 		this.coinsCollectedInLevel = 0;
+		this.bulletsLeft = 50;
 
 		initializeLevel(this, getUser());
 	}
@@ -32,26 +33,27 @@ public class Level1 extends LevelParent {
 	@Override
 	protected void spawnEnemyUnits() {
 		currentNumberOfEnemies += spawnHandler.spawnActors(
-				() -> new EnemyPlane(screenWidth, Math.random() * getEnemyMaximumYPosition()), // Supplier for new enemies
-				5, // Maximum spawn at a time
-				0.20, // Spawn probability
-				currentNumberOfEnemies, // Current count
-				10 // Total allowed
+			() -> new EnemyPlane(screenWidth, Math.random() * getEnemyMaximumYPosition()), // Supplier for new enemies
+			5, // Maximum spawn at a time
+			0.20, // Spawn probability
+			currentNumberOfEnemies, // Current count
+			10 // Total allowed
 		);
 	}
 
 	@Override
 	protected LevelView instantiateLevelView() {
-		return new LevelView(getRoot(), PLAYER_INITIAL_HEALTH, getUser().getScore());
+		return new LevelView(getRoot(), PLAYER_INITIAL_HEALTH, bulletsLeft);
 	}
 
 	private boolean userHasReachedKillTarget() {
-		return getUser().getNumberOfKills() >= KILLS_TO_ADVANCE;
+		return userStatsManager.getNumberOfKills() >= KILLS_TO_ADVANCE;
 	}
 
 	@Override
 	public void update() {
 		super.update();
+		generateEnemyFire();
 		spawnEnemyUnits();
 		updateLevelView();
 	}

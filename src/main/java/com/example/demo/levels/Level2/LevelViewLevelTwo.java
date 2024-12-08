@@ -12,11 +12,14 @@ public class LevelViewLevelTwo extends LevelView {
 	private final Group root;
 	private final ShieldImage shieldImage;
 	
-	public LevelViewLevelTwo(Group root, int heartsToDisplay, int score) {
-		super(root, heartsToDisplay, score);
+	public LevelViewLevelTwo(Group root, int heartsToDisplay, int bossHealth, int bulletCount) {
+		super(root, heartsToDisplay, bulletCount);
 		this.root = root;
 		this.shieldImage = new ShieldImage(SHIELD_X_POSITION, SHIELD_Y_POSITION);
-		this.displayWinningParameter = new DisplayWinningParameter("Boss Health", 100, "Coins", score);
+		this.displayWinningParameter = new DisplayWinningParameter(
+				"/com/example/demo/images/killCount.png", bossHealth,
+				"/com/example/demo/images/ammoCount.png", bulletCount,
+				"/com/example/demo/images/coin.png", 0);
 		addImagesToRoot();
 	}
 	
@@ -37,6 +40,4 @@ public class LevelViewLevelTwo extends LevelView {
 	public void updateShieldPosition(double xPosition, double yPosition) {
 		shieldImage.updatePosition(xPosition, yPosition);
 	}
-
-
 }

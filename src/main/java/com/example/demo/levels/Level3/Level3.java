@@ -1,8 +1,10 @@
 package com.example.demo.levels.Level3;
 
 import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.Planes.enemyPlanes.EnemyPlane;
 import com.example.demo.actors.Planes.enemyPlanes.EnemyRocket;
 import com.example.demo.actors.Planes.friendlyPlanes.UserTank;
+import com.example.demo.actors.additionalUnits.Coins;
 import com.example.demo.levels.LevelParent;
 import com.example.demo.levels.LevelView;
 import javafx.event.EventHandler;
@@ -26,9 +28,11 @@ public class Level3 extends LevelParent {
     public Level3(double screenHeight, double screenWidth) {
         super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
         this.user = new UserTank(PLAYER_INITIAL_HEALTH);
+        this.background = getBackground();
+
         this.remainingTime = SURVIVAL_TIME_SECONDS;
         this.coinsCollectedInLevel = 0;
-        this.background = getBackground();
+        this.bulletsLeft = 50;
 
         initializeLevel(this, user);
     }
@@ -54,13 +58,14 @@ public class Level3 extends LevelParent {
 
     @Override
     protected LevelView instantiateLevelView() {
-        levelView = new LevelViewLevelThree(getRoot(), PLAYER_INITIAL_HEALTH, getUser().getScore());
+        levelView = new LevelViewLevelThree(getRoot(), PLAYER_INITIAL_HEALTH, bulletsLeft, SURVIVAL_TIME_SECONDS);
         return levelView;
     }
 
     @Override
     protected void updateLevelView() {
         levelView.removeHearts(user.getHealth());
+        levelView.updateWinningParameterDisplay(bulletsLeft, remainingTime); // Update the display
     }
 
     @Override
@@ -125,15 +130,25 @@ public class Level3 extends LevelParent {
                 if (kc == KeyCode.LEFT) {
                     user.faceWest(); // Shoot WEST
                 }
-                if (kc == KeyCode.SPACE) fireProjectile();
+                if (kc == KeyCode.SPACE) {
+                    fireProjectile();
+                    bulletsLeft--;
+                }
             }
         });
         getRoot().getChildren().add(background);
     }
 
     @Override
-    protected boolean entityHasPenetratedDefenses(ActiveActorDestructible enemy) {
-        return ((Math.abs(enemy.getTranslateX()) > screenWidth) || ((Math.abs(enemy.getTranslateX()) > screenHeight)));
+    protected void handleDefensesPenetration() {
+        for (ActiveActorDestructible actor : actorManager.getActiveActors()) {
+            if (entityHasPenetratedDefenses(actor)) {
+                if (actor instanceof EnemyRocket) {
+                    currentNumberOfEnemies--;
+                }
+                actor.takeDamage();
+            }
+        }
     }
 
     @Override
@@ -149,7 +164,6 @@ public class Level3 extends LevelParent {
         // Check if 2 frames have passed (20 * 50ms = 1000ms)
         if (frameCount >= 20) {
             remainingTime--; // Update remaining time
-            levelView.updateWinningParameterDisplay(remainingTime); // Update the display
             frameCount = 0; // Reset the frame count
         }
     }

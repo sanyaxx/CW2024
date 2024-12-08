@@ -8,13 +8,21 @@ public class LevelViewLevelFour extends LevelView {
 
     private final Group root;
 
-    public LevelViewLevelFour(Group root, int heartsToDisplay, int score) {
-        super(root, heartsToDisplay, score);
+    public LevelViewLevelFour(Group root, int heartsToDisplay, int bulletCount, int remainingTime) {
+        super(root, heartsToDisplay, bulletCount);
         this.root = root;
-        this.displayWinningParameter = new DisplayWinningParameter("Fuel Time Left", 10);
+        this.displayWinningParameter = new DisplayWinningParameter (
+                "/com/example/demo/images/fuelIcon.png", remainingTime,
+                "/com/example/demo/images/ammoCount.png", bulletCount,
+                "/com/example/demo/images/coin.png", 0
+
+        );
     }
 
-    public void updateWinningParameterDisplay(int parameterValue) {
-        displayWinningParameter.updateValue1(parameterValue);
+    // Overloaded method to update the winning parameters with two values
+    public void updateWinningParameterDisplay(int parameterValue1, int parameterValue2, int parameterValue3) {
+        displayWinningParameter.updateValue1(parameterValue1);
+        displayWinningParameter.updateValue2(parameterValue2);
+        displayWinningParameter.updateValue3(parameterValue3);
     }
 }

@@ -9,11 +9,15 @@ public class Level2 extends LevelParent {
 	private static final String BACKGROUND_IMAGE_NAME = "/com/example/demo/images/level2Background.jpg";
 	private static final int PLAYER_INITIAL_HEALTH = 5;
 	private final Boss boss;
+	private final int bossHealth;
 	private LevelViewLevelTwo levelView;
 
     public Level2(double screenHeight, double screenWidth) {
 		super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
         boss = new Boss(levelView);
+		bossHealth = boss.getHealth();
+
+		this.bulletsLeft = 100;
 		this.coinsCollectedInLevel = 0;
 
 		initializeLevel(this, getUser());
@@ -47,20 +51,20 @@ public class Level2 extends LevelParent {
 
 	@Override
 	protected LevelView instantiateLevelView() {
-		System.out.println("Score: " + getUser().getScore());
-		levelView = new LevelViewLevelTwo(getRoot(), PLAYER_INITIAL_HEALTH, getUser().getScore());
+		levelView = new LevelViewLevelTwo(getRoot(), PLAYER_INITIAL_HEALTH, bossHealth, bulletsLeft);
 		return levelView;
 	}
 
 	@Override
 	protected void updateLevelView() {
 		levelView.removeHearts(getUser().getHealth());
-		levelView.updateWinningParameterDisplay(boss.getHealth(), getUser().getScore());
+		levelView.updateWinningParameterDisplay(boss.getHealth(), bulletsLeft, coinsCollectedInLevel);
 	}
 
 	@Override
 	public void update() {
 		super.update();
+		generateEnemyFire();
 		spawnEnemyUnits();
 		updateLevelView();
 	}
