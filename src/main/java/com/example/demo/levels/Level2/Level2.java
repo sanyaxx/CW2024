@@ -17,15 +17,15 @@ public class Level2 extends LevelParent {
         boss = new Boss(levelView);
 		bossHealth = boss.getHealth();
 
-		this.bulletsLeft = 100;
-		this.coinsCollectedInLevel = 0;
+		this.bulletCount = 50;
+		userStatsManager.setBulletCount(50);
 
 		initializeLevel(this, getUser());
     }
 
 	@Override
 	protected boolean hasLevelBeenLost() {
-		return userIsDestroyed(); // User loss condition
+		return userIsDestroyed() || bulletCount == 0; // User loss condition
 	}
 
 	@Override
@@ -51,14 +51,14 @@ public class Level2 extends LevelParent {
 
 	@Override
 	protected LevelView instantiateLevelView() {
-		levelView = new LevelViewLevelTwo(getRoot(), PLAYER_INITIAL_HEALTH, bossHealth, bulletsLeft);
+		levelView = new LevelViewLevelTwo(getRoot(), PLAYER_INITIAL_HEALTH, bossHealth, bulletCount);
 		return levelView;
 	}
 
 	@Override
 	protected void updateLevelView() {
 		levelView.removeHearts(getUser().getHealth());
-		levelView.updateWinningParameterDisplay(boss.getHealth(), bulletsLeft, coinsCollectedInLevel);
+		levelView.updateWinningParameterDisplay(boss.getHealth(), bulletCount, userStatsManager.getCoinsCollected());
 	}
 
 	@Override

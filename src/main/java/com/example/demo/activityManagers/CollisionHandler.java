@@ -59,6 +59,7 @@ public class CollisionHandler {
                 (actor1 instanceof UserProjectile && actor2 instanceof FighterPlane) ||
                 (actor1 instanceof FighterPlane && actor2 instanceof UserProjectile)) {
             levelParent.userStatsManager.incrementKillCount();
+            levelParent.killCount++;
             if (levelParent.currentNumberOfEnemies > 0) { // ensures that the number is only decremented if > 0
                 levelParent.currentNumberOfEnemies--;
             }
@@ -78,7 +79,6 @@ public class CollisionHandler {
     protected void handleCollectibleEffect(ActiveActorDestructible actor) {
         if (actor instanceof Coins) {
             levelParent.userStatsManager.incrementCoinsCollected();
-            levelParent.coinsCollectedInLevel++;
         } else if (actor instanceof FuelToken) {
             levelParent.getUser().incrementFuelLeft();
         }

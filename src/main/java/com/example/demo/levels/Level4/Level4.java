@@ -33,15 +33,18 @@ public class Level4 extends LevelParent {
     private LevelViewLevelFour levelView;
     private int remainingTime;
     private boolean isFinishLineSpawned;
+    public int fuelCapacity;
 
     public Level4(double screenHeight, double screenWidth) {
         super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
         this.user = getUser();
-        this.remainingTime = SURVIVAL_TIME_SECONDS;
         this.background = getBackground();
-        this.coinsCollectedInLevel = 0;
+
+        this.remainingTime = SURVIVAL_TIME_SECONDS;
         this.isFinishLineSpawned = false;
-        this.bulletsLeft = 100;
+
+        this.bulletCount = 50;
+        userStatsManager.setBulletCount(50);
         
         initializeLevel(this, user);
     }
@@ -71,7 +74,7 @@ public class Level4 extends LevelParent {
 
     @Override
     protected boolean hasLevelBeenLost() {
-        return ((user.isDestroyed()) || ((user.getFuelLeft() == 0) && remainingTime > 0)); // User loss condition
+        return ((user.isDestroyed()) || ((user.getFuelLeft() == 0) && remainingTime > 0)) || bulletCount == 0; // User loss condition
     }
 
     @Override
@@ -81,14 +84,14 @@ public class Level4 extends LevelParent {
 
     @Override
     protected LevelView instantiateLevelView() {
-        levelView = new LevelViewLevelFour(getRoot(), PLAYER_INITIAL_HEALTH, SURVIVAL_TIME_SECONDS, bulletsLeft);
+        levelView = new LevelViewLevelFour(getRoot(), PLAYER_INITIAL_HEALTH, SURVIVAL_TIME_SECONDS, bulletCount);
         return levelView;
     }
 
     @Override
     protected void updateLevelView() {
         levelView.removeHearts(user.getHealth());
-        levelView.updateWinningParameterDisplay(user.getFuelLeft(), bulletsLeft, coinsCollectedInLevel);
+        levelView.updateWinningParameterDisplay(user.getFuelLeft(), bulletCount, userStatsManager.getCoinsCollected());
     }
 
     @Override
@@ -164,7 +167,7 @@ public class Level4 extends LevelParent {
                 }
                 if (kc == KeyCode.SPACE) {
                     fireProjectile(); // Fire projectile
-                    bulletsLeft--;
+                    decrementBulletCount();
                 }
             }
         });

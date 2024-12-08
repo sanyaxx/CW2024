@@ -6,6 +6,7 @@ public class UserStatsManager {
 
     private int coinsCollected;
     private int numberOfKills;
+    private int bulletCount;
     private LevelManager levelManager = LevelManager.getInstance();;
 
     // Protected array to hold level scores
@@ -15,6 +16,7 @@ public class UserStatsManager {
     private UserStatsManager() {
         this.coinsCollected = 0;
         this.numberOfKills = 0;
+
         levelScores = new int[LevelManager.TOTAL_LEVELS_PLUS1 - 1]; // Adjust size according to the number of levels
     }
 
@@ -62,7 +64,19 @@ public class UserStatsManager {
 
 
     public void decrementCoins() { // when life redeemed
-        coinsCollected -= 5;
+        coinsCollected -= 2;
+    }
+
+    public int getBulletCount() {
+        return bulletCount;
+    }
+
+    public void setBulletCount(int value) {
+        bulletCount = value;
+    }
+
+    public void decrementBulletCount() {
+        bulletCount--;
     }
 
     // Optionally, a method to reset the Singleton instance (e.g., for testing purposes)

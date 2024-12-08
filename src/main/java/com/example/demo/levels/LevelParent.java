@@ -39,8 +39,8 @@ public abstract class LevelParent extends Observable implements Updatable {
 
 	public int currentNumberOfEnemies;
 	protected int currentNumberOfCoins;
-	protected int bulletsLeft;
-	public int coinsCollectedInLevel;
+	public int bulletCount;
+	public int killCount;
 	private final LevelView levelView;
 
 	public LevelParent(String backgroundImageName, double screenHeight, double screenWidth, int playerInitialHealth) {
@@ -51,7 +51,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 		this.enemyMaximumYPosition = screenHeight - SCREEN_HEIGHT_ADJUSTMENT;
 		this.levelView = instantiateLevelView();
 		this.currentNumberOfEnemies = 0;
-		this.coinsCollectedInLevel = 0;
+		this.killCount = 0;
 
 		this.screenHeight = screenHeight;
 		this.screenWidth = screenWidth;
@@ -105,7 +105,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 				if (kc == KeyCode.DOWN) user.moveDown();
 				if (kc == KeyCode.SPACE) {
 					fireProjectile();
-					bulletsLeft--;
+					decrementBulletCount();
 				}
 			}
 		});
@@ -167,7 +167,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 
 	protected void updateLevelView() {
 		levelView.removeHearts(user.getHealth());
-		levelView.updateWinningParameterDisplay(userStatsManager.getNumberOfKills(), bulletsLeft, coinsCollectedInLevel);
+		levelView.updateWinningParameterDisplay(killCount, bulletCount, userStatsManager.getCoinsCollected());
 	}
 
 	protected boolean entityHasPenetratedDefenses(ActiveActorDestructible actor) {
@@ -213,12 +213,19 @@ public abstract class LevelParent extends Observable implements Updatable {
 	protected final void checkGameOverConditions() {
 		// Check if the user has lost
 		if (hasLevelBeenLost()) {
-			levelStateHandler.showRedeemLife(root, user);
+			levelStateHandler.showRedeemLife(root, user, this);
 		}
 
 		// Check if the user has won
 		if (hasLevelBeenWon()) {
-			levelStateHandler.handleLevelCompletion(root, user, bulletsLeft);
+			levelStateHandler.handleLevelCompletion(root, user);
+		}
+	}
+
+	protected void decrementBulletCount() {
+		if (bulletCount > 0) {
+			userStatsManager.decrementBulletCount();
+			bulletCount--;
 		}
 	}
 

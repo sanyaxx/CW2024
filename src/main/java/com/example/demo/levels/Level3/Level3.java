@@ -1,10 +1,8 @@
 package com.example.demo.levels.Level3;
 
 import com.example.demo.actors.ActiveActorDestructible;
-import com.example.demo.actors.Planes.enemyPlanes.EnemyPlane;
 import com.example.demo.actors.Planes.enemyPlanes.EnemyRocket;
 import com.example.demo.actors.Planes.friendlyPlanes.UserTank;
-import com.example.demo.actors.additionalUnits.Coins;
 import com.example.demo.levels.LevelParent;
 import com.example.demo.levels.LevelView;
 import javafx.event.EventHandler;
@@ -29,10 +27,10 @@ public class Level3 extends LevelParent {
         super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
         this.user = new UserTank(PLAYER_INITIAL_HEALTH);
         this.background = getBackground();
-
         this.remainingTime = SURVIVAL_TIME_SECONDS;
-        this.coinsCollectedInLevel = 0;
-        this.bulletsLeft = 50;
+
+        this.bulletCount = 50;
+        userStatsManager.setBulletCount(50);
 
         initializeLevel(this, user);
     }
@@ -48,7 +46,7 @@ public class Level3 extends LevelParent {
 
     @Override
     protected boolean hasLevelBeenLost() {
-        return user.isDestroyed(); // User loss condition
+        return user.isDestroyed() || bulletCount == 0; // User loss condition
     }
 
     @Override
@@ -58,14 +56,14 @@ public class Level3 extends LevelParent {
 
     @Override
     protected LevelView instantiateLevelView() {
-        levelView = new LevelViewLevelThree(getRoot(), PLAYER_INITIAL_HEALTH, bulletsLeft, SURVIVAL_TIME_SECONDS);
+        levelView = new LevelViewLevelThree(getRoot(), PLAYER_INITIAL_HEALTH, bulletCount, SURVIVAL_TIME_SECONDS);
         return levelView;
     }
 
     @Override
     protected void updateLevelView() {
         levelView.removeHearts(user.getHealth());
-        levelView.updateWinningParameterDisplay(bulletsLeft, remainingTime); // Update the display
+        levelView.updateWinningParameterDisplay(bulletCount, remainingTime); // Update the display
     }
 
     @Override
@@ -132,7 +130,7 @@ public class Level3 extends LevelParent {
                 }
                 if (kc == KeyCode.SPACE) {
                     fireProjectile();
-                    bulletsLeft--;
+                    decrementBulletCount();
                 }
             }
         });

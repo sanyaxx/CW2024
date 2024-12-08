@@ -4,6 +4,7 @@ import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
 import com.example.demo.functionalClasses.GenerateLevelScore;
 import com.example.demo.gameConfig.AppStage;
 import com.example.demo.gameConfig.GameTimeline;
+import com.example.demo.levels.LevelParent;
 import com.example.demo.screensAndOverlays.*;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -20,6 +21,7 @@ import javafx.util.Duration;
      private final UserStatsManager userStatsManager;
      private UserPlane userInstance;
      private Group root;
+     private LevelParent levelInstance;
 
      Object[][] completedOverlayButtons = {
              {"/com/example/demo/images/menuButton.png", (Runnable) this::goToMainMenu},
@@ -56,14 +58,14 @@ import javafx.util.Duration;
          this.userStatsManager = UserStatsManager.getInstance();
      }
 
-     public void handleLevelCompletion(Group root1, UserPlane user, int remainingBullets) {
+     public void handleLevelCompletion(Group root1, UserPlane user) {
          timeline.stop();
          userInstance = user;
          root = root1;
-         
+
          System.out.println("Lives remaining: " + user.getHealth());
-         System.out.println("Coins collected: " + remainingBullets);
-         int calculatedScore = levelScore.calculateScore(user.getHealth(), remainingBullets);
+         System.out.println("Coins collected: " + userStatsManager.getBulletCount());
+         int calculatedScore = levelScore.calculateScore(user.getHealth(), userStatsManager.getBulletCount());
          System.out.println("Level score: " + calculatedScore);
          userStatsManager.setLevelScore(calculatedScore);
 
@@ -73,21 +75,22 @@ import javafx.util.Duration;
          BaseOverlay overlay = overlayFactory.createOverlay(
                  root,
                  "Level Completed!",
-                 "Total Coins: " + userStatsManager.getCoinsCollected() + " coins",
+                 "Total Coins: " + userStatsManager.getCoinsCollected(),
                  completedOverlayButtons,
                  starImage
          );
          overlay.show();
      }
 
-     public void showRedeemLife(Group root1, UserPlane user) {
+     public void showRedeemLife(Group root1, UserPlane user, LevelParent level) {
          timeline.pause();
          userInstance = user;
          root = root1;
+         levelInstance = level;
 
          BaseOverlay overlay = overlayFactory.createOverlay(
                  root,
-                 "Redeem Life!",
+                 "Continue level?",
                  "Total Coins: " + userStatsManager.getCoinsCollected() + " coins",
                  redeemLifeButton,
                  null
@@ -173,13 +176,18 @@ import javafx.util.Duration;
          if (redeemLifeTimer != null) {
              redeemLifeTimer.stop();
          }
-         if ((userStatsManager.getCoinsCollected()) >= 5){
+         if ((userStatsManager.getCoinsCollected()) >= 2){
              System.out.println("Reviving current level...");
-             if (userInstance.getHealth() <= 0) {
+             if (userInstance.getHealth() <= 0) { // Health = 0
+                 userStatsManager.decrementCoins();
                  userInstance.reviveUserLife();
-             }
-             else {
-                 userInstance.reviveUserFuel(); // For level 4
+             }  // Bullets = 0
+             else if (userStatsManager.getBulletCount() <= 0){
+                 userStatsManager.decrementCoins();
+                 levelInstance.bulletCount += 10;
+             } else { // Fuel = 0
+                 userStatsManager.decrementCoins();
+                 userInstance.reviveUserFuel();
              }
              timeline.play();
          } else {

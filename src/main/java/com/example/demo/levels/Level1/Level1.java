@@ -14,15 +14,16 @@ public class Level1 extends LevelParent {
 
 	public Level1(double screenHeight, double screenWidth) {
 		super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
-		this.coinsCollectedInLevel = 0;
-		this.bulletsLeft = 50;
+
+		this.bulletCount = 30;
+		userStatsManager.setBulletCount(30);
 
 		initializeLevel(this, getUser());
 	}
 
 	@Override
 	protected boolean hasLevelBeenLost() {
-		return userIsDestroyed(); // User loss condition
+		return userIsDestroyed() || bulletCount == 0; // User loss condition
 	}
 
 	@Override
@@ -43,11 +44,11 @@ public class Level1 extends LevelParent {
 
 	@Override
 	protected LevelView instantiateLevelView() {
-		return new LevelView(getRoot(), PLAYER_INITIAL_HEALTH, bulletsLeft);
+		return new LevelView(getRoot(), PLAYER_INITIAL_HEALTH, bulletCount);
 	}
 
 	private boolean userHasReachedKillTarget() {
-		return userStatsManager.getNumberOfKills() >= KILLS_TO_ADVANCE;
+		return killCount >= KILLS_TO_ADVANCE;
 	}
 
 	@Override

@@ -17,18 +17,18 @@ public class GenerateLevelScore {
     }
 
     // Method to calculate score based on lives and coins
-    public int calculateScore(int livesRemaining, int coinsCollected) {
+    public int calculateScore(int livesRemaining, int bulletsRemaining) {
         int score = 0;
 
         // Example scoring logic
         if (livesRemaining > 0) {
             score++; // 1 star for more than 1 life
         }
-        if (coinsCollected > 5) {
-            score++; // 1 star for collecting more than 5 coins
+        if (bulletsRemaining > 5) {
+            score++; // 1 star for saving 5 bullets
         }
-        if (livesRemaining > 3 && coinsCollected > 10) {
-            score++; // 1 star for having at least 1 life left and more than 20 coins
+        if (livesRemaining >= 3 && bulletsRemaining >= 10) {
+            score++; // 1 star for having at least 1 life left and more than 10 bullets
         }
 
         return score;

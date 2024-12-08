@@ -12,7 +12,7 @@ public class LevelManager extends Observable {
 
     // Private constructor initializes currentLevelNumber to 1
     private LevelManager() {
-        this.currentLevelNumber = 4;
+        this.currentLevelNumber = 1;
     }
 
     public static LevelManager getInstance() {
