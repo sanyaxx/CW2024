@@ -34,7 +34,7 @@ public class FinishLine extends FighterPlane {
 
     @Override
     public boolean isCollectible() {
-        return false;
+        return true;
     }
 
 }
