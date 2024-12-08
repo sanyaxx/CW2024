@@ -49,6 +49,10 @@ public class LevelManager extends Observable {
         notifyObservers(levelName);
     }
 
+    public boolean isLastLevel() {
+        return (currentLevelNumber == TOTAL_LEVELS_PLUS1 - 1);
+    }
+
     public int getCurrentLevelNumber() {
         return currentLevelNumber; // Getter for current level number
     }
