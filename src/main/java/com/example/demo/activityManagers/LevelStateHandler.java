@@ -17,7 +17,9 @@ import javafx.util.Duration;
      private OverlayFactory overlayFactory;
      private final LevelManager levelManager;
      private final GenerateLevelScore levelScore;
+     private final UserStatsManager userStatsManager;
      private UserPlane userInstance;
+     private Group root;
 
      Object[][] completedOverlayButtons = {
              {"/com/example/demo/images/menuButton.png", (Runnable) this::goToMainMenu},
@@ -41,39 +43,52 @@ import javafx.util.Duration;
              {"/com/example/demo/images/restartButton.png", (Runnable) this::retryLevel}
 
      };
+     Object[][] nextButton = {
+             {"/com/example/demo/images/nextButton.png", (Runnable) this::nextPage}
+     };
+
 
      public LevelStateHandler() {
          this.timeline = GameTimeline.getInstance().getTimeline();
          this.levelManager = LevelManager.getInstance();
          this.levelScore = new GenerateLevelScore();
          this.overlayFactory = OverlayFactory.getInstance();
+         this.userStatsManager = UserStatsManager.getInstance();
      }
 
-     public void handleLevelCompletion(Group root, UserPlane user, int coinsCollected) {
+     public void handleLevelCompletion(Group root1, UserPlane user, int remainingBullets) {
          timeline.stop();
          userInstance = user;
-         int calculatedScore = levelScore.calculateScore(user.getHealth(), coinsCollected);
-         user.setLevelScore(levelManager.getCurrentLevelNumber(), calculatedScore);
+         root = root1;
+         
+         System.out.println("Lives remaining: " + user.getHealth());
+         System.out.println("Coins collected: " + remainingBullets);
+         int calculatedScore = levelScore.calculateScore(user.getHealth(), remainingBullets);
+         System.out.println("Level score: " + calculatedScore);
+         userStatsManager.setLevelScore(calculatedScore);
 
+         System.out.println("Level score: " + userStatsManager.getLevelScore(levelManager.getCurrentLevelNumber()));
          String starImage = levelScore.getStarImagePath(calculatedScore);
+         System.out.println("Level score image: " + starImage);
          BaseOverlay overlay = overlayFactory.createOverlay(
                  root,
                  "Level Completed!",
-                 "Your Game Score: " + user.getScore(),
+                 "Total Coins: " + userStatsManager.getCoinsCollected() + " coins",
                  completedOverlayButtons,
                  starImage
          );
          overlay.show();
      }
 
-     public void showRedeemLife(Group root, UserPlane user) {
+     public void showRedeemLife(Group root1, UserPlane user) {
          timeline.pause();
          userInstance = user;
+         root = root1;
 
          BaseOverlay overlay = overlayFactory.createOverlay(
                  root,
                  "Redeem Life!",
-                 "Coins Available: " + user.getScore(),
+                 "Total Coins: " + userStatsManager.getCoinsCollected() + " coins",
                  redeemLifeButton,
                  null
          );
@@ -94,9 +109,20 @@ import javafx.util.Duration;
          BaseOverlay overlay = overlayFactory.createOverlay(
                  root,
                  "Level Failed!",
-                 "Your Game Score: " + user.getScore(),
+                 "Total Coins: " + userStatsManager.getCoinsCollected() + " coins",
                  lostOverlayButtons,
                  starImage
+         );
+         overlay.show();
+     }
+
+     public void insufficientInventory(Group root, UserPlane user) {
+         BaseOverlay overlay = overlayFactory.createOverlay(
+                 root,
+                 "Insufficient Balance!",
+                 "Total Coins: " + userStatsManager.getCoinsCollected() + " coins",
+                 nextButton,
+                 null
          );
          overlay.show();
      }
@@ -106,7 +132,7 @@ import javafx.util.Duration;
          BaseOverlay overlay = overlayFactory.createOverlay(
                  root,
                  "Paused",
-                 "Your Game Score: " + user.getScore(),
+                 "Total Coins: " + userStatsManager.getCoinsCollected() + " coins",
                  pauseOverlayButtons,
                  null
          );
@@ -114,6 +140,10 @@ import javafx.util.Duration;
      }
 
      // Actions for buttons (implement game-specific logic here)
+     public void nextPage() {
+         handleLevelLoss(root, userInstance);
+     }
+
      public void goToMainMenu() {
          System.out.println("Navigating to Main Menu...");
          StartScreen startScreen = new StartScreen(AppStage.getInstance().getPrimaryStage());
@@ -121,26 +151,41 @@ import javafx.util.Duration;
      }
 
      public void goToNextLevel() {
-         System.out.println("Starting next level...");
-         levelManager.incrementCurrentLevelNumber();
-         levelManager.showLevelStartScreen(levelManager.getCurrentLevelNumber());
+         System.out.println("Current Level: " + levelManager.getCurrentLevelNumber());
+         if (levelManager.getCurrentLevelNumber() == LevelManager.TOTAL_LEVELS_PLUS1 - 1) {
+             // Create a new root and pass it to the YouWinScreen
+             Group newRoot = new Group();
+             new YouWinScreen(newRoot, userInstance); // Use new root
+         } else {
+             System.out.println("Starting next level...");
+             levelManager.incrementCurrentLevelNumber();
+             levelManager.showLevelStartScreen(levelManager.getCurrentLevelNumber());
+         }
      }
 
      private void retryLevel() {
          System.out.println("Retrying current level...");
-         LevelManager levelManager = LevelManager.getInstance();
          levelManager.showLevelStartScreen(levelManager.getCurrentLevelNumber());
      }
 
      private void reviveLevel() {
-         System.out.println("Reviving current level...");
-         userInstance.reviveUser();
-         timeline.play();
-
          // Stop the redeem life timer if the user clicked the button
          if (redeemLifeTimer != null) {
              redeemLifeTimer.stop();
          }
+         if ((userStatsManager.getCoinsCollected()) >= 5){
+             System.out.println("Reviving current level...");
+             if (userInstance.getHealth() <= 0) {
+                 userInstance.reviveUserLife();
+             }
+             else {
+                 userInstance.reviveUserFuel(); // For level 4
+             }
+             timeline.play();
+         } else {
+            insufficientInventory(root, userInstance);
+         }
+
      }
 
      private void resumeLevel() {
@@ -160,8 +205,4 @@ import javafx.util.Duration;
  }
 
 
-//    public void handleGameWon(UserPlane user) {
-//        timeline.stop();
-//        YouWinScreen youWinScreen = new YouWinScreen(user);
-//        sceneManager.showOverlay(youWinScreen.getOverlay());
-//    }
+

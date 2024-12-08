@@ -1,109 +1,139 @@
 package com.example.demo.screensAndOverlays;
 
+import com.example.demo.activityManagers.UserStatsManager;
 import com.example.demo.functionalClasses.GenerateLevelScore;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
 import com.example.demo.gameConfig.AppStage;
+import javafx.animation.*;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.Objects;
 
 public class YouWinScreen {
-    private final Scene scene; // Scene for this page
+    private final Scene scene;
     private final Stage stage;
+    private final UserStatsManager userStatsManager;
 
-    public YouWinScreen(UserPlane user) {
+    public YouWinScreen(Group root, UserPlane user) {
         this.stage = AppStage.getInstance().getPrimaryStage();
+        this.userStatsManager = UserStatsManager.getInstance();
 
-        // Create a full-screen semi-transparent background
-        Group root = new Group();
-        Rectangle background = new Rectangle(stage.getWidth(), stage.getHeight());
-        background.setFill(new Color(0, 0, 0, 0.8)); // Black with 80% opacity for a darker effect
+        // Create a fresh root and scene
+        Group newRoot = new Group();
+        this.scene = new Scene(newRoot, stage.getWidth(), stage.getHeight(), Color.BLACK);
+        stage.setScene(scene);
 
-        // Create "You Win!" message
-        Text winMessage = new Text("You Win!");
-        winMessage.setFont(Font.font("Arial", FontWeight.BOLD, 48));
-        winMessage.setFill(new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
-                new Stop(0, Color.SILVER),
-                new Stop(1, Color.WHITESMOKE))); // Gradient color
+        // Title: "YOU WON!"
+        Text title = new Text("YOU WON!");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 100));
+        title.setFill(Color.GOLD);
+        title.setStroke(Color.BLACK);
+        title.setStrokeWidth(2);
 
-        // Create an ImageView for the "You Win!" image
-//        Image winImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/demo/images/youwin.png")));
-//        ImageView winImageView = new ImageView(winImage);
-//        winImageView.setFitWidth(600); // Set width
-//        winImageView.setPreserveRatio(true); // Preserve aspect ratio
+        // Center align the title
+        VBox titleBox = new VBox(title);
+        titleBox.setAlignment(Pos.CENTER);
 
-        // Create a VBox to hold the win message and scores
-        VBox scoreSummary = new VBox(20);
-        scoreSummary.setAlignment(Pos.CENTER);
-        scoreSummary.setStyle("-fx-padding: 20;");
+        // Summary: Total score and total kills
+        Text totalScoreText = new Text("Total Score: " + userStatsManager.getCoinsCollected());
+        totalScoreText.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        totalScoreText.setFill(Color.LIGHTBLUE);
 
-        // Array of level names
-        String[] levelNames = {"Level 1", "Level 2", "Level 3", "Level 4"};
+        Text totalKillsText = new Text("Total Kills: " + userStatsManager.getNumberOfKills());
+        totalKillsText.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        totalKillsText.setFill(Color.LIGHTBLUE);
 
-        // Loop through each level to create labels and image views
-        for (int i = 0; i < levelNames.length; i++) {
-            int score = user.getLevelScore(i); // Get the score for each level from the user
-            scoreSummary.getChildren().add(createLevelScoreDisplay(levelNames[i] + ": ", score));
+        VBox summaryBox = new VBox(10, totalScoreText, totalKillsText);
+        summaryBox.setAlignment(Pos.CENTER);
+
+        // Level-wise scores
+        VBox levelScoresBox = new VBox(20);
+        levelScoresBox.setAlignment(Pos.CENTER);
+        String[] levelNames = {"", "Level 1", "Level 2", "Level 3", "Level 4"}; // first index left empty for correct get logic
+
+        for (int i = 1; i < levelNames.length; i++) {
+            int levelScore = userStatsManager.getLevelScore(i); // Get level score from user
+            levelScoresBox.getChildren().add(createLevelScoreDisplay(levelNames[i], levelScore));
         }
 
-        // Create a button to return to the main menu
+        // Main Menu Button
         Button mainMenuButton = new Button("Main Menu");
+        mainMenuButton.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         mainMenuButton.setOnAction(e -> {
-            // Logic to return to the main menu
-            System.out.println("Returning to the main menu..."); // Debug statement
-            // Implement the logic to show the main menu
-            // For example, you can set the scene to the main menu scene
-            // stage.setScene(mainMenuScene);
+            // Navigate to Main Menu
+            StartScreen startScreen = new StartScreen(stage);
+            startScreen.show();
         });
 
-        // Add components to the root
-        VBox vbox = new VBox(20, winMessage, scoreSummary, mainMenuButton);
-        vbox.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(background, vbox);
+        VBox buttonBox = new VBox(mainMenuButton);
+        buttonBox.setAlignment(Pos.CENTER);
 
-        // Create the scene
-        this.scene = new Scene(root, stage.getWidth(), stage.getHeight());
+        // Combine everything in the main layout
+        VBox mainLayout = new VBox(20, titleBox, summaryBox, levelScoresBox, buttonBox);
+        mainLayout.setAlignment(Pos.CENTER);
+        mainLayout.setPrefSize(stage.getWidth(), stage.getHeight()); // Match scene size
 
-        // Set the scene to the primary stage
-        stage.setScene(scene);
-        stage.show(); // Show the stage
+        newRoot.getChildren().add(mainLayout);
+
+        // Add confetti effect
+        addConfettiEffect(newRoot);
+
+        // Display the stage
+        stage.show();
     }
 
     private HBox createLevelScoreDisplay(String levelName, int score) {
-        // Create an instance of GenerateLevelScore to get the star rating
-        GenerateLevelScore completedLevelScore = new GenerateLevelScore(score);
-        String starImagePath = completedLevelScore.getStarImage();
+        // Generate star image path based on score
+        GenerateLevelScore scoreGenerator = new GenerateLevelScore();
+        String starImagePath = scoreGenerator.getStarImagePath(score);
+
+        // Create star image
         Image starImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(starImagePath)));
         ImageView starImageView = new ImageView(starImage);
-        starImageView.setFitWidth(100); // Set desired width for the star image
-        starImageView.setPreserveRatio(true); // Preserve aspect ratio
+        starImageView.setFitWidth(200); // Set width for star image
+        starImageView.setPreserveRatio(true);
 
-        // Create a label for the level name and score
-        Label levelLabel = new Label(levelName + score);
-        levelLabel.setTextFill(Color.LIGHTBLUE); // Change color of level name and score
-        levelLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 24)); // Set font style and size
+        // Level label
+        Text levelText = new Text(levelName);
+        levelText.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
+        levelText.setFill(Color.LIGHTYELLOW);
 
-        // Create an HBox to hold the label and star image, centering them
-        HBox levelScoreDisplay = new HBox(10, levelLabel, starImageView);
-        levelScoreDisplay.setAlignment(Pos.CENTER); // Align items to the center
+        // Combine label and image in HBox
+        HBox levelScoreBox = new HBox(10, levelText, starImageView);
+        levelScoreBox.setAlignment(Pos.CENTER);
 
-        return levelScoreDisplay; // Return the HBox containing the level score display
+        return levelScoreBox;
+    }
+
+    private void addConfettiEffect(Group root) {
+        // Example logic for confetti effect
+        for (int i = 0; i < 50; i++) {
+            Circle confetti = new Circle(5, Color.color(Math.random(), Math.random(), Math.random()));
+            confetti.setTranslateX(Math.random() * stage.getWidth());
+            confetti.setTranslateY(Math.random() * stage.getHeight());
+
+            root.getChildren().add(confetti);
+
+            // Animation for falling confetti
+            TranslateTransition transition = new TranslateTransition(Duration.seconds(3 + Math.random() * 2), confetti);
+            transition.setByY(stage.getHeight());
+            transition.setCycleCount(Animation.INDEFINITE);
+            transition.setInterpolator(Interpolator.EASE_OUT);
+            transition.play();
+        }
     }
 }
