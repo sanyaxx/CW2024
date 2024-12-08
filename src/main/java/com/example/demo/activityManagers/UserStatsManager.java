@@ -44,7 +44,7 @@ public class UserStatsManager {
     public void setLevelScore(int score) {
         int level = levelManager.getCurrentLevelNumber() - 1;
         if (level >= 0 && level <= levelScores.length) {
-            levelScores[level] += 5;
+            levelScores[level] = score;
         } else {
             throw new IndexOutOfBoundsException("Invalid level index: " + level);
         }
