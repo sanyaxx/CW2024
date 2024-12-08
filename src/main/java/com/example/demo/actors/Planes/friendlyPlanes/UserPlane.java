@@ -4,7 +4,7 @@ import com.example.demo.activityManagers.ActorManager;
 import com.example.demo.actors.Projectiles.userProjectiles.UserProjectile;
 import com.example.demo.actors.ActiveActorDestructible;
 import com.example.demo.actors.Planes.FighterPlane;
-import javafx.animation.Animation;
+import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
 
@@ -20,21 +20,15 @@ public class UserPlane extends FighterPlane {
 	private static int PROJECTILE_X_POSITION = 120;
 	private static int PROJECTILE_Y_POSITION_OFFSET = 20;
 	private double velocityMultiplier;
-	private int numberOfKills = 0;
-	private static int score = 0; // Tracks the number of coins collected
 	private static int fuel = 10; // Tracks the amount of fuel remaining
 	private static int rotationAngle = 0; // Default set to facing East
-	private Animation scaleTransition;
-
-	// Protected array to hold level scores
-	protected int[] levelScores;
+	private boolean collisionCooldownActive = false;
+	private long lastCollisionTime = 0; // Time when the cooldown started
+	private static final long COLLISION_COOLDOWN_DURATION = 2_000_000_000L; // 2 seconds in nanoseconds
 
 	public UserPlane(int initialHealth) {
 		super(IMAGE_NAME, IMAGE_HEIGHT, INITIAL_X_POSITION, INITIAL_Y_POSITION, initialHealth);
 		velocityMultiplier = 0;
-
-		// Initialize the level scores array for 4 levels (for example)
-		levelScores = new int[4]; // Adjust size according to the number of levels
 	}
 
 	public void resetPosition() {
@@ -89,71 +83,22 @@ public class UserPlane extends FighterPlane {
 		velocityMultiplier = 0;
 	}
 
-	public int getNumberOfKills() {
-		return numberOfKills;
-	}
-
-	public void incrementKillCount() {
-		numberOfKills++;
-	}
-
-	public int getScore() {
-		return score;
-	}
-
-	public void decrementScore() { // when life redeemed
-		score -= 5;
-	}
-
-	public void incrementScore() {
-		score++;
-	}
-
 	public void decrementFuel() {
-		fuel--;
+		if (fuel > 0) {
+			fuel--;
+		}
 	}
 
 	public int getFuelLeft() {
 		return fuel;
 	}
 
-	public void setFuelLeft() {
-		fuel = 10;
+	public void resetFuelLeft() {
+		fuel = 8;
 	}
 
-	public void incrementFuel() {
-		fuel = fuel + 5;
-	}
-
-	public void startCooldown() {
-		FadeTransition fadeTransition = new FadeTransition(Duration.millis(200), this);
-		fadeTransition.setFromValue(1.0);
-		fadeTransition.setToValue(0.0);
-		fadeTransition.setCycleCount(6); // Flash 6 times
-		fadeTransition.setAutoReverse(true);
-		fadeTransition.play();
-	}
-
-	public void endCooldown() {
-		this.setOpacity(1.0); // Ensure it's fully visible after cooldown
-	}
-
-	// Method to set the score for a specific level
-	public void setLevelScore(int level, int score) {
-		if (level >= 0 && level <= levelScores.length) {
-			levelScores[level - 1] = score;
-		} else {
-			throw new IndexOutOfBoundsException("Invalid level index: " + level);
-		}
-	}
-
-	// Method to get the score for a specific level
-	public int getLevelScore(int level) {
-		if (level >= 0 && level <= levelScores.length) {
-			return levelScores[level];
-		} else {
-			throw new IndexOutOfBoundsException("Invalid level index: " + level);
-		}
+	public void incrementFuelLeft() {
+		fuel += 5;
 	}
 
 	@Override
@@ -163,9 +108,12 @@ public class UserPlane extends FighterPlane {
 
 	@Override
 	public void takeDamage() {
-		decrementHealth();
-		if (getHealth() == 0) {
-			this.setDestroyed(true);
+		if (!collisionCooldownActive) { // Prevent taking damage during cooldown
+			decrementHealth();
+			if (getHealth() == 0) {
+				this.setDestroyed(true);
+			}
+			startCooldown(); // Start the cooldown when damage is taken
 		}
 	}
 
@@ -174,9 +122,49 @@ public class UserPlane extends FighterPlane {
 		ActorManager.getInstance().removeActor(this);
 	}
 
-	public void reviveUser() {
-		this.decrementScore();
+	public void reviveUserLife() {
 		this.incrementHealth();
 		this.setDestroyed(false);
+	}
+
+	public void reviveUserFuel() {
+		this.resetFuelLeft();
+		this.setDestroyed(false);
+	}
+
+	public void startCooldown() {
+		if (collisionCooldownActive) return;
+
+		collisionCooldownActive = true;
+		lastCollisionTime = System.nanoTime();
+
+		// Reset any ongoing fade transition
+		setOpacity(1.0);
+
+		FadeTransition fadeTransition = new FadeTransition(Duration.millis(200), this);
+		fadeTransition.setFromValue(1.0);
+		fadeTransition.setToValue(0.0);
+		fadeTransition.setCycleCount(6);
+		fadeTransition.setAutoReverse(true);
+		fadeTransition.play();
+
+		new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				if (now - lastCollisionTime >= COLLISION_COOLDOWN_DURATION) {
+					endCooldown();
+					stop(); // Ensure this AnimationTimer stops
+				}
+			}
+		}.start();
+	}
+
+	public void endCooldown() {
+		collisionCooldownActive = false;
+		this.setOpacity(1.0); // Restore full visibility
+	}
+
+	public boolean isCollisionCooldownActive() {
+		return collisionCooldownActive;
 	}
 }
