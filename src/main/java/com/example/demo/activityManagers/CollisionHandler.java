@@ -66,6 +66,13 @@ public class CollisionHandler {
 
         actor1.takeDamage();
         actor2.takeDamage();
+
+        // Start cooldown for the UserPlane involved in the collision
+        if (actor1 instanceof UserPlane) {
+            ((UserPlane) actor1).startCooldown();
+        } else if (actor2 instanceof UserPlane) {
+            ((UserPlane) actor2).startCooldown();
+        }
     }
 
     protected void handleCollectibleEffect(ActiveActorDestructible actor) {
