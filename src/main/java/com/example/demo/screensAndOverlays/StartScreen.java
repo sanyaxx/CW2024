@@ -39,13 +39,13 @@ public class StartScreen {
         titleImageView.setLayoutY(20); // Set Y position for title
 
         // Create buttons dynamically using ButtonFactory
-        startButton = ButtonFactory.createImageButton(START_BUTTON_IMAGE, 270, 225);
-        startButton.setLayoutX(stage.getWidth()/2 - 10); // Set X position for start button
-        startButton.setLayoutY(stage.getHeight() - 167); // Set Y position for start button
+        startButton = ButtonFactory.createImageButton(START_BUTTON_IMAGE, 350, 400);
+        startButton.setLayoutX(stage.getWidth()/2 - 30); // Set X position for start button
+        startButton.setLayoutY(stage.getHeight() - 200); // Set Y position for start button
 
-        quitButton = ButtonFactory.createImageButton(QUIT_BUTTON_IMAGE, 260, 225);
-        quitButton.setLayoutX(stage.getWidth()/2 - 278); // Set X position for quit button
-        quitButton.setLayoutY(stage.getHeight() - 167); // Set Y position for quit button
+        quitButton = ButtonFactory.createImageButton(QUIT_BUTTON_IMAGE, 350, 400);
+        quitButton.setLayoutX(stage.getWidth()/2 - 360); // Set X position for quit button
+        quitButton.setLayoutY(stage.getHeight() - 200); // Set Y position for quit button
 
         // Set actions for the buttons
         startButton.setOnAction(event -> startGame());
@@ -66,13 +66,8 @@ public class StartScreen {
 
     public void startGame() {
         LevelManager levelManager = LevelManager.getInstance();
-        int levelNumber = levelManager.getCurrentLevelNumber();
-        System.out.println("currentLevelNumber: " + levelNumber);
-        if (levelNumber != -1) {
-            levelManager.showLevelStartScreen(levelNumber); // Call goToNextLevel with the next level name
-        } else {
-            System.out.println("No more levels available.");
-        }
+//        levelManager.showLevelStartScreen(1);
+        levelManager.showLevelStartScreen(levelManager.getCurrentLevelNumber());// Call goToNextLevel with the next level name
     }
 
     public void quitGame() {
