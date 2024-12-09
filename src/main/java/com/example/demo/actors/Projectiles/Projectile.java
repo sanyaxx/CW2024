@@ -1,9 +1,9 @@
 package com.example.demo.actors.Projectiles;
 
 import com.example.demo.activityManagers.ActorManager;
-import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.GameEntity;
 
-public abstract class Projectile extends ActiveActorDestructible {
+public abstract class Projectile extends GameEntity {
 
 	public Projectile(String imageName, int imageHeight, double initialXPos, double initialYPos) {
 		super(imageName, imageHeight, initialXPos, initialYPos);

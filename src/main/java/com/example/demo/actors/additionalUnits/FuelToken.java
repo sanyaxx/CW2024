@@ -1,9 +1,9 @@
 package com.example.demo.actors.additionalUnits;
 
 import com.example.demo.activityManagers.ActorManager;
-import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.GameEntity;
 
-public class FuelToken extends ActiveActorDestructible {
+public class FuelToken extends GameEntity {
 
     private static final String IMAGE_NAME = "fuel.png";
     private static final int IMAGE_HEIGHT = 55;

@@ -5,7 +5,7 @@ import java.util.*;
 import com.example.demo.activityManagers.*;
 import com.example.demo.activityManagers.UserStatsManager;
 import com.example.demo.actors.Updatable;
-import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.enemyPlanes.EnemyPlane;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
 import com.example.demo.actors.additionalUnits.Coins;
@@ -119,7 +119,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 	}
 
 	protected void fireProjectile() {
-		ActiveActorDestructible projectile = user.fireProjectile();
+		GameEntity projectile = user.fireProjectile();
 		actorManager.addActor(projectile);
 	}
 
@@ -145,14 +145,14 @@ public abstract class LevelParent extends Observable implements Updatable {
 		);
 	}
 
-	protected void spawnEnemyProjectile(ActiveActorDestructible projectile) {
+	protected void spawnEnemyProjectile(GameEntity projectile) {
 		if (projectile != null) {
 			actorManager.addActor(projectile);
 		}
 	}
 
 	protected void handleDefensesPenetration() {
-		for (ActiveActorDestructible actor : actorManager.getActiveActors()) {
+		for (GameEntity actor : actorManager.getActiveActors()) {
 			if (entityHasPenetratedDefenses(actor)) {
 				if (actor instanceof Coins) {
 					currentNumberOfCoins--;
@@ -170,7 +170,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 		levelView.updateWinningParameterDisplay(killCount, bulletCount, userStatsManager.getCoinsCollected());
 	}
 
-	protected boolean entityHasPenetratedDefenses(ActiveActorDestructible actor) {
+	protected boolean entityHasPenetratedDefenses(GameEntity actor) {
 		return (((Math.abs(actor.getTranslateX()) > (screenWidth))));
 	}
 
@@ -202,7 +202,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 		return user.isDestroyed();
 	}
 
-	protected void initializeLevel(LevelParent level, ActiveActorDestructible user){
+	protected void initializeLevel(LevelParent level, GameEntity user){
 		actorManager.clearLevel();
 		actorManager.addActor(user);
 		GameTimeline.getInstance().clearUpdatable();

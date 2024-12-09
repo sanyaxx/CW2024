@@ -1,9 +1,9 @@
 package com.example.demo.actors.Planes;
 
 import com.example.demo.activityManagers.ActorManager;
-import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.GameEntity;
 
-public abstract class FighterPlane extends ActiveActorDestructible {
+public abstract class FighterPlane extends GameEntity {
 
 	private int health;
 
@@ -12,13 +12,13 @@ public abstract class FighterPlane extends ActiveActorDestructible {
 		this.health = health;
 	}
 
-	public abstract ActiveActorDestructible fireProjectile();
+	public abstract GameEntity fireProjectile();
 	
 	@Override
 	public void takeDamage() {
 		health--;
 		if (healthAtZero()) {
-			this.setDestroyed(true);
+			this.isDestroyed = true;
 			ActorManager.getInstance().removeActor(this);
 		}
 	}

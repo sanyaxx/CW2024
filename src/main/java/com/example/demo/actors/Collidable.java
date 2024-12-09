@@ -1,11 +1,11 @@
 package com.example.demo.actors;
 
-public interface Destructible {
+public interface Collidable {
 
 	void takeDamage();
 
 	boolean isFriendly();
 
-	void destroy();
-	
+	void setPosition(double x, double y);
+
 }

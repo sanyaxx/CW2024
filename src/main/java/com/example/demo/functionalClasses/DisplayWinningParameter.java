@@ -1,6 +1,6 @@
 package com.example.demo.functionalClasses;
 
-import com.example.demo.gameConfig.AppStage;
+import com.example.demo.controller.AppStage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;

@@ -1,7 +1,7 @@
 package com.example.demo.activityManagers;
 
+import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Updatable;
-import com.example.demo.actors.ActiveActorDestructible;
 import javafx.scene.Group;
 
 import java.util.Collections;
@@ -15,9 +15,9 @@ public class ActorManager implements Updatable {
     private static Group root;
 
     // Lists to manage actors
-    private final List<ActiveActorDestructible> actorsToAdd = Collections.synchronizedList(new ArrayList<>());
-    private final List<ActiveActorDestructible> actorsToRemove = Collections.synchronizedList(new ArrayList<>());
-    public final List<ActiveActorDestructible> activeActors = Collections.synchronizedList(new ArrayList<>());
+    private final List<GameEntity> actorsToAdd = Collections.synchronizedList(new ArrayList<>());
+    private final List<GameEntity> actorsToRemove = Collections.synchronizedList(new ArrayList<>());
+    public final List<GameEntity> activeActors = Collections.synchronizedList(new ArrayList<>());
 
     // Private constructor to prevent instantiation from outside
     private ActorManager() {}
@@ -34,19 +34,19 @@ public class ActorManager implements Updatable {
         return instance;
     }
 
-    public List<ActiveActorDestructible> getActiveActors() {
+    public List<GameEntity> getActiveActors() {
         return activeActors;
     }
 
     // Add an actor to the list of actors to add
-    public void addActor(ActiveActorDestructible actor) {
+    public void addActor(GameEntity actor) {
         synchronized (actorsToAdd) {
             actorsToAdd.add(actor);
         }
     }
 
     // Add an actor to the list of actors to remove
-    public void removeActor(ActiveActorDestructible actor) {
+    public void removeActor(GameEntity actor) {
         synchronized (actorsToRemove) {
             actorsToRemove.add(actor);
         }
@@ -55,7 +55,7 @@ public class ActorManager implements Updatable {
     // Add/remove actors from the scene
     public void updateScene(Group root) {
         synchronized (actorsToRemove) {
-            for (ActiveActorDestructible actor : actorsToRemove) {
+            for (GameEntity actor : actorsToRemove) {
                 root.getChildren().remove(actor);
                 activeActors.remove(actor);
             }
@@ -63,7 +63,7 @@ public class ActorManager implements Updatable {
         }
 
         synchronized (actorsToAdd) {
-            for (ActiveActorDestructible actor : actorsToAdd) {
+            for (GameEntity actor : actorsToAdd) {
                 if (!root.getChildren().contains(actor)) {
                     activeActors.add(actor);
                     root.getChildren().add(actor);
@@ -76,7 +76,7 @@ public class ActorManager implements Updatable {
     // Update all active actors
     public void updateActors() {
         synchronized (activeActors) {
-            for (ActiveActorDestructible actor : activeActors) {
+            for (GameEntity actor : activeActors) {
                 actor.update();
             }
         }

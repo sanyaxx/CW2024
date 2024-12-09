@@ -1,6 +1,6 @@
 package com.example.demo.activityManagers;
 
-import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.FighterPlane;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
 import com.example.demo.actors.Projectiles.Projectile;
@@ -20,12 +20,12 @@ public class CollisionHandler {
         this.levelParent = levelParent;
     }
 
-    public void checkCollisions(List<ActiveActorDestructible> activeActors) {
+    public void checkCollisions(List<GameEntity> activeActors) {
         for (int i = 0; i < activeActors.size(); i++) {
-            ActiveActorDestructible actor1 = activeActors.get(i);
+            GameEntity actor1 = activeActors.get(i);
 
             for (int j = i + 1; j < activeActors.size(); j++) {
-                ActiveActorDestructible actor2 = activeActors.get(j);
+                GameEntity actor2 = activeActors.get(j);
 
                 if (actor1.getBoundsInParent().intersects(actor2.getBoundsInParent())) {
                     if (actor1.isCollectible() ^ actor2.isCollectible()) {
@@ -40,7 +40,7 @@ public class CollisionHandler {
         }
     }
 
-    protected void handleCollectibleInteraction(ActiveActorDestructible actor1, ActiveActorDestructible actor2) {
+    protected void handleCollectibleInteraction(GameEntity actor1, GameEntity actor2) {
         if (actor1.isCollectible() && !actor2.isCollectible() && actor2 instanceof UserPlane) {
             actor1.takeDamage();
             handleCollectibleEffect(actor1);
@@ -50,7 +50,7 @@ public class CollisionHandler {
         }
     }
 
-    protected void handleNonCollectibleCollision(ActiveActorDestructible actor1, ActiveActorDestructible actor2) {
+    protected void handleNonCollectibleCollision(GameEntity actor1, GameEntity actor2) {
         if (actor1 instanceof Projectile && actor2 instanceof Projectile) {
             return;
         }
@@ -76,7 +76,7 @@ public class CollisionHandler {
         }
     }
 
-    protected void handleCollectibleEffect(ActiveActorDestructible actor) {
+    protected void handleCollectibleEffect(GameEntity actor) {
         if (actor instanceof Coins) {
             levelParent.userStatsManager.incrementCoinsCollected();
         } else if (actor instanceof FuelToken) {

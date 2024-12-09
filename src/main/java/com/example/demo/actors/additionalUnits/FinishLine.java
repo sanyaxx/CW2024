@@ -1,6 +1,6 @@
 package com.example.demo.actors.additionalUnits;
 
-import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.FighterPlane;
 
 public class FinishLine extends FighterPlane {
@@ -15,7 +15,7 @@ public class FinishLine extends FighterPlane {
     }
 
     @Override
-    public ActiveActorDestructible fireProjectile(){ return null;}
+    public GameEntity fireProjectile(){ return null;}
 
     @Override
     public void updatePosition() {

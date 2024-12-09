@@ -1,7 +1,7 @@
 package com.example.demo.actors.Planes.enemyPlanes;
 
 import com.example.demo.actors.Projectiles.enemyProjectiles.BossProjectile;
-import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.FighterPlane;
 import com.example.demo.levels.Level2.LevelViewLevelTwo;
 
@@ -16,7 +16,7 @@ public class Boss extends FighterPlane {
 	private static final double BOSS_FIRE_RATE = .04;
 	private static final int IMAGE_HEIGHT = 60;
 	private static final int VERTICAL_VELOCITY = 8;
-	private static final int HEALTH = 50;
+	private static final int HEALTH = 5;
 	private static final int MOVE_FREQUENCY_PER_CYCLE = 5;
 	private static final int ZERO = 0;
 	private static final int MAX_FRAMES_WITH_SAME_MOVE = 10;
@@ -70,7 +70,7 @@ public class Boss extends FighterPlane {
 	}
 
 	@Override
-	public ActiveActorDestructible fireProjectile() {
+	public GameEntity fireProjectile() {
 		return bossFiresInCurrentFrame() ? new BossProjectile(getProjectileInitialPosition()) : null;
 	}
 

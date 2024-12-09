@@ -1,7 +1,6 @@
 package com.example.demo.actors.Planes.enemyPlanes;
 
-import com.example.demo.activityManagers.ActorManager;
-import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.FighterPlane;
 
 public class EnemyRocket extends FighterPlane {
@@ -20,7 +19,7 @@ public class EnemyRocket extends FighterPlane {
     }
 
     @Override
-    public ActiveActorDestructible fireProjectile() {
+    public GameEntity fireProjectile() {
         return null;
     }
 

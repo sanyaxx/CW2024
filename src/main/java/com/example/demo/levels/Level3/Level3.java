@@ -1,6 +1,6 @@
 package com.example.demo.levels.Level3;
 
-import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.enemyPlanes.EnemyRocket;
 import com.example.demo.actors.Planes.friendlyPlanes.UserTank;
 import com.example.demo.levels.LevelParent;
@@ -70,7 +70,7 @@ public class Level3 extends LevelParent {
     protected void spawnEnemyUnits() {
         if (Math.random() < 0.05) { // Adjust the probability of firing
             int direction = (int) (Math.random() * 4); // 0: North, 1: East, 2: South, 3: West
-            ActiveActorDestructible newEnemyRocket = switch (direction) {
+            GameEntity newEnemyRocket = switch (direction) {
                 case 0 -> new EnemyRocket(screenWidth / 2 - 50, 0, direction);
                 case 1 -> new EnemyRocket(screenWidth, 300, direction);
                 case 2 -> new EnemyRocket(screenWidth / 2 - 50, screenHeight, direction);
@@ -86,7 +86,7 @@ public class Level3 extends LevelParent {
 //    protected void spawnCoinUnits() {
 //    if (Math.random() < 0.03) { // Adjust the probability of firing
 //        int direction = (int) (Math.random() * 4); // 0: North, 1: East, 2: South, 3: West
-//        ActiveActorDestructible newEnemyRocket = switch (direction) {
+//        GameEntity newEnemyRocket = switch (direction) {
 //            case 0 -> new Coins(screenWidth / 2 - 50, 0, direction);
 //            case 1 -> new Coins(screenWidth, 300, direction);
 //            case 2 -> new Coins(screenWidth / 2 - 50, screenHeight, direction);
@@ -104,7 +104,7 @@ public class Level3 extends LevelParent {
 
     @Override
     protected void fireProjectile() {
-        ActiveActorDestructible projectile = user.fireProjectile();
+        GameEntity projectile = user.fireProjectile();
         actorManager.addActor(projectile);
     }
 
@@ -139,7 +139,7 @@ public class Level3 extends LevelParent {
 
     @Override
     protected void handleDefensesPenetration() {
-        for (ActiveActorDestructible actor : actorManager.getActiveActors()) {
+        for (GameEntity actor : actorManager.getActiveActors()) {
             if (entityHasPenetratedDefenses(actor)) {
                 if (actor instanceof EnemyRocket) {
                     currentNumberOfEnemies--;

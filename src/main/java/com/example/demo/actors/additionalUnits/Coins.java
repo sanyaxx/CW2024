@@ -1,9 +1,9 @@
 package com.example.demo.actors.additionalUnits;
 
 import com.example.demo.activityManagers.ActorManager;
-import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.GameEntity;
 
-public class Coins extends ActiveActorDestructible {
+public class Coins extends GameEntity {
 
     private static final String IMAGE_NAME = "coin.png";
     private static final int IMAGE_HEIGHT = 40;

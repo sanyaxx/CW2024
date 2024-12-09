@@ -1,8 +1,8 @@
 package com.example.demo.actors.Planes.friendlyPlanes;
 
 import com.example.demo.activityManagers.ActorManager;
+import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Projectiles.userProjectiles.UserProjectile;
-import com.example.demo.actors.ActiveActorDestructible;
 import com.example.demo.actors.Planes.FighterPlane;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
@@ -59,7 +59,7 @@ public class UserPlane extends FighterPlane {
 	}
 
 	@Override
-	public ActiveActorDestructible fireProjectile() {
+	public GameEntity fireProjectile() {
 		return new UserProjectile(PROJECTILE_X_POSITION, getProjectileYPosition(PROJECTILE_Y_POSITION_OFFSET), rotationAngle);
 	}
 
@@ -111,25 +111,25 @@ public class UserPlane extends FighterPlane {
 		if (!collisionCooldownActive) { // Prevent taking damage during cooldown
 			decrementHealth();
 			if (getHealth() == 0) {
-				this.setDestroyed(true);
+				this.isDestroyed = true;
 			}
 			startCooldown(); // Start the cooldown when damage is taken
 		}
 	}
 
 	public void destroyUser() {
-		this.setDestroyed(true);
+		this.isDestroyed = true;
 		ActorManager.getInstance().removeActor(this);
 	}
 
 	public void reviveUserLife() {
 		this.incrementHealth();
-		this.setDestroyed(false);
+		this.isDestroyed = false;
 	}
 
 	public void reviveUserFuel() {
 		this.resetFuelLeft();
-		this.setDestroyed(false);
+		this.isDestroyed = false;
 	}
 
 	public void startCooldown() {

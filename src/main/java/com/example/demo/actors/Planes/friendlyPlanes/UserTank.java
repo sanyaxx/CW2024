@@ -1,14 +1,14 @@
 package com.example.demo.actors.Planes.friendlyPlanes;
 
 import com.example.demo.actors.Projectiles.userProjectiles.UserProjectile;
-import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.FighterPlane;
-import com.example.demo.gameConfig.AppStage;
+import com.example.demo.controller.AppStage;
 
 public class UserTank extends FighterPlane {
 
     private static final String IMAGE_NAME = "userTank.png";
-    private static final double INITIAL_X_POSITION = (AppStage.getInstance().getPrimaryStage().getWidth())/2 - 90;
+    private static final double INITIAL_X_POSITION = (AppStage.getInstance().getPrimaryStage().getWidth())/2 - 100;
     private static final double INITIAL_Y_POSITION = (AppStage.getInstance().getPrimaryStage().getHeight())/2 - 80;
     private static final int IMAGE_HEIGHT = 100;
     private static int PROJECTILE_X_POSITION = 655;
@@ -62,7 +62,7 @@ public class UserTank extends FighterPlane {
     }
 
     @Override
-    public ActiveActorDestructible fireProjectile() {
+    public GameEntity fireProjectile() {
         return new UserProjectile(PROJECTILE_X_POSITION, PROJECTILE_Y_POSITION, rotationAngle);
     }
 

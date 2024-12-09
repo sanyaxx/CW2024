@@ -1,6 +1,6 @@
 package com.example.demo.levels.Level4;
 
-import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.enemyPlanes.EnemyRocket;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
 import com.example.demo.actors.additionalUnits.Coins;
@@ -126,13 +126,14 @@ public class Level4 extends LevelParent {
     }
 
     protected void spawnFinishLine() {
-        ActiveActorDestructible finishLineInstance = new FinishLine(screenWidth, 0);
+        GameEntity finishLineInstance = new FinishLine(screenWidth, 0);
         actorManager.addActor(finishLineInstance);
     }
 
     @Override
     protected void handleDefensesPenetration() {
         for (ActiveActorDestructible actor : actorManager.getActiveActors()) {
+        for (GameEntity actor : actorManager.getActiveActors()) {
             if (entityHasPenetratedDefenses(actor)) {
                 if (actor instanceof Coins) {
                     currentNumberOfCoins--;

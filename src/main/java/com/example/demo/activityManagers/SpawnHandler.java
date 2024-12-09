@@ -1,6 +1,6 @@
 package com.example.demo.activityManagers;
 
-import com.example.demo.actors.ActiveActorDestructible;
+import com.example.demo.actors.GameEntity;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -27,14 +27,14 @@ public class SpawnHandler {
      * @param maxTotal        The total limit for this type of actor.
      * @return The number of actors successfully spawned.
      */
-    public int spawnActors(Supplier<ActiveActorDestructible> actorSupplier, int maxSpawnCount, double spawnProbability,
+    public int spawnActors(Supplier<GameEntity> actorSupplier, int maxSpawnCount, double spawnProbability,
                            int currentCount, int maxTotal) {
         int spawnedCount = 0;
 
         int actorsToSpawn = Math.min(maxSpawnCount - currentCount, maxTotal - currentCount);
         for (int i = 0; i < actorsToSpawn; i++) {
             if (Math.random() < spawnProbability) {
-                ActiveActorDestructible newActor = actorSupplier.get();
+                GameEntity newActor = actorSupplier.get();
 
                 // Check for overlapping with existing actors
                 if (!isOverlapping(newActor, actorManager.getActiveActors())) {
@@ -56,9 +56,8 @@ public class SpawnHandler {
      * @param existingActors The list of existing actors.
      * @return True if there is an overlap; false otherwise.
      */
-    private boolean isOverlapping(ActiveActorDestructible actor, List<ActiveActorDestructible> existingActors) {
+    private boolean isOverlapping(GameEntity actor, List<GameEntity> existingActors) {
         return existingActors.stream()
                 .anyMatch(existing -> actor.getBoundsInParent().intersects(existing.getBoundsInParent()));
     }
 }
-
