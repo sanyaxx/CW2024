@@ -2,15 +2,14 @@ package com.example.demo.controller;
 
 import java.lang.reflect.InvocationTargetException;
 
-import com.example.demo.gameConfig.AppStage;
 import com.example.demo.activityManagers.LevelManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	private static final double SCREEN_WIDTH = 1300; //(int) javafx.stage.Screen.getPrimary().getBounds().getWidth();
-	private static final double SCREEN_HEIGHT = 750;//(int) javafx.stage.Screen.getPrimary().getBounds().getHeight();;
+	private static final double SCREEN_WIDTH = (int) javafx.stage.Screen.getPrimary().getBounds().getWidth();
+	private static final double SCREEN_HEIGHT = (int) javafx.stage.Screen.getPrimary().getBounds().getHeight();
 	private static final String TITLE = "Sky Battle";
 	private Controller myController;
 
@@ -18,7 +17,7 @@ public class Main extends Application {
 	public void start(Stage stage) throws ClassNotFoundException, NoSuchMethodException, SecurityException,
 			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		stage.setTitle(TITLE);
-		stage.setResizable(true);
+		stage.setResizable(false);
 		stage.setMaximized(true);
 		stage.setHeight(SCREEN_HEIGHT);
 		stage.setWidth(SCREEN_WIDTH);
