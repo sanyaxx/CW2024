@@ -9,12 +9,10 @@ import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.enemyPlanes.EnemyPlane;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
 import com.example.demo.actors.additionalUnits.Coins;
-import com.example.demo.gameConfig.GameTimeline;
-import javafx.event.EventHandler;
+import com.example.demo.controller.GameLoop;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.*;
-import javafx.scene.input.*;
 
 
 public abstract class LevelParent extends Observable implements Updatable {
@@ -36,6 +34,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 	public final LevelManager levelManager;
 	protected SpawnHandler spawnHandler;
 	public final UserStatsManager userStatsManager;
+	public final InputHandler inputHandler;
 
 	public int currentNumberOfEnemies;
 	protected int currentNumberOfCoins;
@@ -62,6 +61,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 		this.levelManager = LevelManager.getInstance();
 		this.spawnHandler = new SpawnHandler(actorManager, screenWidth, screenHeight);
 		this.userStatsManager = UserStatsManager.getInstance();
+		this.inputHandler = new InputHandler();
 
 		levelView.pauseButton.setOnPauseAction(() -> levelStateHandler.handleLevelPaused(root, user));
 		actorManager.setRoot(root);
@@ -73,9 +73,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 
 	public Scene initializeScene() {
 		initializeBackground();
-		levelView.showHeartDisplay();
-		levelView.showWinningParameterDisplay();
-		levelView.showPauseButton();
+		levelView.showUIComponents();
 		return scene;
 	}
 

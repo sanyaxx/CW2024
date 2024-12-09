@@ -23,20 +23,11 @@ public class LevelView {
 		this.pauseButton = new PauseButton();
 	}
 
-
-	public void showHeartDisplay() {
-		root.getChildren().add(heartDisplay.getContainer());
-	}
-
 	public void removeHearts(int heartsRemaining) {
 		int currentNumberOfHearts = heartDisplay.getContainer().getChildren().size();
 		for (int i = 0; i < currentNumberOfHearts - heartsRemaining; i++) {
 			heartDisplay.removeHeart();
 		}
-	}
-
-	public void showWinningParameterDisplay() {
-		root.getChildren().add(displayWinningParameter.getContainer());
 	}
 
 	// Overloaded method to update the winning parameters with two values
@@ -46,8 +37,10 @@ public class LevelView {
 		displayWinningParameter.updateValue3(parameterValue3);
 	}
 
-	// Add the pause button to the root
-	public void showPauseButton() {
+
+	public void showUIComponents() {
+		root.getChildren().add(heartDisplay.getContainer());
+		root.getChildren().add(displayWinningParameter.getContainer());
 		root.getChildren().add(pauseButton.getPauseButton());
 	}
 }
