@@ -2,8 +2,8 @@ package com.example.demo.activityManagers;
 
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
 import com.example.demo.functionalClasses.GenerateLevelScore;
-import com.example.demo.gameConfig.AppStage;
-import com.example.demo.gameConfig.GameTimeline;
+import com.example.demo.controller.AppStage;
+import com.example.demo.controller.GameLoop;
 import com.example.demo.levels.LevelParent;
 import com.example.demo.screensAndOverlays.*;
 import javafx.animation.Timeline;
@@ -31,7 +31,7 @@ public class LevelStateHandler {
     private final Object[][] nextButton;
 
     public LevelStateHandler() {
-        this.timeline = GameTimeline.getInstance().getTimeline();
+        this.timeline = GameLoop.getInstance().getTimeline();
         this.levelManager = LevelManager.getInstance();
         this.levelScore = new GenerateLevelScore();
         this.overlayFactory = OverlayFactory.getInstance();
@@ -101,6 +101,7 @@ public class LevelStateHandler {
 
     public void handleLevelLoss(Group root, UserPlane user) {
         stopTimeline();
+        setContext(root, user, null);
         user.destroyUser();
 
         String starImage = levelScore.getStarImagePath(0);

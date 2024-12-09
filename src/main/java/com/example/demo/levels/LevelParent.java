@@ -79,7 +79,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 
 	public void startGame() {
 		background.requestFocus();
-		GameTimeline.getInstance().getTimeline().play();
+		GameLoop.getInstance().getTimeline().play();
 	}
 
 	@Override
@@ -203,9 +203,9 @@ public abstract class LevelParent extends Observable implements Updatable {
 	protected void initializeLevel(LevelParent level, GameEntity user){
 		actorManager.clearLevel();
 		actorManager.addActor(user);
-		GameTimeline.getInstance().clearUpdatable();
-		GameTimeline.getInstance().addUpdatable(level);
-		GameTimeline.getInstance().addUpdatable(actorManager);
+		GameLoop.getInstance().clearUpdatable();
+		GameLoop.getInstance().addUpdatable(level);
+		GameLoop.getInstance().addUpdatable(actorManager);
 	}
 
 	protected final void checkGameOverConditions() {
