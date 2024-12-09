@@ -64,7 +64,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 		this.inputHandler = new InputHandler();
 
 		levelView.pauseButton.setOnPauseAction(() -> levelStateHandler.handleLevelPaused(root, user));
-		actorManager.setRoot(root);
+		initializeActorManager();
 	}
 
 	protected abstract void spawnEnemyUnits();
@@ -72,9 +72,14 @@ public abstract class LevelParent extends Observable implements Updatable {
 	protected abstract LevelView instantiateLevelView();
 
 	public Scene initializeScene() {
-		initializeBackground();
+		setupBackground();
+		setUpInputHandler();
 		levelView.showUIComponents();
 		return scene;
+	}
+
+	private void initializeActorManager() {
+		actorManager.setRoot(root);
 	}
 
 	public void startGame() {
@@ -92,28 +97,30 @@ public abstract class LevelParent extends Observable implements Updatable {
 		handleDefensesPenetration();
 	}
 
-	protected void initializeBackground() {
+	protected void setupBackground() {
 		background.setFocusTraversable(true);
 		background.setFitHeight(screenHeight);
 		background.setFitWidth(screenWidth);
-		background.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			public void handle(KeyEvent e) {
-				KeyCode kc = e.getCode();
-				if (kc == KeyCode.UP) user.moveUp();
-				if (kc == KeyCode.DOWN) user.moveDown();
-				if (kc == KeyCode.SPACE) {
-					fireProjectile();
-					decrementBulletCount();
-				}
-			}
-		});
-		background.setOnKeyReleased(new EventHandler<KeyEvent>() {
-			public void handle(KeyEvent e) {
-				KeyCode kc = e.getCode();
-				if (kc == KeyCode.UP || kc == KeyCode.DOWN) user.stop();
-			}
-		});
 		root.getChildren().add(background);
+	}
+
+	protected void setUpInputHandler() {
+		inputHandler.setupInputHandlers(
+				user,
+				user::moveUp, user::stop,
+				user::moveDown, user::stop,
+				null, null,
+				null, null,
+				() -> {
+					if (!user.isCollisionCooldownActive()) { // Check if cooldown is not active
+						fireProjectile(); // Fire the projectile if cooldown is inactive
+						decrementBulletCount(); // Decrement bullet count
+					}
+				}
+		);
+
+		background.setOnKeyPressed(inputHandler.getKeyPressHandler(user));
+		background.setOnKeyReleased(inputHandler.getKeyReleaseHandler(user));
 	}
 
 	protected void fireProjectile() {
@@ -184,20 +191,12 @@ public abstract class LevelParent extends Observable implements Updatable {
 		return background;
 	}
 
-	protected int getCurrentNumberOfEnemies() {
-		return currentNumberOfEnemies;
-	}
-
-	protected int getCurrentNumberOfCoins() {
-		return currentNumberOfCoins;
-	}
-
 	protected double getEnemyMaximumYPosition() {
 		return enemyMaximumYPosition;
 	}
 
 	protected boolean userIsDestroyed() {
-		return user.isDestroyed();
+		return user.isDestroyed;
 	}
 
 	protected void initializeLevel(LevelParent level, GameEntity user){
@@ -208,7 +207,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 		GameLoop.getInstance().addUpdatable(actorManager);
 	}
 
-	protected final void checkGameOverConditions() {
+	protected void checkGameOverConditions() {
 		// Check if the user has lost
 		if (hasLevelBeenLost()) {
 			levelStateHandler.showRedeemLife(root, user, this);

@@ -20,7 +20,7 @@ public class Level4 extends LevelParent {
 
     private static final String BACKGROUND_IMAGE_NAME = "/com/example/demo/images/level4Background.jpg";
     private static final int PLAYER_INITIAL_HEALTH = 5;
-    private static final int SURVIVAL_TIME_SECONDS = 8; // Time to survive in seconds
+    private static final int SURVIVAL_TIME_SECONDS = 30; // Time to survive in seconds
     private static double OBSTACLE_DIMENSIONS = Obstacle.getDimensions();
     private final UserPlane user;
     private int frameCount = 0;
@@ -74,7 +74,7 @@ public class Level4 extends LevelParent {
 
     @Override
     protected boolean hasLevelBeenLost() {
-        return ((user.isDestroyed()) || ((user.getFuelLeft() == 0) && remainingTime > 0)) || bulletCount == 0; // User loss condition
+        return ((user.isDestroyed) || ((user.getFuelLeft() == 0) && remainingTime > 0)) || bulletCount == 0; // User loss condition
     }
 
     @Override
@@ -132,7 +132,6 @@ public class Level4 extends LevelParent {
 
     @Override
     protected void handleDefensesPenetration() {
-        for (ActiveActorDestructible actor : actorManager.getActiveActors()) {
         for (GameEntity actor : actorManager.getActiveActors()) {
             if (entityHasPenetratedDefenses(actor)) {
                 if (actor instanceof Coins) {
@@ -148,7 +147,7 @@ public class Level4 extends LevelParent {
                 }
                 else if (actor instanceof Obstacle) {
                     currentNumberOfObstacles--;
-                    actor.destroy();
+                    actorManager.removeActor(actor);
                 }
                 actor.takeDamage();
             }
@@ -156,31 +155,22 @@ public class Level4 extends LevelParent {
     }
 
     @Override
-    protected void initializeBackground() {
-        background.setFocusTraversable(true);
-        background.setFitHeight(screenHeight);
-        background.setFitWidth(screenWidth);
-        background.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent e) {
-                KeyCode kc = e.getCode();
-                if (kc == KeyCode.UP) {
-                    user.moveUp(); // Move up when the up key is pressed
+    protected void setUpInputHandler() {
+        inputHandler.setupInputHandlers(
+                user,
+                user::moveUp,user::fallDown,
+                null,null,
+                null,null,
+                null,null,
+                () -> {
+                    if (!user.isCollisionCooldownActive()) { // Check if cooldown is not active
+                        fireProjectile(); // Fire the projectile if cooldown is inactive
+                        decrementBulletCount(); // Decrement bullet count
+                    }
                 }
-                if (kc == KeyCode.SPACE) {
-                    fireProjectile(); // Fire projectile
-                    decrementBulletCount();
-                }
-            }
-        });
-        background.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent e) {
-                KeyCode kc = e.getCode();
-                if (kc == KeyCode.UP) {
-                    user.fallDown(); // Move down when the up key is released
-                }
-            }
-        });
-        getRoot().getChildren().add(background);
+        );
+        background.setOnKeyPressed(inputHandler.getKeyPressHandler(user));
+        background.setOnKeyReleased(inputHandler.getKeyReleaseHandler(user));
     }
 
     protected void updateSurvivalTimer() {
@@ -188,7 +178,6 @@ public class Level4 extends LevelParent {
 
         // Check if 2 frames have passed (20 * 50ms = 1000ms)
         if (frameCount >= 20) {
-            System.out.println("Time: " + remainingTime);
             remainingTime--; // Update remaining time
             user.decrementFuel();
             frameCount = 0; // Reset the frame count

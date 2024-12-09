@@ -41,12 +41,13 @@ public class Level3 extends LevelParent {
         spawnEnemyUnits();
         updateLevelView();
         updateSurvivalTimer();
+        checkGameOverConditions();
 
     }
 
     @Override
     protected boolean hasLevelBeenLost() {
-        return user.isDestroyed() || bulletCount == 0; // User loss condition
+        return user.isDestroyed || bulletCount == 0; // User loss condition
     }
 
     @Override
@@ -72,9 +73,9 @@ public class Level3 extends LevelParent {
             int direction = (int) (Math.random() * 4); // 0: North, 1: East, 2: South, 3: West
             GameEntity newEnemyRocket = switch (direction) {
                 case 0 -> new EnemyRocket(screenWidth / 2 - 50, 0, direction);
-                case 1 -> new EnemyRocket(screenWidth, 300, direction);
+                case 1 -> new EnemyRocket(screenWidth, 350, direction);
                 case 2 -> new EnemyRocket(screenWidth / 2 - 50, screenHeight, direction);
-                case 3 -> new EnemyRocket(0, 300, direction);
+                case 3 -> new EnemyRocket(0, 350, direction);
                 default -> null; // Fallback
             };
             if (newEnemyRocket != null) {
@@ -109,32 +110,20 @@ public class Level3 extends LevelParent {
     }
 
     @Override
-    protected void initializeBackground() {
-        background.setFocusTraversable(true);
-        background.setFitHeight(screenHeight);
-        background.setFitWidth(screenWidth);
-        background.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent e) {
-                KeyCode kc = e.getCode();
-                if (kc == KeyCode.UP) {
-                    user.faceNorth(); // Shoot NORTH
-                }
-                if (kc == KeyCode.DOWN) {
-                    user.faceSouth(); // Shoot SOUTH
-                }
-                if (kc == KeyCode.RIGHT) {
-                    user.faceEast(); // Shoot EAST
-                }
-                if (kc == KeyCode.LEFT) {
-                    user.faceWest(); // Shoot WEST
-                }
-                if (kc == KeyCode.SPACE) {
+    protected void setUpInputHandler() {
+        inputHandler.setupInputHandlers(
+                user,
+                user::faceNorth,null,
+                user::faceSouth,null,
+                user::faceEast,null,
+                user::faceWest,null,
+                () -> {
                     fireProjectile();
                     decrementBulletCount();
                 }
-            }
-        });
-        getRoot().getChildren().add(background);
+        );
+        background.setOnKeyPressed(inputHandler.getKeyPressHandler(user));
+        background.setOnKeyReleased(inputHandler.getKeyReleaseHandler(user));
     }
 
     @Override
@@ -163,6 +152,19 @@ public class Level3 extends LevelParent {
         if (frameCount >= 20) {
             remainingTime--; // Update remaining time
             frameCount = 0; // Reset the frame count
+        }
+    }
+
+    @Override
+    protected final void checkGameOverConditions() {
+        // Check if the user has lost
+        if (hasLevelBeenLost()) {
+            levelStateHandler.handleLevelLoss(getRoot(), getUser());
+        }
+
+        // Check if the user has won
+        if (hasLevelBeenWon()) {
+            levelStateHandler.handleLevelCompletion(getRoot(), getUser());
         }
     }
 

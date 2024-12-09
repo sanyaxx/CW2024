@@ -17,8 +17,8 @@ public class Level2 extends LevelParent {
         boss = new Boss(levelView);
 		bossHealth = boss.getHealth();
 
-		this.bulletCount = 50;
-		userStatsManager.setBulletCount(50);
+		this.bulletCount = 100;
+		userStatsManager.setBulletCount(100);
 
 		initializeLevel(this, getUser());
     }
@@ -30,14 +30,12 @@ public class Level2 extends LevelParent {
 
 	@Override
 	protected boolean hasLevelBeenWon() {
-		return boss.isDestroyed(); // Win condition specific to this level
+		return boss.isDestroyed; // Win condition specific to this level
 	}
 
 	@Override
 	protected void spawnEnemyUnits() {
-		if (getCurrentNumberOfEnemies() == 0) {
-			actorManager.addActor(boss);
-		}
+		actorManager.addActor(boss);
 	}
 
 	@Override
