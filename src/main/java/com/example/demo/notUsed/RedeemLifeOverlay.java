@@ -1,7 +1,7 @@
 package com.example.demo.notUsed;
 
 import com.example.demo.activityManagers.ButtonFactory;
-import com.example.demo.gameConfig.AppStage;
+import com.example.demo.controller.AppStage;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;

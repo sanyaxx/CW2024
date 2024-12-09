@@ -1,7 +1,7 @@
 package com.example.demo.notUsed;
 
-import com.example.demo.gameConfig.AppStage;
-import com.example.demo.gameConfig.GameTimeline;
+import com.example.demo.controller.AppStage;
+import com.example.demo.controller.GameLoop;
 import com.example.demo.levels.LevelView;
 import javafx.animation.Animation;
 import javafx.animation.Timeline;
@@ -21,7 +21,7 @@ public class PauseHandler {
     public PauseHandler(LevelView levelView, Group root) {
         this.root = root;
         this.stage = AppStage.getInstance().getPrimaryStage();
-        this.timeline = GameTimeline.getInstance().getTimeline();
+        this.timeline = GameLoop.getInstance().getTimeline();
         this.levelView = levelView;
         this.pauseOverlay = new PauseOverlay(new Scene(new StackPane(), stage.getWidth(), stage.getHeight()));
     }

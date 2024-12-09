@@ -3,7 +3,7 @@ package com.example.demo.screensAndOverlays;
 import com.example.demo.activityManagers.UserStatsManager;
 import com.example.demo.functionalClasses.GenerateLevelScore;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
-import com.example.demo.gameConfig.AppStage;
+import com.example.demo.controller.AppStage;
 import javafx.animation.*;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -63,7 +63,7 @@ public class YouWinScreen {
         // Level-wise scores
         VBox levelScoresBox = new VBox(20);
         levelScoresBox.setAlignment(Pos.CENTER);
-        String[] levelNames = {"", "Level 1", "Level 2", "Level 3", "Level 4"}; // first index left empty for correct get logic
+        String[] levelNames = {"", "Level 1", "Level 2", "Level 3", "Level 4"}; // first index left empty for correct level number logic
 
         for (int i = 1; i < levelNames.length; i++) {
             int levelScore = userStatsManager.getLevelScore(i); // Get level score from user

@@ -4,7 +4,7 @@ import com.example.demo.activityManagers.ButtonFactory;
 import com.example.demo.activityManagers.LevelStateHandler;
 import com.example.demo.activityManagers.LevelManager;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
-import com.example.demo.gameConfig.AppStage;
+import com.example.demo.controller.AppStage;
 import com.example.demo.screensAndOverlays.StartScreen;
 import javafx.animation.ScaleTransition;
 import javafx.scene.Group;

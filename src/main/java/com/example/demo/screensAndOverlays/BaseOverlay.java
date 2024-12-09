@@ -1,7 +1,7 @@
 package com.example.demo.screensAndOverlays;
 
 import com.example.demo.activityManagers.ButtonFactory;
-import com.example.demo.gameConfig.AppStage;
+import com.example.demo.controller.AppStage;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -36,7 +36,7 @@ public class BaseOverlay {
         // Create a full-screen semi-transparent background
         Stage stage = AppStage.getInstance().getPrimaryStage();
         background = new Rectangle(stage.getWidth(), stage.getHeight());
-        background.setFill(new Color(0, 0, 0, 0.8)); // Black with 80% opacity
+        background.setFill(new Color(0, 0, 0, 0.85)); // Black with 80% opacity
 
         // Title label
         titleLabel = new Label();
