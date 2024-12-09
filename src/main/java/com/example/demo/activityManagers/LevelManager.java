@@ -44,7 +44,8 @@ public class LevelManager extends Observable {
         }
     }
 
-    public void goToNextLevel(String levelName) {
+    public void goToNextLevel() {
+        String levelName = getNextLevelName();
         setChanged();
         notifyObservers(levelName);
     }
@@ -57,4 +58,7 @@ public class LevelManager extends Observable {
         return currentLevelNumber; // Getter for current level number
     }
 
+    public void setCurrentLevelNumber(int number) {
+        currentLevelNumber = number;
+    }
 }
