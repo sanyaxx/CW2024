@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.controller.AppStage;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,8 +13,8 @@ public class PauseButton {
 
     public PauseButton() {
         button = createButton();
-        button.setLayoutX(1180);
-        button.setLayoutY(15);
+        button.setLayoutX(AppStage.getInstance().getPrimaryStage().getWidth() - 100);
+        button.setLayoutY(25);
     }
 
     private Button createButton() {
