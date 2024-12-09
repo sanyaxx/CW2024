@@ -1,4 +1,4 @@
-package com.example.demo.gameConfig;
+package com.example.demo.controller;
 
 import javafx.stage.Stage;
 

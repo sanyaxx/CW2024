@@ -1,4 +1,4 @@
-package com.example.demo.gameConfig;
+package com.example.demo.controller;
 
 import com.example.demo.actors.Updatable;
 import javafx.animation.KeyFrame;
@@ -8,23 +8,23 @@ import javafx.util.Duration;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class GameTimeline {
+public class GameLoop {
 
-    private static GameTimeline instance;
+    private static GameLoop instance;
 
     private Timeline timeline;
     private static final int MILLISECOND_DELAY = 50;
     private final List<Updatable> updatables = new CopyOnWriteArrayList<>();
 
     // Private constructor
-    private GameTimeline() {
+    private GameLoop() {
         initializeTimeline();
     }
 
     // Singleton instance getter
-    public static synchronized GameTimeline getInstance() {
+    public static synchronized GameLoop getInstance() {
         if (instance == null) {
-            instance = new GameTimeline();
+            instance = new GameLoop();
         }
         return instance;
     }
