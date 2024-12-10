@@ -6,7 +6,7 @@ import com.example.demo.actors.Planes.FighterPlane;
 public class FinishLine extends FighterPlane {
 
     private static final String IMAGE_NAME = "finishLine.png";
-    private static final int IMAGE_HEIGHT = 720;
+    private static final int IMAGE_HEIGHT = 900;
     private static final int HORIZONTAL_VELOCITY = -10;
     private static final int INITIAL_HEALTH = 1;
 
