@@ -10,6 +10,7 @@ import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.enemyPlanes.EnemyPlane;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
 import com.example.demo.actors.additionalUnits.Coins;
+import com.example.demo.actors.additionalUnits.Magnet;
 import com.example.demo.controller.GameLoop;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -39,9 +40,13 @@ public abstract class LevelParent extends Observable implements Updatable {
 
 	public int currentNumberOfEnemies;
 	public int currentNumberOfCoins;
+	public int currentNumberOfMagnets;
 	public int bulletCount;
 	public int killCount;
 	private final LevelView levelView;
+	public boolean magnetismActivated;
+	public double magnetRadius; // Example radius for magnet effect
+	public int frameCount;
 
 	public LevelParent(String backgroundImageName, double screenHeight, double screenWidth, int playerInitialHealth, int playerBulletCount) {
         this.root = new Group();
@@ -51,7 +56,10 @@ public abstract class LevelParent extends Observable implements Updatable {
 		this.enemyMaximumYPosition = screenHeight - SCREEN_HEIGHT_ADJUSTMENT;
 		this.levelView = instantiateLevelView();
 		this.currentNumberOfEnemies = 0;
+		this.currentNumberOfMagnets = 0;
 		this.killCount = 0;
+		this.magnetismActivated = false;
+		this.magnetRadius = 200;
 		this.frameCount = 0;
 
 		this.screenHeight = screenHeight;
@@ -97,6 +105,9 @@ public abstract class LevelParent extends Observable implements Updatable {
 		spawnCoinUnits();
 		checkGameOverConditions();
 		handleDefensesPenetration();
+		if (!magnetismActivated) {
+			spawnMagnet();
+		}
 	}
 
 
@@ -157,6 +168,16 @@ public abstract class LevelParent extends Observable implements Updatable {
 		if (projectile != null) {
 			actorManager.addActor(projectile);
 		}
+	}
+
+	protected void spawnMagnet() {
+		currentNumberOfMagnets += spawnHandler.spawnActors(
+				() -> new Magnet(screenWidth, 100 + (Math.random() * (getEnemyMaximumYPosition() - 100)), 1), // Supplier for new enemies // 1 = launch from east
+				1, // Maximum spawn at a time
+				1, // Spawn probability
+				currentNumberOfMagnets, // Current count
+				1 // Total allowed
+		);
 	}
 
 	protected void handleDefensesPenetration() {
@@ -225,15 +246,40 @@ public abstract class LevelParent extends Observable implements Updatable {
 		}
 	}
 
-	protected void decrementBulletCount() {
-		if (bulletCount > 0) {
-			userStatsManager.decrementBulletCount();
-			bulletCount--;
-		}
-	}
-
 	protected abstract boolean hasLevelBeenLost();
 
 	protected abstract boolean hasLevelBeenWon();
+
+	public void activateMagnet() {
+		frameCount++;
+		magnetismActivated = true;
+
+		actorManager.getActiveActors().stream()
+			.filter(actor -> actor instanceof Coins) // Process all Coins
+			.map(actor -> (Coins) actor)
+			.forEach(coinInactive -> {
+				coinInactive.setMagnetActivated(true); // Ensure the magnet is activated for all coins
+			});
+
+		// Check if 5 frames have passed (100 * 50ms = 50000ms)
+		if (frameCount >= 100) {
+			deactivateMagnet();
+			frameCount = 0; // Reset the frame count
+		}
+	}
+
+	public void deactivateMagnet() {
+		actorManager.getActiveActors().stream()
+				.filter(actor -> actor instanceof Coins) // Filter for coin instances
+				.map(actor -> (Coins) actor) // Cast to Coins
+				.forEach(coinActive -> {
+					coinActive.setMagnetActivated(false);
+				});
+		magnetismActivated = false; // Deactivate the magnet after 5 seconds
+		currentNumberOfMagnets = 0;
+
+	}
 }
+
+
 
