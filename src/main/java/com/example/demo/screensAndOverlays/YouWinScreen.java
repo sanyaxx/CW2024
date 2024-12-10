@@ -2,7 +2,6 @@ package com.example.demo.screensAndOverlays;
 
 import com.example.demo.activityManagers.UserStatsManager;
 import com.example.demo.functionalClasses.GenerateLevelScore;
-import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
 import com.example.demo.controller.AppStage;
 import javafx.animation.*;
 import javafx.geometry.Pos;
@@ -26,11 +25,11 @@ import java.util.Objects;
 public class YouWinScreen {
     private final Scene scene;
     private final Stage stage;
-    private final UserStatsManager userStatsManager;
+    private final UserStatsManager user;
 
-    public YouWinScreen(Group root, UserPlane user) {
+    public YouWinScreen() {
         this.stage = AppStage.getInstance().getPrimaryStage();
-        this.userStatsManager = UserStatsManager.getInstance();
+        this.user = UserStatsManager.getInstance();
 
         // Create a fresh root and scene
         Group newRoot = new Group();
@@ -49,11 +48,11 @@ public class YouWinScreen {
         titleBox.setAlignment(Pos.CENTER);
 
         // Summary: Total score and total kills
-        Text totalScoreText = new Text("Total Score: " + userStatsManager.getCoinsCollected());
+        Text totalScoreText = new Text("Total Score: " + user.getTotalCoinsCollected());
         totalScoreText.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         totalScoreText.setFill(Color.LIGHTBLUE);
 
-        Text totalKillsText = new Text("Total Kills: " + userStatsManager.getNumberOfKills());
+        Text totalKillsText = new Text("Total Kills: " + user.getTotalKillCount());
         totalKillsText.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         totalKillsText.setFill(Color.LIGHTBLUE);
 
@@ -66,7 +65,7 @@ public class YouWinScreen {
         String[] levelNames = {"", "Level 1", "Level 2", "Level 3", "Level 4"}; // first index left empty for correct level number logic
 
         for (int i = 1; i < levelNames.length; i++) {
-            int levelScore = userStatsManager.getLevelScore(i); // Get level score from user
+            int levelScore = user.getLevelScore(i); // Get level score from user
             levelScoresBox.getChildren().add(createLevelScoreDisplay(levelNames[i], levelScore));
         }
 

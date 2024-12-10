@@ -1,6 +1,6 @@
 package com.example.demo.activityManagers;
 
-import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
+import com.example.demo.actors.Planes.friendlyPlanes.UserParent;
 import com.example.demo.functionalClasses.GenerateLevelScore;
 import com.example.demo.controller.AppStage;
 import com.example.demo.controller.GameLoop;
@@ -18,9 +18,8 @@ public class LevelStateHandler {
     private final LevelManager levelManager;
     private final GenerateLevelScore levelScore;
     private final UserStatsManager userStatsManager;
-    private UserPlane userInstance;
+    private UserParent userInstance;
     private Group root;
-    private LevelParent levelInstance;
 
     private static final String COINS_TEXT = "Total Coins: %d coins";
 
@@ -69,24 +68,26 @@ public class LevelStateHandler {
         overlay.show();
     }
 
-    public void handleLevelCompletion(Group root, UserPlane user) {
+    public void handleLevelCompletion(Group root, UserParent user) {
         stopTimeline();
-        setContext(root, user, null);
+        setContext(root, user);
 
-        int calculatedScore = levelScore.calculateScore(user.getHealth(), userStatsManager.getBulletCount());
+        int calculatedScore = levelScore.calculateScore(user.getHealth(), user.getBulletCount());
         userStatsManager.setLevelScore(calculatedScore);
+        userStatsManager.setTotalCoinsCollected(user.getCoinsCollected());
+        userStatsManager.setTotalKillCount(user.getInLevelKillCount());
 
         String starImage = levelScore.getStarImagePath(calculatedScore);
-        String message = String.format(COINS_TEXT, userStatsManager.getCoinsCollected());
+        String message = String.format(COINS_TEXT, user.getCoinsCollected());
 
         showOverlay("Level Completed!", message, completedOverlayButtons, starImage);
     }
 
-    public void showRedeemLife(Group root, UserPlane user, LevelParent level) {
+    public void showRedeemLife(Group root, UserParent user) {
         pauseTimeline();
-        setContext(root, user, level);
+        setContext(root, user);
 
-        String message = String.format(COINS_TEXT, userStatsManager.getCoinsCollected());
+        String message = String.format(COINS_TEXT, user.getCoinsCollected());
         BaseOverlay overlay = overlayFactory.createOverlay(root, "Continue level?", message, redeemLifeButton, null);
 
         redeemLifeTimer = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
@@ -99,41 +100,44 @@ public class LevelStateHandler {
         redeemLifeTimer.play();
     }
 
-    public void handleLevelLoss(Group root, UserPlane user) {
+    public void handleLevelLoss(Group root, UserParent user) {
         stopTimeline();
-        setContext(root, user, null);
+        setContext(root, user);
         user.destroyUser();
 
+        userStatsManager.setTotalCoinsCollected(user.getCoinsCollected());
+        userStatsManager.setTotalKillCount(user.getInLevelKillCount());
+
         String starImage = levelScore.getStarImagePath(0);
-        String message = String.format(COINS_TEXT, userStatsManager.getCoinsCollected());
+        String message = String.format(COINS_TEXT, user.getCoinsCollected());
 
         showOverlay("Level Failed!", message, lostOverlayButtons, starImage);
     }
 
     public void insufficientInventory() {
-        String message = String.format(COINS_TEXT, userStatsManager.getCoinsCollected());
+        String message = String.format(COINS_TEXT, userInstance.getCoinsCollected());
         showOverlay("Insufficient Balance!", message, nextButton, null);
     }
 
-    public void handleLevelPaused(Group root, UserPlane user) {
+    public void handleLevelPaused(Group root, UserParent user) {
         stopTimeline();
-        setContext(root, user, null);
+        setContext(root, user);
 
-        String message = String.format(COINS_TEXT, userStatsManager.getCoinsCollected());
+        String message = String.format(COINS_TEXT, user.getCoinsCollected());
         showOverlay("Paused", message, pauseOverlayButtons, null);
     }
 
     private void reviveLevel() {
         if (redeemLifeTimer != null) redeemLifeTimer.stop();
 
-        if (userStatsManager.getCoinsCollected() >= 2) {
+        if (userInstance.getCoinsCollected() >= 4) {
             System.out.println("Reviving current level...");
-            userStatsManager.decrementCoins();
+            userInstance.decrementCoinsCollected();
 
             if (userInstance.getHealth() <= 0) {
                 userInstance.reviveUserLife();
-            } else if (userStatsManager.getBulletCount() <= 0) {
-                levelInstance.bulletCount += 10;
+            } else if (userInstance.getBulletCount() <= 0) {
+                userInstance.reviveBulletCount();
             } else {
                 userInstance.reviveUserFuel();
             }
@@ -144,10 +148,9 @@ public class LevelStateHandler {
         }
     }
 
-    private void setContext(Group root, UserPlane user, LevelParent level) {
+    private void setContext(Group root, UserParent user) {
         this.root = root;
         this.userInstance = user;
-        this.levelInstance = level;
     }
 
     private void stopTimeline() {
@@ -169,7 +172,7 @@ public class LevelStateHandler {
 
     private void goToNextLevel() {
         if (levelManager.isLastLevel()) {
-            new YouWinScreen(new Group(), userInstance);
+            new YouWinScreen();
         } else {
             levelManager.incrementCurrentLevelNumber();
             levelManager.showLevelStartScreen(levelManager.getCurrentLevelNumber());

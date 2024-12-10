@@ -4,9 +4,8 @@ package com.example.demo.activityManagers;
 public class UserStatsManager {
     private static UserStatsManager instance;
 
-    private int coinsCollected;
-    private int numberOfKills;
-    private int bulletCount;
+    private int totalCoinsCollected;
+    private int totalKillCount;
     private LevelManager levelManager = LevelManager.getInstance();;
 
     // Protected array to hold level scores
@@ -14,9 +13,8 @@ public class UserStatsManager {
 
     // Private constructor to prevent instantiation from outside
     private UserStatsManager() {
-        this.coinsCollected = 0;
-        this.numberOfKills = 0;
-
+        this.totalCoinsCollected = 0;
+        this.totalKillCount = 0;
         levelScores = new int[LevelManager.TOTAL_LEVELS_PLUS1 - 1]; // Adjust size according to the number of levels
     }
 
@@ -26,19 +24,6 @@ public class UserStatsManager {
             instance = new UserStatsManager();
         }
         return instance;
-    }
-
-    // Method to get the score for a specific level
-    public int getCoinsCollected() {
-        return coinsCollected;
-    }
-
-    public void incrementCoinsCollected() {
-        coinsCollected++;
-    }
-
-    public int getNumberOfKills() {
-        return numberOfKills;
     }
 
     public void setLevelScore(int score) {
@@ -58,29 +43,21 @@ public class UserStatsManager {
         }
     }
 
-    public void incrementKillCount() {
-        numberOfKills++;
+    public void setTotalCoinsCollected(int value) {
+        totalCoinsCollected += value;
+    }
+
+    public int getTotalCoinsCollected() {
+        return totalCoinsCollected;
+    }
+
+    public void setTotalKillCount(int value) {
+        totalKillCount += value;
+    }
+
+    public int getTotalKillCount() {
+        return totalKillCount;
     }
 
 
-    public void decrementCoins() { // when life redeemed
-        coinsCollected -= 2;
-    }
-
-    public int getBulletCount() {
-        return bulletCount;
-    }
-
-    public void setBulletCount(int value) {
-        bulletCount = value;
-    }
-
-    public void decrementBulletCount() {
-        bulletCount--;
-    }
-
-    // Optionally, a method to reset the Singleton instance (e.g., for testing purposes)
-    public static void resetInstance() {
-        instance = null;
-    }
 }
