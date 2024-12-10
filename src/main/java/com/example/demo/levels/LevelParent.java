@@ -59,7 +59,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 		this.currentNumberOfMagnets = 0;
 		this.killCount = 0;
 		this.magnetismActivated = false;
-		this.magnetRadius = 200;
+		this.magnetRadius = 300;
 		this.frameCount = 0;
 
 		this.screenHeight = screenHeight;
@@ -176,7 +176,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 				1, // Maximum spawn at a time
 				1, // Spawn probability
 				currentNumberOfMagnets, // Current count
-				1 // Total allowed
+				2 // Total allowed
 		);
 	}
 
@@ -253,6 +253,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 	public void activateMagnet() {
 		frameCount++;
 		magnetismActivated = true;
+		user.initiateMagnetActivated();
 
 		actorManager.getActiveActors().stream()
 			.filter(actor -> actor instanceof Coins) // Process all Coins
@@ -261,8 +262,8 @@ public abstract class LevelParent extends Observable implements Updatable {
 				coinInactive.setMagnetActivated(true); // Ensure the magnet is activated for all coins
 			});
 
-		// Check if 5 frames have passed (100 * 50ms = 50000ms)
-		if (frameCount >= 100) {
+		// Check if 7 frames have passed (140 * 50ms = 50000ms)
+		if (frameCount >= 140) {
 			deactivateMagnet();
 			frameCount = 0; // Reset the frame count
 		}
@@ -275,6 +276,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 				.forEach(coinActive -> {
 					coinActive.setMagnetActivated(false);
 				});
+		user.endMagnetActivated();
 		magnetismActivated = false; // Deactivate the magnet after 5 seconds
 		currentNumberOfMagnets = 0;
 

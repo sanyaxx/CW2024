@@ -6,6 +6,7 @@ import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.FighterPlane;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
 import javafx.util.Duration;
 
 public class UserParent extends FighterPlane{
@@ -116,11 +117,27 @@ public class UserParent extends FighterPlane{
     }
 
     public void initiateMagnetActivated() {
+    // Create a pulsing effect for magnet activation
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), this);
+        scaleTransition.setFromX(1.0);
+        scaleTransition.setFromY(1.0);
+        scaleTransition.setToX(1.2);
+        scaleTransition.setToY(1.2);
+        scaleTransition.setCycleCount(4);
+        scaleTransition.setAutoReverse(true);
+        scaleTransition.play();
 
+        // Optionally, you can add a fade effect as well
+        FadeTransition fadeTransition = new FadeTransition(Duration.millis(500), this);
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.8);
+        fadeTransition.setCycleCount(4);
+        fadeTransition.setAutoReverse(true);
+        fadeTransition.play();
     }
 
     public void endMagnetActivated() {
-
+        this.setOpacity(1.0); // Restore full visibility if faded
     }
 
     public boolean isCollisionCooldownActive() {

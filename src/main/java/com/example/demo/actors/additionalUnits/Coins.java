@@ -79,16 +79,10 @@ public class Coins extends GameEntity {
     // Check if the coin is within the magnet radius
     public boolean isWithinMagnetRadius() {
         if (userVehicle instanceof UserPlane) {
-            double deltaX = userX - (this.getLayoutX() + this.getTranslateX()); // Coin's current position (X)
-            double deltaY = userY - (this.getLayoutY() + this.getTranslateY()); // Coin's current position (Y)
-
-            // Calculate the distance between the coin and the user
-            double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-            // Return true if the distance is within the magnet radius
-            return distance <= magnetRadius;
+          // Return true if the coin within half of the screen
+            return (this.getLayoutX() + this.getTranslateX()) <= AppStage.getInstance().getPrimaryStage().getWidth();
         }
-        return true; // UserTank
+        return true; // For user tank, all coins on screen are attracted
     }
 
     @Override
