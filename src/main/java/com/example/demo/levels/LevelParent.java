@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.example.demo.activityManagers.*;
 import com.example.demo.activityManagers.UserStatsManager;
+import com.example.demo.actors.Planes.friendlyPlanes.UserParent;
 import com.example.demo.actors.Updatable;
 import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.enemyPlanes.EnemyPlane;
@@ -37,20 +38,21 @@ public abstract class LevelParent extends Observable implements Updatable {
 	public final InputHandler inputHandler;
 
 	public int currentNumberOfEnemies;
-	protected int currentNumberOfCoins;
+	public int currentNumberOfCoins;
 	public int bulletCount;
 	public int killCount;
 	private final LevelView levelView;
 
-	public LevelParent(String backgroundImageName, double screenHeight, double screenWidth, int playerInitialHealth) {
+	public LevelParent(String backgroundImageName, double screenHeight, double screenWidth, int playerInitialHealth, int playerBulletCount) {
         this.root = new Group();
 		this.scene = new Scene(root, screenWidth, screenHeight);
-		this.user = new UserPlane(playerInitialHealth);
+		this.user = new UserPlane(playerInitialHealth, playerBulletCount);
 		this.background = new ImageView(new Image(getClass().getResource(backgroundImageName).toExternalForm()));
 		this.enemyMaximumYPosition = screenHeight - SCREEN_HEIGHT_ADJUSTMENT;
 		this.levelView = instantiateLevelView();
 		this.currentNumberOfEnemies = 0;
 		this.killCount = 0;
+		this.frameCount = 0;
 
 		this.screenHeight = screenHeight;
 		this.screenWidth = screenWidth;
@@ -97,6 +99,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 		handleDefensesPenetration();
 	}
 
+
 	protected void setupBackground() {
 		background.setFocusTraversable(true);
 		background.setFitHeight(screenHeight);
@@ -114,7 +117,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 				() -> {
 					if (!user.isCollisionCooldownActive()) { // Check if cooldown is not active
 						fireProjectile(); // Fire the projectile if cooldown is inactive
-						decrementBulletCount(); // Decrement bullet count
+						getUser().decrementBulletCount();
 					}
 				}
 		);
@@ -142,7 +145,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 
 	protected void spawnCoinUnits() {
 		currentNumberOfCoins += spawnHandler.spawnActors(
-				() -> new Coins(screenWidth, Math.random() * getEnemyMaximumYPosition()), // Supplier for new coins
+				() -> new Coins(screenWidth,100 + (Math.random() * (getEnemyMaximumYPosition() - 100)), magnetRadius), // Supplier for new coins
 				5, // Maximum spawn at a time
 				0.15, // Spawn probability
 				currentNumberOfCoins, // Current count
@@ -165,6 +168,9 @@ public abstract class LevelParent extends Observable implements Updatable {
 				if (actor instanceof EnemyPlane) {
 					currentNumberOfEnemies--;
 				}
+				if (actor instanceof Magnet) {
+					currentNumberOfMagnets = 0;
+				}
 				actor.takeDamage();
 			}
 		}
@@ -172,7 +178,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 
 	protected void updateLevelView() {
 		levelView.removeHearts(user.getHealth());
-		levelView.updateWinningParameterDisplay(killCount, bulletCount, userStatsManager.getCoinsCollected());
+		levelView.updateWinningParameterDisplay(user.getInLevelKillCount(), user.getBulletCount(), user.getCoinsCollected());
 	}
 
 	protected boolean entityHasPenetratedDefenses(GameEntity actor) {
@@ -199,7 +205,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 		return user.isDestroyed;
 	}
 
-	protected void initializeLevel(LevelParent level, GameEntity user){
+	protected void initializeLevel(LevelParent level, UserParent user){
 		actorManager.clearLevel();
 		actorManager.addActor(user);
 		GameLoop.getInstance().clearUpdatable();
@@ -210,7 +216,7 @@ public abstract class LevelParent extends Observable implements Updatable {
 	protected void checkGameOverConditions() {
 		// Check if the user has lost
 		if (hasLevelBeenLost()) {
-			levelStateHandler.showRedeemLife(root, user, this);
+			levelStateHandler.showRedeemLife(root, user);
 		}
 
 		// Check if the user has won

@@ -2,19 +2,20 @@ package com.example.demo.levels.Level3;
 
 import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.enemyPlanes.EnemyRocket;
+import com.example.demo.actors.Planes.friendlyPlanes.UserParent;
 import com.example.demo.actors.Planes.friendlyPlanes.UserTank;
+import com.example.demo.actors.additionalUnits.Coins;
+import com.example.demo.actors.additionalUnits.Magnet;
 import com.example.demo.levels.LevelParent;
 import com.example.demo.levels.LevelView;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 
 public class Level3 extends LevelParent {
 
     private static final String BACKGROUND_IMAGE_NAME = "/com/example/demo/images/level3Background.jpg";
     private static final int PLAYER_INITIAL_HEALTH = 5;
+    private static final int PLAYER_BULLET_COUNT = 50;
     private static final int SURVIVAL_TIME_SECONDS = 15; // Time to survive in seconds
     private final UserTank user;
     private int frameCount = 0;
@@ -24,14 +25,11 @@ public class Level3 extends LevelParent {
     private int remainingTime;
 
     public Level3(double screenHeight, double screenWidth) {
-        super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
-        this.user = new UserTank(PLAYER_INITIAL_HEALTH);
+        super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH, PLAYER_BULLET_COUNT);
+        this.user = new UserTank(PLAYER_INITIAL_HEALTH, PLAYER_BULLET_COUNT);
         this.background = getBackground();
         this.remainingTime = SURVIVAL_TIME_SECONDS;
-
-        this.bulletCount = 50;
-        userStatsManager.setBulletCount(50);
-
+        this.magnetRadius = 500;
         initializeLevel(this, user);
     }
 
@@ -42,12 +40,11 @@ public class Level3 extends LevelParent {
         updateLevelView();
         updateSurvivalTimer();
         checkGameOverConditions();
-
     }
 
     @Override
     protected boolean hasLevelBeenLost() {
-        return user.isDestroyed || bulletCount == 0; // User loss condition
+        return user.isDestroyed || user.getBulletCount() == 0; // User loss condition
     }
 
     @Override
@@ -57,14 +54,14 @@ public class Level3 extends LevelParent {
 
     @Override
     protected LevelView instantiateLevelView() {
-        levelView = new LevelViewLevelThree(getRoot(), PLAYER_INITIAL_HEALTH, bulletCount, SURVIVAL_TIME_SECONDS);
+        levelView = new LevelViewLevelThree(getRoot(), PLAYER_INITIAL_HEALTH, PLAYER_BULLET_COUNT, SURVIVAL_TIME_SECONDS, 0);
         return levelView;
     }
 
     @Override
     protected void updateLevelView() {
         levelView.removeHearts(user.getHealth());
-        levelView.updateWinningParameterDisplay(bulletCount, remainingTime); // Update the display
+        levelView.updateWinningParameterDisplay(user.getBulletCount(), remainingTime, user.getCoinsCollected()); // Update the display
     }
 
     @Override
@@ -84,24 +81,30 @@ public class Level3 extends LevelParent {
         }
     }
 
-//    protected void spawnCoinUnits() {
-//    if (Math.random() < 0.03) { // Adjust the probability of firing
-//        int direction = (int) (Math.random() * 4); // 0: North, 1: East, 2: South, 3: West
-//        GameEntity newEnemyRocket = switch (direction) {
-//            case 0 -> new Coins(screenWidth / 2 - 50, 0, direction);
-//            case 1 -> new Coins(screenWidth, 300, direction);
-//            case 2 -> new Coins(screenWidth / 2 - 50, screenHeight, direction);
-//            case 3 -> new Coins(0, 300, direction);
-//            default -> null; // Fallback
-//        };
-//        if (newEnemyRocket != null) {
-//            actorManager.addActor(newEnemyRocket);
-//        }
-//    }
+    protected void spawnMagnet() {
+    if (Math.random() < 0.009) { // Adjust the probability of spawning
+        int direction = (int) (Math.random() * 4); // 0: North, 1: East, 2: South, 3: West
+        GameEntity newMagnet = switch (direction) {
+            case 0 -> new Magnet(screenWidth / 2 - 50, 0, direction);
+            case 1 -> new Magnet(screenWidth, 350, direction);
+            case 2 -> new Magnet(screenWidth / 2 - 50, screenHeight, direction);
+            case 3 -> new Magnet(0, 350, direction);
+            default -> null; // Fallback
+        };
+        if (newMagnet != null) {
+            actorManager.addActor(newMagnet);
+        }}
+    }
 
-
-    @Override
-    protected void spawnCoinUnits() {}
+    protected void spawnCoinUnits() {
+        currentNumberOfCoins += spawnHandler.spawnActors(
+                () -> new Coins(screenWidth, Math.random() * getEnemyMaximumYPosition(), magnetRadius), // Supplier for new coins
+                10, // Maximum spawn at a time
+                0.15, // Spawn probability
+                currentNumberOfCoins, // Current count
+                20 // Total allowed
+        );
+    }
 
     @Override
     protected void fireProjectile() {
@@ -119,7 +122,7 @@ public class Level3 extends LevelParent {
                 user::faceWest,null,
                 () -> {
                     fireProjectile();
-                    decrementBulletCount();
+                    user.decrementBulletCount();
                 }
         );
         background.setOnKeyPressed(inputHandler.getKeyPressHandler(user));
@@ -132,6 +135,9 @@ public class Level3 extends LevelParent {
             if (entityHasPenetratedDefenses(actor)) {
                 if (actor instanceof EnemyRocket) {
                     currentNumberOfEnemies--;
+                }
+                if (actor instanceof Magnet) {
+                    currentNumberOfMagnets = 0;
                 }
                 actor.takeDamage();
             }
@@ -156,16 +162,15 @@ public class Level3 extends LevelParent {
     }
 
     @Override
-    protected final void checkGameOverConditions() {
+    protected void checkGameOverConditions() {
         // Check if the user has lost
         if (hasLevelBeenLost()) {
-            levelStateHandler.handleLevelLoss(getRoot(), getUser());
+            levelStateHandler.showRedeemLife(getRoot(), user);
         }
 
         // Check if the user has won
         if (hasLevelBeenWon()) {
-            levelStateHandler.handleLevelCompletion(getRoot(), getUser());
+            levelStateHandler.handleLevelCompletion(getRoot(), user);
         }
     }
-
 }

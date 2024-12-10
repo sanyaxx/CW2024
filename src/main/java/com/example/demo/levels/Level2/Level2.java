@@ -8,24 +8,22 @@ public class Level2 extends LevelParent {
 
 	private static final String BACKGROUND_IMAGE_NAME = "/com/example/demo/images/level2Background.jpg";
 	private static final int PLAYER_INITIAL_HEALTH = 5;
+	private static final int PLAYER_BULLET_COUNT = 100;
 	private final Boss boss;
 	private final int bossHealth;
 	private LevelViewLevelTwo levelView;
 
     public Level2(double screenHeight, double screenWidth) {
-		super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
+		super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH, PLAYER_BULLET_COUNT);
         boss = new Boss(levelView);
 		bossHealth = boss.getHealth();
-
-		this.bulletCount = 100;
-		userStatsManager.setBulletCount(100);
 
 		initializeLevel(this, getUser());
     }
 
 	@Override
 	protected boolean hasLevelBeenLost() {
-		return userIsDestroyed() || bulletCount == 0; // User loss condition
+		return userIsDestroyed() || getUser().getBulletCount() == 0; // User loss condition
 	}
 
 	@Override
@@ -49,14 +47,14 @@ public class Level2 extends LevelParent {
 
 	@Override
 	protected LevelView instantiateLevelView() {
-		levelView = new LevelViewLevelTwo(getRoot(), PLAYER_INITIAL_HEALTH, bossHealth, bulletCount);
+		levelView = new LevelViewLevelTwo(getRoot(), PLAYER_INITIAL_HEALTH, bossHealth, PLAYER_BULLET_COUNT, getUser().getCoinsCollected());
 		return levelView;
 	}
 
 	@Override
 	protected void updateLevelView() {
 		levelView.removeHearts(getUser().getHealth());
-		levelView.updateWinningParameterDisplay(boss.getHealth(), bulletCount, userStatsManager.getCoinsCollected());
+		levelView.updateWinningParameterDisplay(boss.getHealth(), getUser().getBulletCount(), getUser().getCoinsCollected());
 	}
 
 	@Override

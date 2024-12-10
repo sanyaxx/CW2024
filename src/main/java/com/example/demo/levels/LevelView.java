@@ -15,11 +15,13 @@ public class LevelView {
 	public DisplayWinningParameter displayWinningParameter;
 	public final PauseButton pauseButton;
 
-	public LevelView(Group root, int heartsToDisplay, int bulletCount) {
+	public LevelView(Group root, int heartsToDisplay, int bulletCount, int coinsCollected) {
 		this.root = root;
 		this.heartDisplay = new DisplayHeart(HEART_DISPLAY_X_POSITION, HEART_DISPLAY_Y_POSITION, heartsToDisplay);
-
-		this.displayWinningParameter = new DisplayWinningParameter("/com/example/demo/images/killCount.png", 0, "/com/example/demo/images/ammoCount.png", bulletCount, "/com/example/demo/images/coin.png", 0);
+		this.displayWinningParameter = new DisplayWinningParameter(
+				"/com/example/demo/images/killCount.png", 0,
+				"/com/example/demo/images/ammoCount.png", bulletCount,
+				"/com/example/demo/images/coin.png", coinsCollected);
 		this.pauseButton = new PauseButton();
 	}
 

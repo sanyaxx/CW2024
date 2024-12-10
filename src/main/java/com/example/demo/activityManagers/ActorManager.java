@@ -1,7 +1,10 @@
 package com.example.demo.activityManagers;
 
 import com.example.demo.actors.GameEntity;
+import com.example.demo.actors.Planes.friendlyPlanes.UserParent;
+import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
 import com.example.demo.actors.Updatable;
+import com.example.demo.actors.additionalUnits.Coins;
 import javafx.scene.Group;
 
 import java.util.Collections;
@@ -81,6 +84,15 @@ public class ActorManager implements Updatable {
             }
         }
     }
+
+    public UserParent getUserVehicle() {
+        return activeActors.stream()
+                .filter(actor -> actor instanceof UserParent)
+                .map(actor -> (UserParent) actor) // Cast the filtered actor to UserPlane
+                .findFirst() // Get the first UserPlane if present
+                .orElse(null); // Return null if no UserPlane is found
+    }
+
 
     // Set the root node
     public void setRoot(Group rootToSet) {

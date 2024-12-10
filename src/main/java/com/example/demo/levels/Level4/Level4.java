@@ -3,10 +3,7 @@ package com.example.demo.levels.Level4;
 import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.enemyPlanes.EnemyRocket;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
-import com.example.demo.actors.additionalUnits.Coins;
-import com.example.demo.actors.additionalUnits.FinishLine;
-import com.example.demo.actors.additionalUnits.FuelToken;
-import com.example.demo.actors.additionalUnits.Obstacle;
+import com.example.demo.actors.additionalUnits.*;
 import com.example.demo.levels.LevelParent;
 import com.example.demo.levels.LevelView;
 import javafx.event.EventHandler;
@@ -20,31 +17,29 @@ public class Level4 extends LevelParent {
 
     private static final String BACKGROUND_IMAGE_NAME = "/com/example/demo/images/level4Background.jpg";
     private static final int PLAYER_INITIAL_HEALTH = 5;
-    private static final int SURVIVAL_TIME_SECONDS = 30; // Time to survive in seconds
+    private static final int SURVIVAL_TIME_SECONDS = 9; // Time to survive in seconds
+    private static final int PLAYER_FUEL_CAPACITY = 8;
+    private static final int PLAYER_BULLET_COUNT = 100;
     private static double OBSTACLE_DIMENSIONS = Obstacle.getDimensions();
     private final UserPlane user;
     private int frameCount = 0;
 
     private int currentNumberOfFuelTokens;
     private int currentNumberOfObstacles;
-    private int currentNumberOfFinishLines;
 
     private ImageView background;
     private LevelViewLevelFour levelView;
     private int remainingTime;
     private boolean isFinishLineSpawned;
-    public int fuelCapacity;
 
     public Level4(double screenHeight, double screenWidth) {
-        super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
+        super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH, PLAYER_BULLET_COUNT);
         this.user = getUser();
+        user.setFuelCapacity(PLAYER_FUEL_CAPACITY);
         this.background = getBackground();
 
         this.remainingTime = SURVIVAL_TIME_SECONDS;
         this.isFinishLineSpawned = false;
-
-        this.bulletCount = 50;
-        userStatsManager.setBulletCount(50);
         
         initializeLevel(this, user);
     }
@@ -74,7 +69,7 @@ public class Level4 extends LevelParent {
 
     @Override
     protected boolean hasLevelBeenLost() {
-        return ((user.isDestroyed) || ((user.getFuelLeft() == 0) && remainingTime > 0)) || bulletCount == 0; // User loss condition
+        return ((user.isDestroyed) || ((user.getFuelLeft() == 0) && remainingTime > 0)) || user.getBulletCount() == 0; // User loss condition
     }
 
     @Override
@@ -84,20 +79,20 @@ public class Level4 extends LevelParent {
 
     @Override
     protected LevelView instantiateLevelView() {
-        levelView = new LevelViewLevelFour(getRoot(), PLAYER_INITIAL_HEALTH, SURVIVAL_TIME_SECONDS, bulletCount);
+        levelView = new LevelViewLevelFour(getRoot(), PLAYER_INITIAL_HEALTH, PLAYER_FUEL_CAPACITY, PLAYER_BULLET_COUNT, getUser().getCoinsCollected());
         return levelView;
     }
 
     @Override
     protected void updateLevelView() {
         levelView.removeHearts(user.getHealth());
-        levelView.updateWinningParameterDisplay(user.getFuelLeft(), bulletCount, userStatsManager.getCoinsCollected());
+        levelView.updateWinningParameterDisplay(user.getFuelLeft(), user.getBulletCount(), user.getCoinsCollected());
     }
 
     @Override
     protected void spawnEnemyUnits() {
         currentNumberOfEnemies += spawnHandler.spawnActors(
-            () -> new EnemyRocket(screenWidth, Math.random() * getEnemyMaximumYPosition()/2, 1), // Supplier for new enemies
+            () -> new EnemyRocket(screenWidth, (100 + (Math.random() * (getEnemyMaximumYPosition() - 100)))/2, 1), // Supplier for new enemies
             5, // Maximum spawn at a time
             0.03, // Spawn probability 0.03
             currentNumberOfEnemies, // Current count
@@ -107,7 +102,7 @@ public class Level4 extends LevelParent {
 
     protected void spawnFuelUnits() {
         currentNumberOfFuelTokens += spawnHandler.spawnActors(
-            () -> new FuelToken(screenWidth / 2 * Math.random(), Math.random() * (screenHeight / 2)), // Supplier for new enemies
+            () -> new FuelToken(screenWidth / 0.75 * Math.random(),(100 + (Math.random() * (getEnemyMaximumYPosition() - 100)))/2), // Supplier for new enemies
             4, // Maximum spawn at a time
             0.2, // Spawn probability 0.03
             currentNumberOfFuelTokens, // Current count
@@ -119,7 +114,7 @@ public class Level4 extends LevelParent {
         currentNumberOfObstacles += spawnHandler.spawnActors(
             () -> new Obstacle(screenWidth - OBSTACLE_DIMENSIONS, screenHeight - OBSTACLE_DIMENSIONS), // Supplier for new enemies
             5, // Maximum spawn at a time
-            0.03, // Spawn probability 0.03
+            0.06, // Spawn probability 0.03
             currentNumberOfObstacles, // Current count
             10 // Total allowed
         );
@@ -149,6 +144,9 @@ public class Level4 extends LevelParent {
                     currentNumberOfObstacles--;
                     actorManager.removeActor(actor);
                 }
+                else if (actor instanceof Magnet) {
+                    currentNumberOfMagnets--;
+                }
                 actor.takeDamage();
             }
         }
@@ -165,7 +163,7 @@ public class Level4 extends LevelParent {
                 () -> {
                     if (!user.isCollisionCooldownActive()) { // Check if cooldown is not active
                         fireProjectile(); // Fire the projectile if cooldown is inactive
-                        decrementBulletCount(); // Decrement bullet count
+                        user.decrementBulletCount(); // Decrement bullet count
                     }
                 }
         );

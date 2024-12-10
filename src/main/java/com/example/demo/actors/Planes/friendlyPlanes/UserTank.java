@@ -5,7 +5,7 @@ import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.FighterPlane;
 import com.example.demo.controller.AppStage;
 
-public class UserTank extends FighterPlane {
+public class UserTank extends UserParent {
 
     private static final String IMAGE_NAME = "userTank.png";
     private static final double INITIAL_X_POSITION = (AppStage.getInstance().getPrimaryStage().getWidth())/2 - 100;
@@ -15,12 +15,8 @@ public class UserTank extends FighterPlane {
     private static int PROJECTILE_Y_POSITION = 300;
     private static int rotationAngle = 0;
 
-    public UserTank(int initialHealth) {
-        super(IMAGE_NAME, IMAGE_HEIGHT, INITIAL_X_POSITION, INITIAL_Y_POSITION, initialHealth);
-    }
-
-    @Override
-    public void updatePosition() {
+    public UserTank(int initialHealth, int bulletCount) {
+        super(IMAGE_NAME, IMAGE_HEIGHT, INITIAL_X_POSITION, INITIAL_Y_POSITION, initialHealth, bulletCount);
     }
 
     public void faceNorth() {
@@ -57,23 +53,8 @@ public class UserTank extends FighterPlane {
     }
 
     @Override
-    public boolean isFriendly() {
-        return true;
-    }
-
-    @Override
     public GameEntity fireProjectile() {
         return new UserProjectile(PROJECTILE_X_POSITION, PROJECTILE_Y_POSITION, rotationAngle);
-    }
-
-    @Override
-    public boolean isCollectible() {
-        return false;
-    }
-
-    @Override
-    public void takeDamage() {
-        super.takeDamage();
     }
 
 }
