@@ -2,11 +2,13 @@ package com.example.demo.activityManagers;
 
 import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.FighterPlane;
+import com.example.demo.actors.Planes.friendlyPlanes.UserParent;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
 import com.example.demo.actors.Projectiles.Projectile;
 import com.example.demo.actors.Projectiles.userProjectiles.UserProjectile;
 import com.example.demo.actors.additionalUnits.Coins;
 import com.example.demo.actors.additionalUnits.FuelToken;
+import com.example.demo.actors.additionalUnits.Magnet;
 import com.example.demo.levels.LevelParent;
 
 import java.util.List;
@@ -41,10 +43,10 @@ public class CollisionHandler {
     }
 
     protected void handleCollectibleInteraction(GameEntity actor1, GameEntity actor2) {
-        if (actor1.isCollectible() && !actor2.isCollectible() && actor2 instanceof UserPlane) {
+        if (actor1.isCollectible() && !actor2.isCollectible() && actor2 instanceof UserParent) {
             actor1.takeDamage();
             handleCollectibleEffect(actor1);
-        } else if (!actor1.isCollectible() && actor1 instanceof UserPlane && actor2.isCollectible()) {
+        } else if (!actor1.isCollectible() && actor1 instanceof UserParent && actor2.isCollectible()) {
             actor2.takeDamage();
             handleCollectibleEffect(actor2);
         }
@@ -58,8 +60,7 @@ public class CollisionHandler {
         if ((actor1 instanceof FighterPlane && actor2 instanceof FighterPlane) ||
                 (actor1 instanceof UserProjectile && actor2 instanceof FighterPlane) ||
                 (actor1 instanceof FighterPlane && actor2 instanceof UserProjectile)) {
-            levelParent.userStatsManager.incrementKillCount();
-            levelParent.killCount++;
+            levelParent.actorManager.getUserVehicle().incrementKillCount();
             if (levelParent.currentNumberOfEnemies > 0) { // ensures that the number is only decremented if > 0
                 levelParent.currentNumberOfEnemies--;
             }
@@ -78,9 +79,14 @@ public class CollisionHandler {
 
     protected void handleCollectibleEffect(GameEntity actor) {
         if (actor instanceof Coins) {
-            levelParent.userStatsManager.incrementCoinsCollected();
+            levelParent.actorManager.getUserVehicle().incrementCoinsCollected();
+            if (levelParent.currentNumberOfCoins > 0) {
+                levelParent.currentNumberOfCoins--;
+            }
         } else if (actor instanceof FuelToken) {
-            levelParent.getUser().incrementFuelLeft();
+            levelParent.actorManager.getUserVehicle().incrementFuelLeft();
+        } else if (actor instanceof Magnet) {
+            levelParent.activateMagnet();
         }
     }
 
