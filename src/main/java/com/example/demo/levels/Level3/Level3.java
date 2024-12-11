@@ -161,16 +161,16 @@ public class Level3 extends LevelParent {
         }
     }
 
-    @Override
+    // not overridden because user type is different in this level
     protected void checkGameOverConditions() {
         // Check if the user has lost
         if (hasLevelBeenLost()) {
-            levelStateHandler.showRedeemLife(getRoot(), user);
+            overlayHandler.showRedeemLife(getRoot(), user);
         }
 
         // Check if the user has won
         if (hasLevelBeenWon()) {
-            levelStateHandler.handleLevelCompletion(getRoot(), user);
+            overlayHandler.handleLevelCompletion(getRoot(), user);
         }
     }
 }

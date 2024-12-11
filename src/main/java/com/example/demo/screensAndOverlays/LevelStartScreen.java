@@ -80,8 +80,7 @@ public class LevelStartScreen {
             case 3:
                 return "→ Use arrow keys to change direction.\n" +
                         "→ SPACE to shoot projectiles.\n" +
-                        "→ Remember to collect coins!\n"+
-                        "→ THIS LEVEL MUST BE PASSED IN ONE GO (no life redemptions!!!)";
+                        "→ Remember to collect coins!\n";
             case 4:
                 return "→ UP arrow key to move.\n" +
                         "→ Plane automatically descends when UP key released.\n" +

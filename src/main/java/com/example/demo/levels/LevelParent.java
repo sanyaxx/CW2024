@@ -37,11 +37,11 @@ public abstract class LevelParent extends Observable implements Updatable {
 	protected SpawnHandler spawnHandler;
 	public final UserStatsManager userStatsManager;
 	public final InputHandler inputHandler;
+	public final OverlayHandler overlayHandler;
 
 	public int currentNumberOfEnemies;
 	public int currentNumberOfCoins;
 	public int currentNumberOfMagnets;
-	public int bulletCount;
 	public int killCount;
 	private final LevelView levelView;
 	public boolean magnetismActivated;
@@ -72,8 +72,9 @@ public abstract class LevelParent extends Observable implements Updatable {
 		this.spawnHandler = new SpawnHandler(actorManager, screenWidth, screenHeight);
 		this.userStatsManager = UserStatsManager.getInstance();
 		this.inputHandler = new InputHandler();
+		this.overlayHandler = OverlayHandler.getInstance();
 
-		levelView.pauseButton.setOnPauseAction(() -> levelStateHandler.handleLevelPaused(root, user));
+		levelView.pauseButton.setOnPauseAction(() -> overlayHandler.handleLevelPaused(root, user));
 		initializeActorManager();
 	}
 
@@ -237,12 +238,12 @@ public abstract class LevelParent extends Observable implements Updatable {
 	protected void checkGameOverConditions() {
 		// Check if the user has lost
 		if (hasLevelBeenLost()) {
-			levelStateHandler.showRedeemLife(root, user);
+			overlayHandler.showRedeemLife(root, user);
 		}
 
 		// Check if the user has won
 		if (hasLevelBeenWon()) {
-			levelStateHandler.handleLevelCompletion(root, user);
+			overlayHandler.handleLevelCompletion(root, user);
 		}
 	}
 

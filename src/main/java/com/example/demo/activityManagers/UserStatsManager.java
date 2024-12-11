@@ -1,12 +1,16 @@
 package com.example.demo.activityManagers;
 
 
+import com.example.demo.actors.Planes.friendlyPlanes.UserParent;
+import com.example.demo.functionalClasses.GenerateLevelScore;
+
 public class UserStatsManager {
     private static UserStatsManager instance;
 
     private int totalCoinsCollected;
     private int totalKillCount;
-    private LevelManager levelManager = LevelManager.getInstance();;
+    private final LevelManager levelManager = LevelManager.getInstance();
+    private final GenerateLevelScore generateLevelScore = GenerateLevelScore.getInstance();
 
     // Protected array to hold level scores
     protected int[] levelScores;
@@ -41,6 +45,16 @@ public class UserStatsManager {
         } else {
             throw new IndexOutOfBoundsException("Invalid level index: " + level);
         }
+    }
+
+    public int calculateLevelScore(UserParent user) {
+        return generateLevelScore.calculateScore(user.getHealth(), user.getBulletCount());
+    }
+
+    public void storeLevelStatistics(UserParent user, int totalKillCount, int totalCoinsCollected) {
+        setLevelScore(calculateLevelScore(user));
+        setTotalKillCount(totalKillCount);
+        setTotalCoinsCollected(totalCoinsCollected);
     }
 
     public void setTotalCoinsCollected(int value) {
