@@ -1,9 +1,17 @@
 package com.example.demo.functionalClasses;
 
 public class GenerateLevelScore {
+    private static GenerateLevelScore instance;
 
     // Constructor for lives and coins
     public GenerateLevelScore() {
+    }
+
+    public static GenerateLevelScore getInstance() {
+        if (instance == null) {
+            instance = new GenerateLevelScore();
+        }
+        return instance;
     }
 
     // Method to get star image path based on score
