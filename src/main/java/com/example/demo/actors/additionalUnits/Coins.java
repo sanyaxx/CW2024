@@ -4,7 +4,6 @@ import com.example.demo.activityManagers.ActorManager;
 import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.friendlyPlanes.UserParent;
 import com.example.demo.actors.Planes.friendlyPlanes.UserPlane;
-import com.example.demo.actors.Planes.friendlyPlanes.UserTank;
 import com.example.demo.controller.AppStage;
 
 public class Coins extends GameEntity {

@@ -5,7 +5,7 @@ public interface Collidable {
 	void takeDamage();
 
 	boolean isFriendly();
-
-	void setPosition(double x, double y);
+//
+//	void setPosition(double x, double y);
 
 }

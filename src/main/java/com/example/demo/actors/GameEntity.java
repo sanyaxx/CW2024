@@ -24,8 +24,8 @@ public abstract class GameEntity extends ActiveActor implements Collidable, Coll
     @Override
 	public abstract boolean isCollectible();
 
-	public void setPosition(double x, double y) {
-		this.setLayoutX(x);
-		this.setLayoutY(y);
-	}
+//	public void setPosition(double x, double y) {
+//		this.setLayoutX(x);
+//		this.setLayoutY(y);
+//	}
 }

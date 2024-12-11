@@ -1,7 +1,6 @@
 package com.example.demo.actors.Planes.friendlyPlanes;
 
 import com.example.demo.activityManagers.ActorManager;
-import com.example.demo.activityManagers.LevelManager;
 import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.FighterPlane;
 import javafx.animation.AnimationTimer;
@@ -142,10 +141,6 @@ public class UserParent extends FighterPlane{
 
     public boolean isCollisionCooldownActive() {
         return collisionCooldownActive;
-    }
-
-    public void setBulletCount(int bulletCount) {
-        this.bulletCount = bulletCount;
     }
 
     public int getBulletCount() {
