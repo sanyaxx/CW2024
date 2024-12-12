@@ -1,3 +1,8 @@
+/**
+ * This is the module descriptor for the "com.example.demo" module.
+ * It defines the module's dependencies and the packages that are exposed to other modules.
+ */
+
 module com.example.demo {
     requires javafx.controls;
     requires javafx.fxml;
@@ -8,7 +13,6 @@ module com.example.demo {
     opens com.example.demo.levels to javafx.fxml;
     opens com.example.demo.levels.Level1 to javafx.fxml;
     opens com.example.demo.activityManagers to javafx.fxml;
-//    opens com.example.demo.gameConfig to javafx.fxml;
     opens com.example.demo.levels.Level2 to javafx.fxml;
     opens com.example.demo.levels.Level3 to javafx.fxml;
     opens com.example.demo.levels.Level4 to javafx.fxml;
@@ -21,7 +25,8 @@ module com.example.demo {
     opens com.example.demo.actors.Projectiles.userProjectiles to javafx.fxml;
     opens com.example.demo.actors.additionalUnits to javafx.fxml;
     opens com.example.demo.notUsed to javafx.fxml;
-    opens com.example.demo.screensAndOverlays to javafx.fxml;
-    opens com.example.demo.functionalClasses to javafx.fxml;
+    opens com.example.demo.displays to javafx.fxml;
+//    opens com.example.demo.functionalClasses to javafx.fxml;
     opens com.example.demo.controller to javafx.fxml;
+    exports com.example.demo;
 }
