@@ -146,6 +146,7 @@ public class LevelStateHandler {
     /**
      * Toggles the volume of the game (mute/unmute).
      */
+
     public void toggleAudio() {
         System.out.println("Volume toggled...");
         audioHandler.toggleAudio();

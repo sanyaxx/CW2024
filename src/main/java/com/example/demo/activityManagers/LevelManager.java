@@ -10,6 +10,9 @@ import java.beans.PropertyChangeSupport;
  * It tracks the current level, displays level start screens, and handles level transitions.
  * This class uses the Singleton design pattern to ensure a single instance is created,
  * providing a consistent way of managing levels.
+ *
+ * <p>Original Source: This class is newly introduced to centralize level management and avoid mixing level logic
+ *  * with gameplay logic previously found in LevelParent.</p>
  */
 public class LevelManager extends PropertyChangeSupport {
     /** Singleton instance of LevelManager. */
@@ -21,10 +24,10 @@ public class LevelManager extends PropertyChangeSupport {
     /** The total number of levels in the game plus one for boundary tracking. */
     public static final int TOTAL_LEVELS_PLUS1 = 4 + 1;
 
+
     /**
-     * Private constructor for LevelManager.
-     * Initializes the current level number to 1 and passes the LevelManager class as a parameter
-     * to the superclass for property change support.
+     * Private constructor initializes currentLevelNumber to 1.
+     * This ensures the LevelManager starts at level 1 when instantiated.
      */
     private LevelManager() {
         super(LevelManager.class);
@@ -44,19 +47,23 @@ public class LevelManager extends PropertyChangeSupport {
         return instance;
     }
 
-    /**
-     * Displays the level start screen for the specified level number.
-     *
-     * @param levelNumber The level number for which the start screen should be displayed.
-     */
-    public void showLevelStartScreen(int levelNumber) {
-        LevelStartScreen levelStartScreen = new LevelStartScreen(levelNumber);
-        levelStartScreen.show();
-    }
 
     /**
      * Increments the current level number by 1, ensuring it does not exceed the total number of levels.
      * This method is typically called when a level is completed.
+     * Shows the level start screen for the given level number.
+     * Displays the level's name and objective to the player.
+     *
+     * @param levelNumber The level number for which to show the start screen.
+     */
+    public void showLevelStartScreen(int levelNumber) {
+        LevelStartScreen levelStartScreen = new LevelStartScreen(levelNumber);
+        levelStartScreen.show(); // Show the level start screen with level name and aim
+    }
+
+    /**
+     * Increments the current level number, ensuring that it doesn't exceed the total number of levels.
+     * This method is called when a level is completed, advancing to the next level.
      */
     public void incrementCurrentLevelNumber() {
         if (currentLevelNumber < TOTAL_LEVELS_PLUS1 - 1) {
@@ -70,6 +77,9 @@ public class LevelManager extends PropertyChangeSupport {
      * Retrieves the name of the next level.
      *
      * @return The fully qualified name of the next level's class, or {@code null} if there are no more levels.
+     * Retrieves the name of the next level based on the current level number.
+     *
+     * @return The name of the next level, or null if there are no more levels.
      */
     public String getNextLevelName() {
         if (currentLevelNumber < TOTAL_LEVELS_PLUS1) {
@@ -99,6 +109,15 @@ public class LevelManager extends PropertyChangeSupport {
      */
     public boolean isLastLevel() {
         return currentLevelNumber == TOTAL_LEVELS_PLUS1 - 1;
+
+    /**
+     * Checks if the current level is the last level in the game.
+     * This helps determine if the game is about to end.
+     *
+     * @return True if the current level is the last level, false otherwise.
+     */
+    public boolean isLastLevel() {
+        return (currentLevelNumber == TOTAL_LEVELS_PLUS1 - 1); // Check if the current level is the last level
     }
 
     /**
@@ -111,7 +130,8 @@ public class LevelManager extends PropertyChangeSupport {
     }
 
     /**
-     * Sets the current level number to the specified value.
+     * Sets the current level number to a specified value.
+     * This allows for manual level progression or resetting the level number.
      *
      * @param number The new level number to set.
      */
@@ -136,4 +156,7 @@ public class LevelManager extends PropertyChangeSupport {
     public void removeLevelChangeListener(PropertyChangeListener listener) {
         removePropertyChangeListener(listener);
     }
+        currentLevelNumber = number; // Setter for current level number
+    }
+
 }

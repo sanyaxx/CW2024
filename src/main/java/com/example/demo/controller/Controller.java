@@ -23,6 +23,12 @@ import com.example.demo.displays.StartScreen;
  * With reference to the old Controller code,
  * 'implements Observer' has been modified to implements 'PropertyChangeListener'
  * since Observer was deprecated.
+ *<p>
+ * In the previous version of this class, the game only launched into {@code LevelOne} directly, with a fixed reference to
+ * that level. The new version has been generalized to allow any level to be launched by dynamically loading the
+ * level class using reflection. This provides flexibility and allows the game to easily transition between different levels.
+ * The class also shows a start screen before beginning the game, ensuring a smoother user experience.
+ * </p>
  * </p>
  */
 public class Controller implements PropertyChangeListener {
@@ -48,8 +54,8 @@ public class Controller implements PropertyChangeListener {
 	 * Launches the game by displaying the start screen.
 	 * This method provides a start screen for the player before transitioning to the first level.
 	 *
-	 * @throws SecurityException        If there is a security issue during screen initialization.
-	 * @throws IllegalArgumentException If the arguments provided during screen initialization are invalid.
+	 * @throws SecurityException If there is a security issue during the instantiation.
+	 * @throws IllegalArgumentException If the arguments for invoking methods are invalid.
 	 */
 	public void launchGame() throws SecurityException, IllegalArgumentException {
 		StartScreen startScreen = new StartScreen(stage);
@@ -81,7 +87,10 @@ public class Controller implements PropertyChangeListener {
 
 	/**
 	 * Displays an error message in an alert box when an exception occurs.
-	 * This method is used to handle errors during level transitions or initialization.
+	 * <p>
+	 * This method is invoked when an error occurs during the process of transitioning between levels.
+	 * The exception type is displayed to help the developer debug the issue.
+	 *</p>
 	 *
 	 * @param e The exception that was caught and needs to be displayed.
 	 */
