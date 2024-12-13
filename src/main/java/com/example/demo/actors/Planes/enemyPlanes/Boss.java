@@ -61,7 +61,7 @@ public class Boss extends FighterPlane {
 	/**
 	 * The initial health of the boss.
 	 */
-	private static final int HEALTH = 5;
+	private static final int HEALTH = 15;
 
 	/**
 	 * The frequency at which the boss changes its movement pattern.

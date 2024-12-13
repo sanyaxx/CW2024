@@ -22,7 +22,7 @@ public class Level4 extends LevelParent {
     private static final int PLAYER_INITIAL_HEALTH = 5;
 
     /** The amount of time the player must survive in seconds. */
-    private static final int SURVIVAL_TIME_SECONDS = 9;
+    private static final int SURVIVAL_TIME_SECONDS = 45;
 
     /** The fuel capacity of the player at the start of the level. */
     private static final int PLAYER_FUEL_CAPACITY = 8;

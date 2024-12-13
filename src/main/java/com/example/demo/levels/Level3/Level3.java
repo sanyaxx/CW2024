@@ -28,12 +28,12 @@ public class Level3 extends LevelParent {
     /**
      * The initial bullet count of the player at the start of Level 3.
      */
-    private static final int PLAYER_BULLET_COUNT = 50;
+    private static final int PLAYER_BULLET_COUNT = 70;
 
     /**
      * The time (in seconds) the player needs to survive in Level 3.
      */
-    private static final int SURVIVAL_TIME_SECONDS = 15;
+    private static final int SURVIVAL_TIME_SECONDS = 45;
 
     /**
      * The user-controlled tank in Level 3.
