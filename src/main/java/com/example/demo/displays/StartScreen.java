@@ -1,6 +1,5 @@
-package com.example.demo.screensAndOverlays;
+package com.example.demo.displays;
 
-import com.example.demo.activityManagers.ButtonFactory;
 import com.example.demo.activityManagers.LevelManager;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -11,19 +10,55 @@ import javafx.stage.Stage;
 
 import java.util.Objects;
 
+/**
+ * This class is responsible for displaying the start screen of the game.
+ * It sets up the background, title, buttons for starting the game and quitting,
+ * and manages the actions when these buttons are clicked.
+ */
 public class StartScreen {
+    /**
+     * The file path for the background image of the start screen.
+     */
     private static final String BACKGROUND_IMAGE = "/com/example/demo/images/startPageBackground.png";
-    private Stage stage; // Store the stage reference
+
+    /**
+     * The main stage where the start screen will be displayed.
+     */
+    private Stage stage;
+
+    /**
+     * The button that starts the game.
+     */
     private Button startButton;
+
+    /**
+     * The button that quits the game.
+     */
     private Button quitButton;
 
+    /**
+     * The file path for the start button image.
+     */
     private static final String START_BUTTON_IMAGE = "/com/example/demo/images/startButton.png";
+
+    /**
+     * The file path for the quit button image.
+     */
     private static final String QUIT_BUTTON_IMAGE = "/com/example/demo/images/quitButton.png";
 
+    /**
+     * Constructor to initialize the StartScreen with a reference to the main stage.
+     *
+     * @param stage the main application stage
+     */
     public StartScreen(Stage stage) {
         this.stage = stage; // Initialize the stage reference
     }
 
+    /**
+     * Displays the start screen with background, title, and buttons.
+     * The start and quit buttons are configured, and actions are assigned to them.
+     */
     public void show() {
         // Set up the background image
         ImageView backgroundImageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream(BACKGROUND_IMAGE))));
@@ -40,11 +75,11 @@ public class StartScreen {
 
         // Create buttons dynamically using ButtonFactory
         startButton = ButtonFactory.createImageButton(START_BUTTON_IMAGE, 350, 400);
-        startButton.setLayoutX(stage.getWidth()/2 - 30); // Set X position for start button
+        startButton.setLayoutX(stage.getWidth() / 2 - 30); // Set X position for start button
         startButton.setLayoutY(stage.getHeight() - 200); // Set Y position for start button
 
         quitButton = ButtonFactory.createImageButton(QUIT_BUTTON_IMAGE, 350, 400);
-        quitButton.setLayoutX(stage.getWidth()/2 - 360); // Set X position for quit button
+        quitButton.setLayoutX(stage.getWidth() / 2 - 360); // Set X position for quit button
         quitButton.setLayoutY(stage.getHeight() - 200); // Set Y position for quit button
 
         // Set actions for the buttons
@@ -58,18 +93,24 @@ public class StartScreen {
         // Set the scene
         Scene scene = new Scene(root, stage.getWidth(), stage.getHeight());
         stage.setScene(scene);
-        stage.setTitle("Game Start Page");
+        stage.setTitle("SKY BATTLE");
 
         stage.setMaximized(true);
         stage.show();
     }
 
+    /**
+     * Starts the game by navigating to the current level's start screen.
+     */
     public void startGame() {
         LevelManager levelManager = LevelManager.getInstance();
-//        levelManager.showLevelStartScreen(1);
-        levelManager.showLevelStartScreen(levelManager.getCurrentLevelNumber());// Call goToNextLevel with the next level name
+        // Navigate to the current level's start screen
+        levelManager.showLevelStartScreen(levelManager.getCurrentLevelNumber());
     }
 
+    /**
+     * Exits the game by terminating the application.
+     */
     public void quitGame() {
         System.exit(0);
     }

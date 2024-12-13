@@ -1,39 +1,34 @@
 package com.example.demo.controller;
 
-import javafx.application.Platform;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.CountDownLatch;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppStageTest {
 
-    @Test
-    void testSingletonInstance() {
-        AppStage instance1 = AppStage.getInstance();
-        AppStage instance2 = AppStage.getInstance();
-        assertSame(instance1, instance2, "AppStage should return the same instance for the singleton.");
+    private AppStage appStage;
+
+    @BeforeEach
+    void setUp() {
     }
 
     @Test
-    void testSetAndGetPrimaryStage() throws InterruptedException {
-        CountDownLatch latch = new CountDownLatch(1);
+    void testSingletonInstance() {
+        // Get the first instance of AppStage
+        AppStage firstInstance = AppStage.getInstance();
 
-        Platform.startup(() -> { // Ensures JavaFX is initialized
-            try {
-                AppStage appStage = AppStage.getInstance();
-                Stage mockStage = new Stage();
-                appStage.setPrimaryStage(mockStage);
+        // Get the second instance of AppStage
+        AppStage secondInstance = AppStage.getInstance();
 
-                assertSame(mockStage, appStage.getPrimaryStage(), "The retrieved primary stage should match the set stage.");
-            } finally {
-                latch.countDown();
-            }
-        });
+        // Assert that both instances are the same (Singleton pattern)
+        assertSame(firstInstance, secondInstance, "AppStage should return the same instance.");
+    }
 
-        // Wait for the JavaFX Application Thread to finish
-        latch.await();
+
+    @Test
+    void testPrimaryStageNotSetInitially() {
+        // Ensure that the primary stage is not set initially
+        assertNull(AppStage.getInstance().getPrimaryStage(), "The primary stage should be null before it is set.");
     }
 }

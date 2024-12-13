@@ -1,5 +1,6 @@
-package com.example.demo.screensAndOverlays;
+package com.example.demo.displays;
 
+import com.example.demo.activityManagers.AudioHandler;
 import com.example.demo.activityManagers.LevelManager;
 import com.example.demo.controller.AppStage;
 import javafx.geometry.Pos;
@@ -17,12 +18,30 @@ import javafx.stage.Stage;
 
 import java.util.Objects;
 
+/**
+ * A class that represents the start screen displayed when a level begins.
+ * This screen includes the level's objective, instructions, and a prompt to
+ * start the game. It also provides animated effects and responds to user input.
+ */
 public class LevelStartScreen {
-    private final Stage stage; // Reference to the main application stage
-    private int levelNumber; // Current level number
-    private final LevelManager levelManager; // Singleton instance of LevelManager
-    private String levelAim; // Description of the current level's objective
-    private String instructionsText; // Instructions for the current level
+
+    /** Reference to the main application stage. */
+    private final Stage stage;
+
+    /** Current level number. */
+    private int levelNumber;
+
+    /** Singleton instance of LevelManager, responsible for managing game levels. */
+    private final LevelManager levelManager;
+
+    /** Singleton instance of AudioHandler, responsible for managing game audio. */
+    private final AudioHandler audioHandler;
+
+    /** Description of the current level's objective. */
+    private String levelAim;
+
+    /** Instructions for the current level. */
+    private String instructionsText;
 
     /**
      * Constructor initializes the level number and sets the corresponding aim and instructions.
@@ -35,6 +54,7 @@ public class LevelStartScreen {
         this.levelManager = LevelManager.getInstance(); // Access LevelManager instance
         this.levelAim = getLevelAim(levelNumber); // Determine the level aim
         this.instructionsText = getInstructions(levelNumber); // Determine the instructions for the level
+        this.audioHandler = AudioHandler.getInstance(); // Control game audio
     }
 
     /**
@@ -56,7 +76,6 @@ public class LevelStartScreen {
             default:
                 return "Unknown level aim";
         }
-
     }
 
     /**
@@ -70,22 +89,22 @@ public class LevelStartScreen {
             case 1:
                 return "→ Use UP & DOWN arrow keys to move.\n" +
                         "→ SPACE to shoot projectiles.\n" +
-                        "→ Avoid enemy missiles." +
-                        "→ Remember to collect coins!";
+                        "→ Avoid enemy missiles.\n" +
+                        "→ Remember to collect coins and the magnets!\n";
             case 2:
                 return "→ Use UP & DOWN arrow keys to move.\n" +
                         "→ SPACE to shoot projectiles.\n" +
                         "→ Avoid direct hits from the boss's lasers.\n" +
-                        "→ Remember to collect coins!";
+                        "→ Remember to collect coins and the magnets!";
             case 3:
                 return "→ Use arrow keys to change direction.\n" +
                         "→ SPACE to shoot projectiles.\n" +
-                        "→ Remember to collect coins!\n";
+                        "→ Remember to collect coins and the magnets!\n";
             case 4:
                 return "→ UP arrow key to move.\n" +
                         "→ Plane automatically descends when UP key released.\n" +
                         "→ SPACE to shoot projectiles.\n" +
-                        "→ Remember to collect coins!";
+                        "→ Remember to collect coins and the magnets!\n";
             default:
                 return "No instructions available for this level.";
         }
@@ -93,6 +112,8 @@ public class LevelStartScreen {
 
     /**
      * Displays the level start screen with animated effects and instructions.
+     * The screen includes background images, level title, objectives,
+     * instructions, and a start prompt.
      */
     public void show() {
         // Create a background for the screen
@@ -132,7 +153,6 @@ public class LevelStartScreen {
         // Set the scene
         Scene scene = new Scene(rootGroup, stage.getWidth(), stage.getHeight());
         stage.setScene(scene);
-        stage.setTitle("Level Start Screen");
 
         stage.setMaximized(true);
         stage.show();
@@ -140,20 +160,29 @@ public class LevelStartScreen {
         // Set action for SPACE key to start the level
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.SPACE) {
-                int nextLevelNumber = levelNumber++;
-                levelManager.setCurrentLevelNumber(nextLevelNumber);
-                levelManager.goToNextLevel();
+                int nextLevelNumber = levelNumber++; // Increment the level number
+                levelManager.setCurrentLevelNumber(nextLevelNumber); // Update the current level in LevelManager
+                levelManager.goToNextLevel(); // Proceed to the next level
             }
         });
     }
 
+    /**
+     * Helper method to create a styled label with specified text, font size, and color.
+     * The label also includes a shadow effect for visual appeal.
+     *
+     * @param text The text to display in the label.
+     * @param fontSize The font size of the text.
+     * @param color The color of the text.
+     * @return A Label object with the specified properties.
+     */
     private Label createLabel(String text, int fontSize, Color color) {
         Label label = new Label(text);
-        label.setFont(Font.font("Arial", fontSize));
-        label.setTextFill(color);
-        label.setAlignment(Pos.CENTER);
-        label.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 5, 0.0, 0, 0);");
-        label.setWrapText(true);
-        return label;
+        label.setFont(Font.font("Arial", fontSize)); // Set the font and size
+        label.setTextFill(color); // Set the text color
+        label.setAlignment(Pos.CENTER); // Center the text
+        label.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 5, 0.0, 0, 0);"); // Add shadow effect
+        label.setWrapText(true); // Enable text wrapping
+        return label; // Return the styled label
     }
 }
