@@ -8,7 +8,7 @@
 
 1. **Install IntelliJ IDEA Community** if not already installed.
 2. **Open Project** in IntelliJ via `File` > `Open...`.
-3. **Load Maven Dependencies**: IntelliJ auto-loads dependencies. If not, click the `Maven` tool window and refresh.
+3. **Load Maven Dependencies**: IntelliJ autoload dependencies. If not, click the `Maven` tool window and refresh.
 4. **Set Correct JDK**: Ensure the project uses a compatible JDK Version 23.
 5. **Build Project**: Select `Build` > `Build Project`.
 6. **Run Application**: Click the green `Run` button or press `Shift + F10`.
@@ -272,6 +272,21 @@ Coins serve as a collectible resource, contributing to overall player progressio
 
 ---
 
+### Bullet Tracking System Implementation
+
+#### 1. Purpose
+Tracks the player's bullet usage during each level, encouraging strategic resource management and rewarding efficiency with score bonuses.
+
+#### 2. Features and Functionality
+- **Bullet Count**: Each level starts with a set number of bullets displayed on the UI.
+- **Resource Depletion**: Shooting reduces the bullet count; firing is disabled at zero bullets.
+- **Game Over Condition**: Running out of bullets without meeting the winning condition results in failure.
+- **Score Impact**: Remaining bullets at level completion boost the player's final score.
+
+#### 3. Why These Features Were Implemented
+- Encourages strategic gameplay and accuracy.
+- Links resource conservation to player rewards, enhancing engagement and replayability.
+
 ### **Magnet Feature for Coin Attraction**
 The magnet feature adds a strategic gameplay element, enabling players to attract coins within a defined radius. It enhances engagement through intuitive mechanics and real-time feedback.
 
@@ -404,6 +419,23 @@ This screen provides a polished and rewarding conclusion to the game while reinf
 
 ---
 
+### Audio Implementation
+
+#### 1. Purpose
+The audio implementation in the game was designed to enhance the player's experience by providing auditory feedback for key events.
+
+#### 2. Features and Functionality
+- **User Firing a Projectile**: A sound is played every time the player fires a projectile, providing an auditory cue for this action.
+- **User Losing a Life**: A distinct sound plays when the player loses a life, helping to emphasize the impact of this event.
+- **Completing a Level**: A celebratory sound is triggered when the player successfully completes a level, reinforcing the sense of accomplishment.
+- **Losing a Level**: A sound is played when the player fails a level, providing feedback on the game's progression and outcome.
+- **Mute Toggle**: The player can mute all sounds, allowing for a personalized gaming experience.
+
+#### 3. Why These Features Were Implemented
+- **Player Feedback**: Audio provides immediate feedback for important actions, making the game more intuitive and interactive.
+- **Immersion**: Make the game world more alive and immersive, increasing player engagement.
+- **User Control**: The mute toggle feature allows players to adjust their audio settings, providing flexibility and accessibility.
+
 ### UI Implementation: Enhancing User Experience
 
 **Purpose**:  
@@ -428,7 +460,7 @@ Create a seamless, intuitive interface for easy navigation and engaging gameplay
 ---
 
 ## Implemented but not working properly
-#### Noted: There are currently no features in the game that aren't working properly. However, I encountered several issues during development. Below are a few notable problems and how I overcame them:
+#### Note: There are currently no features in the game that aren't working properly. However, I encountered several issues during development. Below are a few notable problems and how I overcame them:
 
 1) **Enemy Spawning Logic:**
     - **Issue:** The game had a maximum number of enemies that could spawn. Initially, I incremented `currentNumberOfEnemies` whenever an enemy spawned and decremented it when an enemy was killed or penetrated defenses. However, I realized that the `currentNumberOfEnemies` was going negative, causing the system to spawn more enemies than intended. This resulted in situations where negative values (e.g., -99) would allow a much higher number of enemies (e.g., 99) to spawn, bypassing the cap.
@@ -905,6 +937,7 @@ Manages the progression and transitions between levels, including tracking the c
 4. **Observer Pattern**: Notifies observers (e.g., game controllers) of level transitions using `setChanged()` and `notifyObservers()`.
 5. **Boundary Handling**: Safeguards against exceeding the total number of levels.
 6. **Dynamic Level Loading**: Constructs the class name of the next level dynamically for integration with the game's level loading system.
+7. **Implements PropertyChangeSupport**: Allows for the notification of level change events to registered listeners, enabling dynamic updates when the level progresses or changes.
 
 #### **Why It Was Implemented**
 To centralize level management logic, streamline transitions, and ensure the game's progression is cohesive and maintainable. This allows for adding new levels or changing progression logic without impacting unrelated systems.
@@ -1008,6 +1041,27 @@ To provide a centralized system for managing the user's progress, including thei
 - **Easy Access to Statistics**: Provides methods to get and set various statistics, making it easy to retrieve and update data.
 
 ---
+
+### Audio Handler Implementation
+
+#### 1. Purpose
+The `AudioHandler` class controls the audio functionality in the game, handling sound effects for various events like projectile firing, life loss, and level transitions. It also provides a mute toggle to manage audio preferences.
+
+- **Location**: `com.example.demo.audioHandler`
+
+#### 2. Features and Functionality
+- **Sound Management**:
+    - Plays different sounds for projectile firing, life loss, level won, and level lost events.
+    - Stops any currently playing sound before triggering a new one.
+- **Mute Toggle**:
+    - Mutes all sounds when activated and resumes audio when toggled off.
+- **Singleton Pattern**:
+    - Ensures only one instance of the `AudioHandler` class is used throughout the game.
+
+#### 3. Why These Features Were Implemented
+- **Enhanced Player Experience**: Sound effects provide feedback for in-game actions, improving immersion and engagement.
+- **User Control**: The mute functionality allows players to manage their audio preferences, enhancing accessibility.
+- **Code Efficiency**: The singleton pattern ensures streamlined audio management, avoiding redundant instances and ensuring consistent behavior.
 
 ### **Class: `DisplayWinningParameter`**
 
@@ -1255,11 +1309,6 @@ To provide a reusable structure for overlays in the game, ensuring consistent ap
 - Easy to customize with different content types (text, images, buttons).
 - Simplifies the addition of score images and dynamic buttons.
 
-### extra
-• Unexpected Problems: Communicate any unexpected challenges or issues you
-encountered during the assignment. Describe how you addressed or attempted to
-resolve them.
-
 ## Modified Java Classes
 
 #### Class: `Controller`
@@ -1269,7 +1318,7 @@ In the modified `Controller` class:
 2. **Launch Screen Addition**: The `launchGame()` method has been changed to instantiate and show a `StartScreen` instead of immediately loading a level. This refactor now allows for a start screen before the game begins.
 3. **Error Handling Consolidation**: A new private method, `showError()`, has been added to handle exceptions more cleanly, centralizing the error display logic that was previously embedded within the `update()` method.
 4. **Refactored Imports**: The `LevelParent` class is now imported from the `levels` package instead of directly from the root package, aligning with a better organizational structure.
-5. **Observer Handling**: The observer functionality is preserved, with the `Controller` still updating levels upon receiving notifications. However, the collision and level management logic is cleaner and more modular, with the `Controller` now focusing more on the flow of the game rather than game mechanics.
+5. **PropertyChangeListener Handling**: The previous `Observer` functionality has been removed due to it being deprecated. This new functionality has replaced it, although with the same purpose: updating levels upon receiving notifications. However, the collision and level management logic is cleaner and more modular, with the `Controller` now focusing more on the flow of the game rather than game mechanics.
 
 These changes simplify the class, making it more maintainable and focused on managing the game flow rather than internal game logic like collisions.
 
@@ -1306,6 +1355,7 @@ The `Destructible` interface, located in the `com.example.demo` package, was ref
 - Enhanced **UI updates** through the `LevelView` class, including dynamic changes to hearts and score displays.
 - Refined game state management with the `LevelStateHandler` and `OverlayHandler`, providing more granular control over level pauses, wins, and losses.
 - Changed the name of the method in updateLevelView() to update the heart display from removeHearts() to syncHeartsWithUserHealth().
+- New class no longer implements Observer (since it was deprecated) and because all level management methodology has been shifted to the `levelManager` class.
 
 **Key Changes:**
 - **Actor Management:** Actors like coins, enemies, and projectiles are now handled by `ActorManager`.
@@ -1555,3 +1605,23 @@ The `Destructible` interface, located in the `com.example.demo` package, was ref
 - Enhanced gameplay dynamics with the ability to reposition the shield dynamically.
 - Better scaling for diverse resolutions with reduced and manageable shield size.
 - Improved player experience by ensuring the shield remains visible when activated, regardless of overlapping UI elements.  
+
+## Unexpected Problems Faced 
+**Unexpected Problems Faced**
+
+- **Laptop Crash:**
+    - The night before submission, my laptop became unresponsive for 10 hours, causing fear that my code might be lost.
+    - I hadn’t pushed commits due to concerns about public forks.
+    - The next morning, my GitHub commits were gone from GitHub Desktop, but the `.git` file in my coursework folder was intact.
+    - I pushed my commits from another computer, preventing loss of progress.
+
+- **Laptop Performance Issues:**
+    - My laptop remained slow until the submission day, with many programs malfunctioning.
+    - Despite this, I stayed calm and managed to resolve the issues.
+
+- **Module-Info Error:**
+    - Minutes before the crash, the terminal displayed an error regarding `module-info` and the `com.example.demo` package.
+    - After troubleshooting, I realized the problem was due to the absence of a functional class outside the package.
+    - Adding the class resolved the issue.
+
+This experience emphasized the importance of staying calm and problem-solving during unexpected challenges.

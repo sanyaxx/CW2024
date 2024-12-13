@@ -75,6 +75,7 @@ public class LevelStateHandler {
      * Navigates to the main menu screen of the game.
      */
     public void goToMainMenu() {
+        audioHandler.stopAllSounds();
         System.out.println("Navigating to Main Menu...");
         new StartScreen(AppStage.getInstance().getPrimaryStage()).show(); // Show the main menu screen
     }
@@ -84,6 +85,7 @@ public class LevelStateHandler {
      * Otherwise, it increments the current level number and shows the start screen for the next level.
      */
     public void goToNextLevel() {
+        audioHandler.stopAllSounds();
         if (levelManager.isLastLevel()) {
             new YouWinScreen(); // Display "You Win" screen if the current level is the last
         } else {
@@ -99,6 +101,7 @@ public class LevelStateHandler {
      * @param user The user who is being revived.
      */
     public void reviveLevel(UserParent user) {
+        audioHandler.stopAllSounds();
         if (getOverlayHandler().redeemLifeTimer != null) getOverlayHandler().redeemLifeTimer.stop(); // Stop the redeem life timer if running
 
         if (user.getCoinsCollected() >= 4) {
@@ -122,6 +125,7 @@ public class LevelStateHandler {
      * Retries the current level by showing the start screen for the current level number.
      */
     public void retryLevel() {
+        audioHandler.stopAllSounds();
         levelManager.showLevelStartScreen(levelManager.getCurrentLevelNumber()); // Show the start screen again for the current level
     }
 
@@ -139,6 +143,7 @@ public class LevelStateHandler {
      * Resumes the level after pausing. It stops the redeem life timer (if running) and restarts the timeline.
      */
     public void resumeLevel() {
+        audioHandler.stopAllSounds();
         if (getOverlayHandler().redeemLifeTimer != null) getOverlayHandler().redeemLifeTimer.stop(); // Stop redeem life timer if running
         playTimeline(); // Restart the game timeline
     }

@@ -2,6 +2,7 @@ package com.example.demo.actors.Planes.friendlyPlanes;
 
 import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Projectiles.userProjectiles.UserProjectile;
+import com.example.demo.controller.AppStage;
 
 /**
  * Represents the user-controlled plane in the game, with functionality for movement and projectile firing.
@@ -21,7 +22,7 @@ public class UserPlane extends UserParent {
 	private static final double Y_UPPER_BOUND = 80;
 
 	/** The lower bound of the vertical plane movement */
-	private static final double Y_LOWER_BOUND = 700;
+	private static final double Y_LOWER_BOUND = AppStage.getInstance().getPrimaryStage().getHeight() - 150;
 
 	/** The initial x-coordinate position of the plane */
 	private static final double INITIAL_X_POSITION = 80.0;

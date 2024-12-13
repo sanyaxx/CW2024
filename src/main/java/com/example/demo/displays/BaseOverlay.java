@@ -124,7 +124,7 @@ public class BaseOverlay {
 
         // Main layout container
         VBox layoutContainer = new VBox(20); // Vertical layout with spacing
-        layoutContainer.setAlignment(Pos.TOP_CENTER); // Align to top-center
+        layoutContainer.setAlignment(Pos.CENTER); // Align to center vertically and horizontally
         layoutContainer.setStyle("-fx-padding: 30;"); // Padding around content
         layoutContainer.getChildren().addAll(titleLabel, contentBox, scoreImageContainer, buttonContainer);
 

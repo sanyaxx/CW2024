@@ -136,9 +136,9 @@ public class Level3 extends LevelParent {
             int direction = (int) (Math.random() * 4); // 0: North, 1: East, 2: South, 3: West
             GameEntity newEnemyRocket = switch (direction) {
                 case 0 -> new EnemyRocket(screenWidth / 2 - 50, 0, direction);
-                case 1 -> new EnemyRocket(screenWidth, 350, direction);
+                case 1 -> new EnemyRocket(screenWidth, screenHeight / 2 - 80, direction);
                 case 2 -> new EnemyRocket(screenWidth / 2 - 50, screenHeight, direction);
-                case 3 -> new EnemyRocket(0, 350, direction);
+                case 3 -> new EnemyRocket(0, screenHeight / 2 - 80, direction);
                 default -> null; // Fallback
             };
             if (newEnemyRocket != null) {
@@ -155,9 +155,9 @@ public class Level3 extends LevelParent {
             int direction = (int) (Math.random() * 4); // 0: North, 1: East, 2: South, 3: West
             GameEntity newMagnet = switch (direction) {
                 case 0 -> new Magnet(screenWidth / 2 - 50, 0, direction);
-                case 1 -> new Magnet(screenWidth, 350, direction);
+                case 1 -> new Magnet(screenWidth, screenHeight / 2 - 80, direction);
                 case 2 -> new Magnet(screenWidth / 2 - 50, screenHeight, direction);
-                case 3 -> new Magnet(0, 350, direction);
+                case 3 -> new Magnet(0, screenHeight / 2 - 80, direction);
                 default -> null; // Fallback
             };
             if (newMagnet != null) {

@@ -3,6 +3,7 @@ package com.example.demo.actors.Planes.enemyPlanes;
 import com.example.demo.actors.Projectiles.enemyProjectiles.BossProjectile;
 import com.example.demo.actors.GameEntity;
 import com.example.demo.actors.Planes.FighterPlane;
+import com.example.demo.controller.AppStage;
 import com.example.demo.levels.Level2.LevelViewLevelTwo;
 
 import java.util.*;
@@ -30,7 +31,7 @@ public class Boss extends FighterPlane {
 	/**
 	 * The initial X position of the boss on the screen.
 	 */
-	private static final double INITIAL_X_POSITION = 1000.0;
+	private static final double INITIAL_X_POSITION = AppStage.getInstance().getPrimaryStage().getWidth() - 500;
 
 	/**
 	 * The initial Y position of the boss on the screen.

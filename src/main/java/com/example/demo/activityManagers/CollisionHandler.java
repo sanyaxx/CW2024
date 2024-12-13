@@ -156,6 +156,7 @@ public class CollisionHandler {
             levelParent.actorManager.getUserVehicle().incrementCoinsCollected();
             if (levelParent.currentNumberOfCoins > 0) {
                 levelParent.currentNumberOfCoins--;
+                levelParent.audioHandler.playCoinCollectedSound();
             }
         }
         // Handle the effect of a fuel token collectible

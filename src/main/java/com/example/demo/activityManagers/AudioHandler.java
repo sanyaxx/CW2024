@@ -15,7 +15,7 @@ public class AudioHandler {
 
     // Paths to the audio files
     /** Path to the sound when the projectile is fired */
-    private final String PROJECTILE_FIRED_SOUND_PATH = "/com/example/demo/audios/fireProjectile.mp3";
+    private final String PROJECTILE_FIRED_SOUND_PATH = "/com/example/demo/audios/fireProjectile1.wav";
 
     /** Path to the sound when a life is lost */
     private final String LIFE_LOST_SOUND_PATH = "/com/example/demo/audios/loseLife.mp3";
@@ -24,7 +24,10 @@ public class AudioHandler {
     private final String LEVEL_WON_SOUND_PATH = "/com/example/demo/audios/winGame.mp3";
 
     /** Path to the sound when the level is lost */
-    private final String LEVEL_LOST_SOUND_PATH = "/com/example/demo/audios/loseGame.mp3";
+    private final String LEVEL_LOST_SOUND_PATH = "/com/example/demo/audios/loseGame1.wav";
+
+    /** Path to the sound when the level is lost */
+    private final String COIN_COLLECTED_SOUND_PATH = "/com/example/demo/audios/collectCoins.wav";
 
     // MediaPlayers for playing the sounds
     /** MediaPlayer for the projectile fired sound */
@@ -39,9 +42,15 @@ public class AudioHandler {
     /** MediaPlayer for the level lost sound */
     private MediaPlayer levelLostPlayer;
 
+    /** MediaPlayer for the coin collected sound */
+    private MediaPlayer coinCollectedPlayer;
+
     // Variable to track whether the audio is muted or not
     /** Boolean flag indicating if the audio is muted */
     private boolean isMuted = false;
+
+    // Volume level for the sounds, from 0.0 to 1.0
+    private double volumeLevel = 0.1;
 
     /**
      * Private constructor for the AudioHandler class, following the Singleton pattern.
@@ -60,6 +69,12 @@ public class AudioHandler {
 
         Media levelLostMedia = new Media(getClass().getResource(LEVEL_LOST_SOUND_PATH).toExternalForm());
         levelLostPlayer = new MediaPlayer(levelLostMedia);
+
+        Media coinCollectedMedia = new Media(getClass().getResource(COIN_COLLECTED_SOUND_PATH).toExternalForm());
+        coinCollectedPlayer = new MediaPlayer(coinCollectedMedia);
+
+        // Set initial volume for all sounds
+        setVolumeForAllSounds(volumeLevel);
     }
 
     /**
@@ -135,6 +150,18 @@ public class AudioHandler {
     }
 
     /**
+     * Plays the sound for when the level is lost.
+     * If the audio is not muted, it will stop any currently playing sounds and start the new sound.
+     */
+    public void playCoinCollectedSound() {
+        if (!isMuted) {
+            stopAllSounds(); // Stop any currently playing sound
+            coinCollectedPlayer.seek(coinCollectedPlayer.getStartTime()); // Rewind to start
+            coinCollectedPlayer.play();
+        }
+    }
+
+    /**
      * Toggles the mute state of the audio.
      * If audio is currently muted, it will stop all sounds. If audio is un-muted, sounds will resume playing.
      */
@@ -143,5 +170,34 @@ public class AudioHandler {
         if (isMuted) {
             stopAllSounds(); // Stop all sounds when muted
         }
+    }
+
+    /**
+     * Adjusts the volume for all sounds.
+     * Volume is a value between 0.0 (muted) and 1.0 (full volume).
+     *
+     * @param volume the new volume level to set, between 0.0 and 1.0
+     */
+    public void setVolumeForAllSounds(double volume) {
+        // Ensure volume is within the valid range
+        if (volume < 0.0) volume = 0.0;
+        if (volume > 1.0) volume = 1.0;
+
+        volumeLevel = volume;
+
+        // Set volume for each sound
+        projectileFiredPlayer.setVolume(volume);
+        lifeLostMediaPlayer.setVolume(volume);
+        levelWonPlayer.setVolume(volume);
+        levelLostPlayer.setVolume(volume);
+    }
+
+    /**
+     * Get the current volume level of the audio.
+     *
+     * @return the current volume level, between 0.0 and 1.0
+     */
+    public double getVolume() {
+        return volumeLevel;
     }
 }

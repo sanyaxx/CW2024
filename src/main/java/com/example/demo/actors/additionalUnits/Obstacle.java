@@ -18,7 +18,7 @@ public class Obstacle extends GameEntity {
     private static final String IMAGE_NAME = "obstacle.png";
 
     /** The height of the obstacle's image */
-    private static final int IMAGE_HEIGHT = 300;
+    private static final int IMAGE_HEIGHT = 400;
 
     /** The horizontal velocity at which the obstacle moves */
     private static final int HORIZONTAL_VELOCITY = -10;

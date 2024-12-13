@@ -90,7 +90,7 @@ public class LevelStartScreen {
                 return "→ Use UP & DOWN arrow keys to move.\n" +
                         "→ SPACE to shoot projectiles.\n" +
                         "→ Avoid enemy missiles.\n" +
-                        "→ Remember to collect coins and the magnets!\n";
+                        "→ Remember to collect coins and the magnets!";
             case 2:
                 return "→ Use UP & DOWN arrow keys to move.\n" +
                         "→ SPACE to shoot projectiles.\n" +
@@ -99,12 +99,12 @@ public class LevelStartScreen {
             case 3:
                 return "→ Use arrow keys to change direction.\n" +
                         "→ SPACE to shoot projectiles.\n" +
-                        "→ Remember to collect coins and the magnets!\n";
+                        "→ Remember to collect coins and the magnets!";
             case 4:
                 return "→ UP arrow key to move.\n" +
                         "→ Plane automatically descends when UP key released.\n" +
                         "→ SPACE to shoot projectiles.\n" +
-                        "→ Remember to collect coins and the magnets!\n";
+                        "→ Remember to collect coins and the magnets!";
             default:
                 return "No instructions available for this level.";
         }

@@ -76,9 +76,6 @@ public class LevelManager extends PropertyChangeSupport {
     /**
      * Retrieves the name of the next level.
      *
-     * @return The fully qualified name of the next level's class, or {@code null} if there are no more levels.
-     * Retrieves the name of the next level based on the current level number.
-     *
      * @return The name of the next level, or null if there are no more levels.
      */
     public String getNextLevelName() {
@@ -109,15 +106,6 @@ public class LevelManager extends PropertyChangeSupport {
      */
     public boolean isLastLevel() {
         return currentLevelNumber == TOTAL_LEVELS_PLUS1 - 1;
-
-    /**
-     * Checks if the current level is the last level in the game.
-     * This helps determine if the game is about to end.
-     *
-     * @return True if the current level is the last level, false otherwise.
-     */
-    public boolean isLastLevel() {
-        return (currentLevelNumber == TOTAL_LEVELS_PLUS1 - 1); // Check if the current level is the last level
     }
 
     /**
@@ -155,8 +143,6 @@ public class LevelManager extends PropertyChangeSupport {
      */
     public void removeLevelChangeListener(PropertyChangeListener listener) {
         removePropertyChangeListener(listener);
-    }
-        currentLevelNumber = number; // Setter for current level number
     }
 
 }

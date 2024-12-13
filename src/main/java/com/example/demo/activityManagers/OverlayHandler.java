@@ -201,7 +201,7 @@ public class OverlayHandler {
         }
 
         // Prepare the message to show
-        String message = ("Click on the heart to buy your revival\n\n\n" + String.format(COINS_TEXT + user.getCoinsCollected()) + "\n\nCoins needed: 4");
+        String message = ("Click on the heart to buy your revival\n\n\n" + String.format(COINS_TEXT, user.getCoinsCollected()) + "\n\nCoins needed: 4");
         showOverlay("Continue level?", message, redeemLifeButton, null);
 
         // Stop the existing timer if it's running
