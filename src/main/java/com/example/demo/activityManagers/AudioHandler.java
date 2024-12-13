@@ -49,7 +49,7 @@ public class AudioHandler {
     /** Boolean flag indicating if the audio is muted */
     private boolean isMuted = false;
 
-    // Volume level for the sounds, from 0.0 to 1.0
+    /** Volume level for the sounds, from 0.0 to 1.0 */
     private double volumeLevel = 0.1;
 
     /**

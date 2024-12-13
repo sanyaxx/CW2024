@@ -19,7 +19,7 @@ import com.example.demo.displays.StartScreen;
  * <p>
  * This version generalizes the game's level handling by dynamically loading levels using reflection. It provides
  * flexibility for transitions and ensures a smoother user experience.
- * </p><p>
+ * </p>
  * With reference to the old Controller code,
  * 'implements Observer' has been modified to implements 'PropertyChangeListener'
  * since Observer was deprecated.
@@ -28,7 +28,6 @@ import com.example.demo.displays.StartScreen;
  * that level. The new version has been generalized to allow any level to be launched by dynamically loading the
  * level class using reflection. This provides flexibility and allows the game to easily transition between different levels.
  * The class also shows a start screen before beginning the game, ensuring a smoother user experience.
- * </p>
  * </p>
  */
 public class Controller implements PropertyChangeListener {
