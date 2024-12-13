@@ -11,6 +11,7 @@
 3. **Load Maven Dependencies**: IntelliJ autoload dependencies. If not, click the `Maven` tool window and refresh.
 4. **Set Correct JDK**: Ensure the project uses a compatible JDK Version 23.
 5. **Build Project**: Select `Build` > `Build Project`.
+6. **Select the correct run file**: Ensure the 'Current File' option is selected next t the Run button.
 6. **Run Application**: Click the green `Run` button or press `Shift + F10`.
 7. **Play the Game**: The game window will open. Enjoy!
 **Dependencies**: Maven for dependencies, JavaFX for UI.
